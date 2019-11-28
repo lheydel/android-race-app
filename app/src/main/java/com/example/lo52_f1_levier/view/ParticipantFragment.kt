@@ -55,10 +55,18 @@ class ParticipantFragment : Fragment() {
     // Pour agir sur les éléments du layout
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+        // sale mais fonctionne
+        var fragment : Fragment
+        fragment = ParticipantTabAjouterFragment().apply {}
+        childFragmentManager
+            .beginTransaction()
+            .replace(R.id.toReplaceWithFragment, fragment)
+            .commit()
+
         // listener sur le TabLayout
         tab_layout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                lateinit var fragment : Fragment
+
                 // Ajouter
                 if(tab!!.position == 0){
                     fragment = ParticipantTabAjouterFragment().apply {}

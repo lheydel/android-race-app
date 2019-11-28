@@ -87,8 +87,13 @@ class TabListActivity : AppCompatActivity() {
                             arguments = Bundle().apply {
                                 putString(ParticipantFragment.ARG_ITEM_ID, item.id)
                             }
-                        //TODO : ajouter les autres "onglets"
                         }
+                        "Equipes" -> fragment = EquipeFragment().apply {
+                            arguments = Bundle().apply {
+                                putString(EquipeFragment.ARG_ITEM_ID, item.id)
+                            }
+                        }
+                        //TODO : ajouter les autres "onglets"
                     }
                     /*val fragment = TabDetailFragment().apply {
                         arguments = Bundle().apply {

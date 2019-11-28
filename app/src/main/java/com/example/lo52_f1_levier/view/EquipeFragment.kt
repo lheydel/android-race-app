@@ -8,6 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.lo52_f1_levier.R
+import com.example.lo52_f1_levier.dummy.DummyContent
+import kotlinx.android.synthetic.main.activity_tab_detail.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -27,12 +29,18 @@ class EquipeFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private var listener: OnFragmentInteractionListener? = null
+    private var item: DummyContent.MainTab? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            if (it.containsKey(TabDetailFragment.ARG_ITEM_ID)) {
+                // Load the dummy content specified by the fragment
+                // arguments. In a real-world scenario, use a Loader
+                // to load content from a content provider.
+                item = DummyContent.ITEM_MAP[it.getString(TabDetailFragment.ARG_ITEM_ID)]
+                activity?.toolbar_layout?.title = item?.content
+            }
         }
     }
 
@@ -49,19 +57,19 @@ class EquipeFragment : Fragment() {
         listener?.onFragmentInteraction(uri)
     }
 
-    override fun onAttach(context: Context) {
+    /*override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is OnFragmentInteractionListener) {
             listener = context
         } else {
             throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
         }
-    }
+    }*/
 
-    override fun onDetach() {
+    /*override fun onDetach() {
         super.onDetach()
         listener = null
-    }
+    }*/
 
     /**
      * This interface must be implemented by activities that contain this
@@ -81,13 +89,21 @@ class EquipeFragment : Fragment() {
 
     companion object {
         /**
+         * The fragment argument representing the item ID that this fragment
+         * represents.
+         */
+        const val ARG_ITEM_ID = "item_id"
+    }
+
+    /*companion object {
+        *//**
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
          * @return A new instance of fragment EquipeFragment.
-         */
+         *//*
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
@@ -97,5 +113,5 @@ class EquipeFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
-    }
+    }*/
 }
