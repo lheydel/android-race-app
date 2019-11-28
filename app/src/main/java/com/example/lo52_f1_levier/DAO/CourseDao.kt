@@ -9,7 +9,6 @@ import com.example.lo52_f1_levier.model.CourseDbHelper
 
 class CourseDao(context: Context) {
     val dbHelper = CourseDbHelper(context)
-    val db = dbHelper.writableDatabase
 
     fun insertCourse(titre: String, date: String): Long? {
         val db = dbHelper.writableDatabase
@@ -17,8 +16,7 @@ class CourseDao(context: Context) {
             put(Course.Coursetable.TITLE, titre)
             put(Course.Coursetable.DATE, date)
         }
-        val newRowId = db?.insert(Course.Coursetable.TABLE_NAME, null, values)
-        return newRowId
+        return db?.insert(Course.Coursetable.TABLE_NAME, null, values)
     }
 
     fun getCourse(titre:String): Cursor? {
@@ -31,7 +29,7 @@ class CourseDao(context: Context) {
 
         val sortOrder = "${Course.Coursetable.DATE} DESC"
 
-        val cursor = db.query(
+        return db.query(
             Course.Coursetable.TABLE_NAME,   // The table to query
             projection,             // The array of columns to return (pass null to get all)
             selection,              // The columns for the WHERE clause
@@ -40,8 +38,6 @@ class CourseDao(context: Context) {
             null,                   // don't filter by row groups
             sortOrder               // The sort order
         )
-
-        return cursor
     }
     fun deleteCourse(titre: String): Int {
         val db = dbHelper.writableDatabase
@@ -58,12 +54,11 @@ class CourseDao(context: Context) {
         }
         val selection = "${Course.Coursetable.TITLE} LIKE ?"
         val selectionArgs = arrayOf(oldTitle)
-        val count = db.update(
+        return db.update(
             Course.Coursetable.TABLE_NAME,
             values,
             selection,
             selectionArgs)
-        return count
     }
 
 }
