@@ -1,26 +1,26 @@
-package com.example.lo52_f1_levier
+package com.example.lo52_f1_levier.view
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.lo52_f1_levier.R
 import com.example.lo52_f1_levier.dummy.DummyContent
-import kotlinx.android.synthetic.main.activity_item_detail.*
-import kotlinx.android.synthetic.main.item_detail.view.*
+import kotlinx.android.synthetic.main.activity_tab_detail.*
 
 /**
- * A fragment representing a single Item detail screen.
- * This fragment is either contained in a [ItemListActivity]
- * in two-pane mode (on tablets) or a [ItemDetailActivity]
+ * A fragment representing a single tab detail screen.
+ * This fragment is either contained in a [TabListActivity]
+ * in two-pane mode (on tablets) or a [TabDetailActivity]
  * on handsets.
  */
-class ItemDetailFragment : Fragment() {
+class TabDetailFragment : Fragment() {
 
     /**
      * The dummy content this fragment is presenting.
      */
-    private var item: DummyContent.DummyItem? = null
+    private var item: DummyContent.MainTab? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,11 +40,16 @@ class ItemDetailFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val rootView = inflater.inflate(R.layout.item_detail, container, false)
+
+        /*when (item?.content) {
+            "Participants" -> return inflater.inflate(R.layout.fragment_participant, container, false)
+            "Equipes" -> return inflater.inflate(R.layout.fragment_participant, container, false)
+        }*/
+        val rootView = inflater.inflate(R.layout.tab_detail, container, false)
 
         // Show the dummy content as text in a TextView.
         item?.let {
-            rootView.item_detail.text = it.details
+            //rootView.tab_detail.text = it.details
         }
 
         return rootView

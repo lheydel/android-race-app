@@ -14,44 +14,43 @@ object DummyContent {
     /**
      * An array of sample (dummy) items.
      */
-    val ITEMS: MutableList<DummyItem> = ArrayList()
+    val ITEMS: MutableList<MainTab> = ArrayList()
 
     /**
      * A map of sample (dummy) items, by ID.
      */
-    val ITEM_MAP: MutableMap<String, DummyItem> = HashMap()
-
-    private val COUNT = 25
+    val ITEM_MAP: MutableMap<String, MainTab> = HashMap()
 
     init {
-        // Add some sample items.
-        for (i in 1..COUNT) {
-            addItem(createDummyItem(i))
-        }
+        // Création des "onglets"
+        addItem(MainTab("1", "Participants"))
+        addItem(MainTab("2", "Equipes"))
+        addItem(MainTab("3", "Courses"))
+        addItem(MainTab("4", "Historiques"))
     }
 
-    private fun addItem(item: DummyItem) {
+    private fun addItem(item: MainTab) {
         ITEMS.add(item)
         ITEM_MAP.put(item.id, item)
     }
 
-    private fun createDummyItem(position: Int): DummyItem {
-        return DummyItem(position.toString(), "Item " + position, makeDetails(position))
-    }
+    /*private fun createDummyItem(position: Int): MainTab {
+        return MainTab(position.toString(), "Item " + position, makeDetails(position))
+    }*/
 
-    private fun makeDetails(position: Int): String {
+    /*private fun makeDetails(position: Int): String {
         val builder = StringBuilder()
         builder.append("Details about Item: ").append(position)
         for (i in 0..position - 1) {
             builder.append("\nMore details information here.")
         }
         return builder.toString()
-    }
+    }*/
 
     /**
      * A dummy item representing a piece of content.
      */
-    data class DummyItem(val id: String, val content: String, val details: String) {
+    data class MainTab(val id: String, val content: String) {
         override fun toString(): String = content
     }
 }

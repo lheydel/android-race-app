@@ -1,23 +1,24 @@
-package com.example.lo52_f1_levier
+package com.example.lo52_f1_levier.view
 
 import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import android.view.MenuItem
-import kotlinx.android.synthetic.main.activity_item_detail.*
+import com.example.lo52_f1_levier.R
+import kotlinx.android.synthetic.main.activity_tab_detail.*
 
 /**
- * An activity representing a single Item detail screen. This
+ * An activity representing a single tab detail screen. This
  * activity is only used on narrow width devices. On tablet-size devices,
  * item details are presented side-by-side with a list of items
- * in a [ItemListActivity].
+ * in a [TabListActivity].
  */
-class ItemDetailActivity : AppCompatActivity() {
+class TabDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_item_detail)
+        setContentView(R.layout.activity_tab_detail)
         setSupportActionBar(detail_toolbar)
 
         fab.setOnClickListener { view ->
@@ -40,17 +41,17 @@ class ItemDetailActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
-            val fragment = ItemDetailFragment().apply {
+            val fragment = TabDetailFragment().apply {
                 arguments = Bundle().apply {
                     putString(
-                        ItemDetailFragment.ARG_ITEM_ID,
-                        intent.getStringExtra(ItemDetailFragment.ARG_ITEM_ID)
+                        TabDetailFragment.ARG_ITEM_ID,
+                        intent.getStringExtra(TabDetailFragment.ARG_ITEM_ID)
                     )
                 }
             }
 
             supportFragmentManager.beginTransaction()
-                .add(R.id.item_detail_container, fragment)
+                .add(R.id.tab_detail_container, fragment)
                 .commit()
         }
     }
@@ -64,7 +65,7 @@ class ItemDetailActivity : AppCompatActivity() {
                 //
                 // http://developer.android.com/design/patterns/navigation.html#up-vs-back
 
-                navigateUpTo(Intent(this, ItemListActivity::class.java))
+                navigateUpTo(Intent(this, TabListActivity::class.java))
                 true
             }
             else -> super.onOptionsItemSelected(item)
