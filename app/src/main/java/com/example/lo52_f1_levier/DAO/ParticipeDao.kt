@@ -9,7 +9,7 @@ import com.example.lo52_f1_levier.model.CourseDbHelper
 
 class ParticipeDao(context : Context) {
     val dbHelper = CourseDbHelper(context)
-
+    //TODO : getall
     fun insertParticipe(titre: String, numc: Int, ename : String): Long? {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
@@ -64,4 +64,5 @@ class ParticipeDao(context : Context) {
             selection,
             selectionArgs)
     }
+    // TODO : add get update
 }

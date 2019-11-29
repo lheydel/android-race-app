@@ -32,5 +32,6 @@ object ParticipeTable : BaseColumns {
     const val TIME1 = "Time1"
     const val TIME2 = "Time2"
     const val TIME3 = "Time3"
+    //TODO : add times
 }}
 
