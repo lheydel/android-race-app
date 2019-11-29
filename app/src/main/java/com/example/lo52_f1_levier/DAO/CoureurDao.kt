@@ -10,12 +10,12 @@ import com.example.lo52_f1_levier.model.CourseDbHelper
 class CoureurDao(context: Context) {
     val dbHelper = CourseDbHelper(context)
 
-    fun insertCoureur(titre: String, date: String): Long? {
+    fun insertCoureur(titre: String, cname: String, surname: String): Long? {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
             put(Coureur.CoureurTable.NUMC, titre)
-            put(Coureur.CoureurTable.CNAME, date)
-            put(Coureur.CoureurTable.SURNAME, date)
+            put(Coureur.CoureurTable.CNAME, cname)
+            put(Coureur.CoureurTable.SURNAME, surname)
         }
         return db?.insert(Coureur.CoureurTable.NAME, null, values)
     }
@@ -41,14 +41,14 @@ class CoureurDao(context: Context) {
             sortOrder               // The sort order
         )
     }
-    fun deleteCourse(numc: String): Int {
+    fun deleteCourse(numc: Int): Int {
         val db = dbHelper.writableDatabase
         val selection = "${Coureur.CoureurTable.NUMC} LIKE ?"
-        val selectionArgs = arrayOf(numc)
+        val selectionArgs = arrayOf(numc.toString())
         val deletedRows = db.delete(Coureur.CoureurTable.NAME, selection, selectionArgs)
         return deletedRows
     }
-    fun updateCourse(oldNumc: String,numc: String,cname: String, surname: String): Int {
+    fun updateCourse(oldNumc: Int,numc: Int,cname: String, surname: String): Int {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
             put(Coureur.CoureurTable.NUMC, numc)
@@ -56,7 +56,7 @@ class CoureurDao(context: Context) {
             put(Coureur.CoureurTable.SURNAME,surname)
         }
         val selection = "${Coureur.CoureurTable.NUMC} LIKE ?"
-        val selectionArgs = arrayOf(oldNumc)
+        val selectionArgs = arrayOf(oldNumc.toString())
         return db.update(
             Coureur.CoureurTable.NAME,
             values,
