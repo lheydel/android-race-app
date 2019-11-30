@@ -34,7 +34,13 @@ const val SQL_CREATE_PARTICIPE =
             "${Participe.ParticipeTable.ENAME} TEXT,"+
             "${Participe.ParticipeTable.TIME1} NUMBER,"+
             "${Participe.ParticipeTable.TIME2} NUMBER,"+
-            "${Participe.ParticipeTable.TIME3} NUMBER,"
+            "${Participe.ParticipeTable.TIME3} NUMBER,"+
+            "${Participe.ParticipeTable.TIME4} NUMBER,"+
+            "${Participe.ParticipeTable.TIME5} NUMBER,"+
+            "${Participe.ParticipeTable.TIME6} NUMBER,"+
+            "${Participe.ParticipeTable.TIME7} NUMBER,"+
+            "${Participe.ParticipeTable.TIME8} NUMBER,"+
+            "${Participe.ParticipeTable.TIME9} NUMBER"
 
 
 const val SQL_DELETE_PARTICIPE = "DROP TABLE IF EXISTS ${Participe.ParticipeTable.NAME}"

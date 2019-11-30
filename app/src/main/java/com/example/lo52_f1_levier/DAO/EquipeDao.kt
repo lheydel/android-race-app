@@ -9,7 +9,7 @@ import com.example.lo52_f1_levier.model.CourseDbHelper
 
 class EquipeDao(context : Context) {
     val dbHelper = CourseDbHelper(context)
-    //TODO : getall
+
     fun insertEquipe(titre: String): Long? {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
@@ -60,4 +60,22 @@ class EquipeDao(context : Context) {
             selectionArgs)
         return count
     }
+    fun getAllEquipe(): Cursor? {
+        val db = dbHelper.readableDatabase
+
+        val projection = arrayOf(BaseColumns._ID, Equipe.EquipeTable.ENAME)
+
+        val cursor = db.query(
+            Equipe.EquipeTable.NAME,   // The table to query
+            projection,             // The array of columns to return (pass null to get all)
+            null,              // The columns for the WHERE clause
+            null,          // The values for the WHERE clause
+            null,                   // don't group the rows
+            null,                   // don't filter by row groups
+            null
+        )
+
+        return cursor
+    }
+
 }
