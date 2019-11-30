@@ -9,7 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.lo52_f1_levier.R
 import com.example.lo52_f1_levier.dummy.DummyContent
+import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_tab_detail.*
+import kotlinx.android.synthetic.main.fragment_participant.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -44,6 +46,48 @@ class EquipeFragment : Fragment() {
         }
     }
 
+    // Pour agir sur les éléments du layout
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        // sale mais fonctionne
+        var fragment : Fragment
+        fragment = EquipeTabAjouterFragment().apply {}
+        childFragmentManager
+            .beginTransaction()
+            .replace(R.id.toReplaceWithFragment, fragment)
+            .commit()
+
+        // listener sur le TabLayout
+        tab_layout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+
+                // Ajouter
+                if(tab!!.position == 0){
+                    fragment = EquipeTabAjouterFragment().apply {}
+                    childFragmentManager
+                        .beginTransaction()
+                        .replace(R.id.toReplaceWithFragment, fragment)
+                        .commit()
+                }
+                // Consult...
+                if(tab!!.position == 1){
+                    fragment = EquipeTabConsultFragment().apply {}
+                    childFragmentManager
+                        .beginTransaction()
+                        .replace(R.id.toReplaceWithFragment, fragment)
+                        .commit()
+                }
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+
+            }
+        })
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -53,9 +97,9 @@ class EquipeFragment : Fragment() {
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    fun onButtonPressed(uri: Uri) {
+    /*fun onButtonPressed(uri: Uri) {
         listener?.onFragmentInteraction(uri)
-    }
+    }*/
 
     /*override fun onAttach(context: Context) {
         super.onAttach(context)

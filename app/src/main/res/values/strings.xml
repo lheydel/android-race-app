@@ -11,6 +11,8 @@
     <string name="cancel">Annuler</string>
     <string name="nb_participant">Nombre de participants :</string>
     <string name="list_participant">Liste des participants :</string>
+    <string name="nb_team">Nombre d\'équipes :</string>
+    <string name="list_team">Liste des équipes :</string>
     <string name="edit">Modifier</string>
     <string name="delete">Supprimer</string>
     <string name="history">Historique</string>

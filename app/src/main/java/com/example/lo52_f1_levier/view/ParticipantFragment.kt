@@ -89,17 +89,7 @@ class ParticipantFragment : Fragment() {
             }
 
             override fun onTabReselected(tab: TabLayout.Tab?) {
-                lateinit var fragment : Fragment
-                if(tab!!.position == 0){
-                    fragment = ParticipantTabAjouterFragment().apply {}
-                    childFragmentManager
-                        .beginTransaction()
-                        .replace(R.id.toReplaceWithFragment, fragment)
-                        .commit()
-                }
-                if(tab!!.position == 1){
 
-                }
             }
         })
     }

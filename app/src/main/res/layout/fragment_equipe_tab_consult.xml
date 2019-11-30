@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="view.ParticipantTabConsultFragment">
+    tools:context=".view.EquipeTabConsultFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -46,7 +46,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="40dp"
-                        android:text="@string/list_participant"
+                        android:text="@string/list_team"
                         android:textSize="24sp"
                         app:layout_constraintStart_toStartOf="@+id/textView4"
                         app:layout_constraintTop_toBottomOf="@+id/textView4" />
@@ -57,7 +57,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="40dp"
                         android:layout_marginTop="40dp"
-                        android:text="@string/nb_participant"
+                        android:text="@string/nb_team"
                         android:textSize="24sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -142,7 +142,7 @@
                             android:id="@+id/edit"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="30dp"
+                            android:layout_marginTop="50dp"
                             android:text="@string/edit"
                             android:textSize="24sp"
                             app:layout_constraintStart_toStartOf="@+id/add"
@@ -152,21 +152,12 @@
                             android:id="@+id/delete"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="30dp"
+                            android:layout_marginTop="50dp"
                             android:text="@string/delete"
                             android:textSize="24sp"
                             app:layout_constraintStart_toStartOf="@+id/edit"
                             app:layout_constraintTop_toBottomOf="@+id/edit" />
 
-                        <Button
-                            android:id="@+id/history"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="30dp"
-                            android:text="@string/history"
-                            android:textSize="24sp"
-                            app:layout_constraintStart_toStartOf="@+id/delete"
-                            app:layout_constraintTop_toBottomOf="@+id/delete" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -174,4 +165,5 @@
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </FrameLayout>

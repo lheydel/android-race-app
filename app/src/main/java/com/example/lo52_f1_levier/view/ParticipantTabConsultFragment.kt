@@ -1,13 +1,23 @@
 package com.example.lo52_f1_levier.view
 
+import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.core.content.contentValuesOf
+import androidx.recyclerview.widget.RecyclerView
+import com.example.lo52_f1_levier.DAO.CoureurDao
 import com.example.lo52_f1_levier.R
+import com.example.lo52_f1_levier.dummy.DummyContent
+import com.example.lo52_f1_levier.model.Coureur
+import kotlinx.android.synthetic.main.fragment_participant_tab_consult.*
+import kotlinx.android.synthetic.main.tab_list_content.view.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -42,6 +52,23 @@ class ParticipantTabConsultFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_participant_tab_consult, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?){
+        val coureurDao = CoureurDao(this.context!!)
+        val coureurs = mutableListOf<Coureur>()
+        val cursor = coureurDao.getCoureur("test")
+
+        /*with(cursor!!){
+            while (moveToNext()){
+                val coureur = Coureur.apply {
+                    getString(getColumnIndexOrThrow(Coureur.CoureurTable.NUMC))
+                    getString(getColumnIndexOrThrow(Coureur.CoureurTable.CNAME))
+                    getString(getColumnIndexOrThrow(Coureur.CoureurTable.SURNAME))
+                }
+                coureurs.add(coureur)
+            }
+        }*/
     }
 
     // TODO: Rename method, update argument and hook method into UI event

@@ -10,10 +10,10 @@ import com.example.lo52_f1_levier.model.CourseDbHelper
 class CoureurDao(context: Context) {
     val dbHelper = CourseDbHelper(context)
 
-    fun insertCoureur(titre: String, cname: String, surname: String): Long? {
+    fun insertCoureur(id: String, cname: String, surname: String): Long? {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
-            put(Coureur.CoureurTable.NUMC, titre)
+            put(Coureur.CoureurTable.NUMC, id)
             put(Coureur.CoureurTable.CNAME, cname)
             put(Coureur.CoureurTable.SURNAME, surname)
         }

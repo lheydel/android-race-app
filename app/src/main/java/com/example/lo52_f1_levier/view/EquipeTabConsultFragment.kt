@@ -7,12 +7,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import androidx.appcompat.app.AlertDialog
-import com.example.lo52_f1_levier.DAO.CoureurDao
+
 import com.example.lo52_f1_levier.R
-import kotlinx.android.synthetic.main.fragment_participant_tab_ajouter.*
-import kotlinx.android.synthetic.main.fragment_participant_tab_consult.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -22,12 +18,12 @@ private const val ARG_PARAM2 = "param2"
 /**
  * A simple [Fragment] subclass.
  * Activities that contain this fragment must implement the
- * [ParticipantTabAjouterFragment.OnFragmentInteractionListener] interface
+ * [EquipeTabConsultFragment.OnFragmentInteractionListener] interface
  * to handle interaction events.
- * Use the [ParticipantTabAjouterFragment.newInstance] factory method to
+ * Use the [EquipeTabConsultFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class ParticipantTabAjouterFragment : Fragment() {
+class EquipeTabConsultFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -46,27 +42,11 @@ class ParticipantTabAjouterFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_participant_tab_ajouter, container, false)
+        return inflater.inflate(R.layout.fragment_equipe_tab_consult, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?){
-        /*btn_addParticipant.setOnClickListener{
-            if(firstName.text.toString() != "" && lastName.text.toString() != ""){
-                val coureurDao = CoureurDao(this.context!!)
-                coureurDao.insertCoureur("1",firstName.text.toString(),lastName.text.toString())
-            }
-            else{
-                val builder = AlertDialog.Builder(this.context!!)
-                builder.setTitle("Attention")
-                builder.setMessage("Veuillez bien remplir toutes les informations nécessaires.")
-                builder.show()
-
-            }
-        }*/
-    }
-
-    /*// TODO: Rename method, update argument and hook method into UI event
-    fun onButtonPressed(uri: Uri) {
+    // TODO: Rename method, update argument and hook method into UI event
+    /*fun onButtonPressed(uri: Uri) {
         listener?.onFragmentInteraction(uri)
     }*/
 
@@ -100,7 +80,6 @@ class ParticipantTabAjouterFragment : Fragment() {
         fun onFragmentInteraction(uri: Uri)
     }
 
-
     companion object {
         /**
          * Use this factory method to create a new instance of
@@ -108,12 +87,12 @@ class ParticipantTabAjouterFragment : Fragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment ParticipantTabAjouterFragment.
+         * @return A new instance of fragment EquipeTabConsultFragment.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            ParticipantTabAjouterFragment().apply {
+            EquipeTabConsultFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)
