@@ -10,10 +10,10 @@ import com.example.lo52_f1_levier.model.CourseDbHelper
 class CoureurDao(context: Context) {
     val dbHelper = CourseDbHelper(context)
 
-    fun insertCoureur(id: String, cname: String, surname: String): Long? {
+    fun insertCoureur(Numc: String, cname: String, surname: String): Long? {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
-            put(Coureur.CoureurTable.NUMC, id)
+            put(Coureur.CoureurTable.NUMC, Numc)
             put(Coureur.CoureurTable.CNAME, cname)
             put(Coureur.CoureurTable.SURNAME, surname)
         }
@@ -41,6 +41,26 @@ class CoureurDao(context: Context) {
             sortOrder               // The sort order
         )
     }
+
+    fun getAllCoureur(titre:String): Cursor? {
+        val db = dbHelper.readableDatabase
+
+        val projection = arrayOf(BaseColumns._ID, Coureur.CoureurTable.NUMC, Coureur.CoureurTable.CNAME,
+            Coureur.CoureurTable.SURNAME)
+
+        val sortOrder = "${Coureur.CoureurTable.CNAME} DESC"
+
+        return db.query(
+            Coureur.CoureurTable.NAME,   // The table to query
+            projection,             // The array of columns to return (pass null to get all)
+            null,              // The columns for the WHERE clause
+            null,          // The values for the WHERE clause
+            null,                   // don't group the rows
+            null,                   // don't filter by row groups
+            sortOrder               // The sort order
+        )
+    }
+
     fun deleteCourse(numc: Int): Int {
         val db = dbHelper.writableDatabase
         val selection = "${Coureur.CoureurTable.NUMC} LIKE ?"

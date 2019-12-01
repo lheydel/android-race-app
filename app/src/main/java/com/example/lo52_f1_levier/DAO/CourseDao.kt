@@ -10,6 +10,7 @@ import com.example.lo52_f1_levier.model.CourseDbHelper
 class CourseDao(context: Context) {
     val dbHelper = CourseDbHelper(context)
 
+
     fun insertCourse(titre: String, date: String): Long? {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
@@ -39,6 +40,26 @@ class CourseDao(context: Context) {
             sortOrder               // The sort order
         )
     }
+
+    fun getAllCourse(): Cursor? {
+        val db = dbHelper.readableDatabase
+
+        val projection = arrayOf(BaseColumns._ID, Course.Coursetable.TITLE, Course.Coursetable.DATE)
+
+
+        val sortOrder = "${Course.Coursetable.DATE} DESC"
+
+        return db.query(
+            Course.Coursetable.TABLE_NAME,   // The table to query
+            projection,             // The array of columns to return (pass null to get all)
+            null,              // The columns for the WHERE clause
+            null,          // The values for the WHERE clause
+            null,                   // don't group the rows
+            null,                   // don't filter by row groups
+            sortOrder               // The sort order
+        )
+    }
+
     fun deleteCourse(titre: String): Int {
         val db = dbHelper.writableDatabase
         val selection = "${Course.Coursetable.TITLE} LIKE ?"
