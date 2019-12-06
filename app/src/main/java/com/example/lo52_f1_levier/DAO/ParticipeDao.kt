@@ -33,7 +33,8 @@ class ParticipeDao(context : Context) {
             Participe.ParticipeTable.TIME6,
             Participe.ParticipeTable.TIME7,
             Participe.ParticipeTable.TIME8,
-            Participe.ParticipeTable.TIME9
+            Participe.ParticipeTable.TIME9,
+            Participe.ParticipeTable.TIME10
             )
 
         val selection = "${Participe.ParticipeTable.NUMC} = ?"
@@ -66,7 +67,8 @@ class ParticipeDao(context : Context) {
             Participe.ParticipeTable.TIME6,
             Participe.ParticipeTable.TIME7,
             Participe.ParticipeTable.TIME8,
-            Participe.ParticipeTable.TIME9
+            Participe.ParticipeTable.TIME9,
+            Participe.ParticipeTable.TIME10
         )
 
         val selection = "${Participe.ParticipeTable.ENAME} = ?"
@@ -99,7 +101,8 @@ class ParticipeDao(context : Context) {
             Participe.ParticipeTable.TIME6,
             Participe.ParticipeTable.TIME7,
             Participe.ParticipeTable.TIME8,
-            Participe.ParticipeTable.TIME9
+            Participe.ParticipeTable.TIME9,
+            Participe.ParticipeTable.TIME10
         )
 
         val selection = "${Participe.ParticipeTable.TITLE} = ?"
@@ -132,7 +135,8 @@ class ParticipeDao(context : Context) {
             Participe.ParticipeTable.TIME6,
             Participe.ParticipeTable.TIME7,
             Participe.ParticipeTable.TIME8,
-            Participe.ParticipeTable.TIME9
+            Participe.ParticipeTable.TIME9,
+            Participe.ParticipeTable.TIME10
         )
 
 
@@ -175,7 +179,7 @@ class ParticipeDao(context : Context) {
 
     fun setTimeByNumC(Numc: String,numTime : Int, time : Int): Int {
         val db = dbHelper.writableDatabase
-        var values=ContentValues()
+        val values=ContentValues()
         when(numTime){
             1->  values.apply {
             put(Participe.ParticipeTable.TIME1, time)
@@ -203,6 +207,9 @@ class ParticipeDao(context : Context) {
             }
             9->  values.apply {
                 put(Participe.ParticipeTable.TIME9, time)
+            }
+            10->  values.apply {
+                put(Participe.ParticipeTable.TIME10, time)
             }
             else -> values.apply {
             put(Participe.ParticipeTable.TIME1, time)
