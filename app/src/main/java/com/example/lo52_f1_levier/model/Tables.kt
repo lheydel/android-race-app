@@ -1,7 +1,10 @@
 package com.example.lo52_f1_levier.model
 
 import android.provider.BaseColumns
-
+/*
+* Scripte de création des tables
+*
+* */
 const val SQL_CREATE_COURSE =
     "CREATE TABLE ${Course.Coursetable.TABLE_NAME} (" +
             "${BaseColumns._ID} INTEGER PRIMARY KEY," +
@@ -40,7 +43,8 @@ const val SQL_CREATE_PARTICIPE =
             "${Participe.ParticipeTable.TIME6} NUMBER,"+
             "${Participe.ParticipeTable.TIME7} NUMBER,"+
             "${Participe.ParticipeTable.TIME8} NUMBER,"+
-            "${Participe.ParticipeTable.TIME9} NUMBER"
+            "${Participe.ParticipeTable.TIME9} NUMBER,"+
+            "${Participe.ParticipeTable.TIME10} NUMBER"
 
 
 const val SQL_DELETE_PARTICIPE = "DROP TABLE IF EXISTS ${Participe.ParticipeTable.NAME}"
