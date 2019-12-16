@@ -1,7 +1,9 @@
 package com.example.lo52_f1_levier.model
 
 import android.provider.BaseColumns
-
+/*
+Objects contenants les noms des champs des tables
+ */
 object Course {
     object Coursetable : BaseColumns {
         const val TABLE_NAME = "Course"
@@ -38,6 +40,7 @@ object ParticipeTable : BaseColumns {
     const val TIME7 = "Time7"
     const val TIME8 = "Time8"
     const val TIME9 = "Time9"
-    //TODO : add times
+    const val TIME10 = "Time10"
+    //TODO : add times plus de times ????
 }}
 
