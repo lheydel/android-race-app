@@ -116,7 +116,6 @@ class TabListActivity : AppCompatActivity() {
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val item = values[position]
-            holder.idView.text = item.id
             holder.contentView.text = item.content
 
             with(holder.itemView) {
@@ -128,7 +127,6 @@ class TabListActivity : AppCompatActivity() {
         override fun getItemCount() = values.size
 
         inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-            val idView: TextView = view.id_text
             val contentView: TextView = view.content
         }
     }

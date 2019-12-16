@@ -53,7 +53,9 @@ class ParticipantTabAjouterFragment : Fragment() {
         btn_addParticipant.setOnClickListener{
             if(firstName.text.toString() != "" && lastName.text.toString() != ""){
                 val coureurDao = CoureurDao(this.context!!)
-                coureurDao.insertCoureur("1",firstName.text.toString(),lastName.text.toString())
+                coureurDao.insertCoureur(firstName.text.toString(),lastName.text.toString())
+                firstName.text.clear()
+                lastName.text.clear()
             }
             else{
                 val builder = AlertDialog.Builder(this.context!!)

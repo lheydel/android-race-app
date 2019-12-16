@@ -81,5 +81,4 @@ class CourseDao(context: Context) {
             selection,
             selectionArgs)
     }
-
 }

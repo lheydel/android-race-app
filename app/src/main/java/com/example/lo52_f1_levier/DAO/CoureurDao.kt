@@ -6,17 +6,19 @@ import android.database.Cursor
 import android.provider.BaseColumns
 import com.example.lo52_f1_levier.model.Coureur
 import com.example.lo52_f1_levier.model.CourseDbHelper
+import java.lang.Exception
 
 class CoureurDao(context: Context) {
     val dbHelper = CourseDbHelper(context)
 
-    fun insertCoureur(Numc: String, cname: String, surname: String): Long? {
+    fun insertCoureur(cname: String, surname: String): Long? {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
-            put(Coureur.CoureurTable.NUMC, Numc)
+            put(Coureur.CoureurTable.NUMC, getLastId() + 1)
             put(Coureur.CoureurTable.CNAME, cname)
             put(Coureur.CoureurTable.SURNAME, surname)
         }
+
         return db?.insert(Coureur.CoureurTable.NAME, null, values)
     }
 
@@ -42,7 +44,7 @@ class CoureurDao(context: Context) {
         )
     }
 
-    fun getAllCoureur(titre:String): Cursor? {
+    fun getAllCoureur(): Cursor? {
         val db = dbHelper.readableDatabase
 
         val projection = arrayOf(BaseColumns._ID, Coureur.CoureurTable.NUMC, Coureur.CoureurTable.CNAME,
@@ -61,14 +63,14 @@ class CoureurDao(context: Context) {
         )
     }
 
-    fun deleteCourse(numc: Int): Int {
+    fun deleteCoureur(numc: Int): Int {
         val db = dbHelper.writableDatabase
         val selection = "${Coureur.CoureurTable.NUMC} LIKE ?"
         val selectionArgs = arrayOf(numc.toString())
         val deletedRows = db.delete(Coureur.CoureurTable.NAME, selection, selectionArgs)
         return deletedRows
     }
-    fun updateCourse(oldNumc: Int,numc: Int,cname: String, surname: String): Int {
+    fun updateCoureur(oldNumc: Int,numc: Int,cname: String, surname: String): Int {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
             put(Coureur.CoureurTable.NUMC, numc)
@@ -84,4 +86,16 @@ class CoureurDao(context: Context) {
             selectionArgs)
     }
 
+    fun getLastId() : Int {
+        val db = dbHelper.writableDatabase
+
+        var res = db.rawQuery("SELECT MAX(Numc) as maxId FROM " + Coureur.CoureurTable.NAME, null)
+        res.moveToFirst()
+        try{
+            return (res.getString(0)).toInt()
+        }catch(e: Exception){
+            return -1
+        }
+
+    }
 }

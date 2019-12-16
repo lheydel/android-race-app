@@ -62,7 +62,7 @@ class EquipeFragment : Fragment() {
             override fun onTabSelected(tab: TabLayout.Tab?) {
 
                 // Ajouter
-                if(tab!!.position == 0){
+                if(tab?.position == 0){
                     fragment = EquipeTabAjouterFragment().apply {}
                     childFragmentManager
                         .beginTransaction()
@@ -70,7 +70,7 @@ class EquipeFragment : Fragment() {
                         .commit()
                 }
                 // Consult...
-                if(tab!!.position == 1){
+                if(tab?.position == 1){
                     fragment = EquipeTabConsultFragment().apply {}
                     childFragmentManager
                         .beginTransaction()

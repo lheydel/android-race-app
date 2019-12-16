@@ -1,23 +1,27 @@
 package com.example.lo52_f1_levier.view
 
-import android.content.ContentValues
-import android.content.Context
+
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.core.content.contentValuesOf
+import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lo52_f1_levier.DAO.CoureurDao
 import com.example.lo52_f1_levier.R
-import com.example.lo52_f1_levier.dummy.DummyContent
 import com.example.lo52_f1_levier.model.Coureur
+import com.example.lo52_f1_levier.model.Runner
+import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_participant_tab_consult.*
-import kotlinx.android.synthetic.main.tab_list_content.view.*
+import kotlinx.android.synthetic.main.tab_list_content.*
+import android.os.Build
+import kotlinx.android.synthetic.main.fragment_participant.*
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -32,11 +36,18 @@ private const val ARG_PARAM2 = "param2"
  * Use the [ParticipantTabConsultFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+typealias MyRunnerClickListener = (View, Runner, ParticipantTabConsultFragment.RunnerAdapter.ViewHolder) -> Unit
+lateinit var selectedPosition : ParticipantTabConsultFragment.RunnerAdapter.ViewHolder
+
 class ParticipantTabConsultFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
     private var listener: OnFragmentInteractionListener? = null
+
+    private lateinit var selectedRunner : Runner
+    private lateinit var adapter: RunnerAdapter
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,19 +67,73 @@ class ParticipantTabConsultFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?){
         val coureurDao = CoureurDao(this.context!!)
-        val coureurs = mutableListOf<Coureur>()
-        val cursor = coureurDao.getCoureur("test")
+        val coureurs = ArrayList<Runner>()
+        val cursor = coureurDao.getAllCoureur()
 
-        /*with(cursor!!){
+        with(cursor!!){
             while (moveToNext()){
-                val coureur = Coureur.apply {
-                    getString(getColumnIndexOrThrow(Coureur.CoureurTable.NUMC))
-                    getString(getColumnIndexOrThrow(Coureur.CoureurTable.CNAME))
+                val runner = Runner(getInt(getColumnIndexOrThrow(Coureur.CoureurTable.NUMC)),
+                    getString(getColumnIndexOrThrow(Coureur.CoureurTable.CNAME)),
                     getString(getColumnIndexOrThrow(Coureur.CoureurTable.SURNAME))
-                }
-                coureurs.add(coureur)
+                )
+                coureurs.add(runner)
             }
-        }*/
+        }
+
+        adapter = RunnerAdapter(
+            onClickListener = this::selectItem
+        )
+        adapter.replaceItems(coureurs)
+        listParticipant.layoutManager = LinearLayoutManager(this.context)
+        listParticipant.adapter = adapter
+        editTextNbParticipant.setText(coureurs.size.toString())
+
+        delete.setOnClickListener{
+            if(::selectedRunner.isInitialized){
+                coureurDao.deleteCoureur(selectedRunner.numc)
+
+                val ft = fragmentManager!!.beginTransaction()
+                if (Build.VERSION.SDK_INT >= 26) {
+                    ft.setReorderingAllowed(false)
+                }
+                ft.detach(this).attach(this).commit()
+                editTextNbParticipant.setText((coureurs.size - 1).toString())
+            }
+            else
+                Toast.makeText(this.context, "Vous devez sélectionner un Participant", Toast.LENGTH_SHORT).show()
+        }
+
+        add.setOnClickListener{
+            this.parentFragment?.tab_layout?.getTabAt(0)?.select()
+        }
+
+        edit.setOnClickListener{
+
+            if(::selectedRunner.isInitialized) {
+                val intent = Intent(this.context, ParticipantEditActivity::class.java)
+                intent.putExtra("runnerId", selectedRunner.numc)
+                startActivity(intent)
+                this.parentFragment?.tab_layout?.getTabAt(0)?.select()
+            }else
+                Toast.makeText(this.context, "Vous devez sélectionner un Participant", Toast.LENGTH_SHORT).show()
+        }
+
+        history.setOnClickListener {
+            if(::selectedRunner.isInitialized) {
+                Toast.makeText(this.context, "TODO", Toast.LENGTH_SHORT).show()
+            }else
+                Toast.makeText(this.context, "Vous devez sélectionner un Participant", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun selectItem(view: View,runner: Runner, holder: RunnerAdapter.ViewHolder) {
+        selectedRunner = runner
+        if(::selectedPosition.isInitialized){
+
+            selectedPosition.content.setBackgroundColor(Color.parseColor("#ffffff"))
+        }
+        holder.content.setBackgroundColor(Color.parseColor("#d1d1d1"))
+        selectedPosition = holder
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -125,4 +190,42 @@ class ParticipantTabConsultFragment : Fragment() {
                 }
             }
     }
+
+    class RunnerAdapter(private val onClickListener: MyRunnerClickListener) : RecyclerView.Adapter<RunnerAdapter.ViewHolder>(){
+        private var runners = ArrayList<Runner>()
+
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.tab_list_content, parent, false)
+            return ViewHolder(view)
+        }
+
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            val runner = runners[position]
+            holder.content.text = runner.cname + " " + runner.surname
+            holder.content.setOnClickListener { view ->
+                onClickListener(view, runner, holder)
+            }
+        }
+
+
+
+        fun replaceItems(runner: ArrayList<Runner>) {
+            this.runners = runner
+            notifyDataSetChanged()
+        }
+
+        override fun getItemCount(): Int {
+            return runners.size
+        }
+
+        inner class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView),
+            LayoutContainer
+    }
+
+//    class ViewHolder (view: View) : RecyclerView.ViewHolder(view) {
+//        val idView: TextView = view.id_text
+//        val contentView: TextView = view.content
+//    }
 }
