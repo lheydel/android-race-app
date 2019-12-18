@@ -4,4 +4,11 @@
     <dimen name="app_bar_height">200dp</dimen>
     <dimen name="item_width">200dp</dimen>
     <dimen name="text_margin">16dp</dimen>
+
+    <!-- TeamBox -->
+    <dimen name="teambox_width">250dp</dimen>
+    <dimen name="teambox_height">150dp</dimen>
+    <dimen name="teambox_margin_bot">10dp</dimen>
+    <dimen name="teambox_margin_side">5dp</dimen>
+    <dimen name="teambox_padding">5dp</dimen>
 </resources>

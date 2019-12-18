@@ -3,4 +3,7 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+    <color name="runner1">#F5D699</color>
+    <color name="runner2">#F5B08C</color>
+    <color name="runner3">#8F9CFC</color>
 </resources>
