@@ -1,29 +1,34 @@
 package com.example.lo52_f1_levier.coursetimer
 
+import android.view.*
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import android.view.ViewGroup
-import android.view.LayoutInflater
-import android.view.View
 import com.example.lo52_f1_levier.R
 import kotlinx.android.synthetic.main.team_box.view.*
 
 /**
  * Link data to the RecyclerView listing the team boxes in the CourseTimerActivity
  */
-class TeamBoxGridAdapter(private val teams: Array<TeamBoxData>) :
-    RecyclerView.Adapter<TeamBoxGridAdapter.TeamBoxGridViewHolder>() {
+class TeamBoxGridAdapter(private val teams: Array<TeamBoxData>) : RecyclerView.Adapter<TeamBoxGridAdapter.TeamBoxGridViewHolder>() {
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder.
     // Each data item is just a string in this case that is shown in a TextView.
-    class TeamBoxGridViewHolder(private val teamBox: View) : RecyclerView.ViewHolder(teamBox) {
+    class TeamBoxGridViewHolder(private val teambox: View) :
+        RecyclerView.ViewHolder(teambox), View.OnCreateContextMenuListener {
+
+        init {
+            teambox.teamboxCV.setOnCreateContextMenuListener(this)
+        }
+
         fun setData(team: TeamBoxData) {
-            teamBox.teamNumber.text = team.teamNumber.toString()
-            teamBox.progressBar.max = team.NB_TOTAL_STEPS - 1
+            teambox.teamNumber.text = team.teamNumber.toString()
+            teambox.progressBar.max = team.NB_TOTAL_STEPS - 1
             updateData(team)
 
-            teamBox.setOnClickListener { nextStep(team) }
+            teambox.setOnClickListener { nextStep(team) }
+            //teamBox.setOnLongClickListener { true }
         }
 
         private fun updateData(team: TeamBoxData) {
@@ -32,13 +37,13 @@ class TeamBoxGridAdapter(private val teams: Array<TeamBoxData>) :
                 return
             }
 
-            teamBox.runnerName.text = team.getCurrentRunner()
+            teambox.runnerName.text = team.getCurrentRunner()
 
-            teamBox.imgJersey.setImageResource(team.getDrawableRunner())
-            teamBox.imgPassage.setImageResource(team.getDrawablePassage())
-            teamBox.imgStep.setImageResource(team.getDrawableStep())
+            teambox.imgJersey.setImageResource(team.getDrawableRunner())
+            teambox.imgPassage.setImageResource(team.getDrawablePassage())
+            teambox.imgStep.setImageResource(team.getDrawableStep())
 
-            teamBox.progressBar.progress = team.totalStepsDone
+            teambox.progressBar.progress = team.totalStepsDone
         }
 
         private fun nextStep(team: TeamBoxData) {
@@ -47,10 +52,15 @@ class TeamBoxGridAdapter(private val teams: Array<TeamBoxData>) :
         }
 
         private fun displayFinish() {
-            teamBox.runnerName.text = "Parcours Terminé"
-            teamBox.runningState.visibility = View.INVISIBLE
-            teamBox.imgJersey.visibility = View.GONE
-            teamBox.imgFinish.visibility = View.VISIBLE
+            teambox.runnerName.text = "Parcours Terminé"
+            teambox.runningState.visibility = View.INVISIBLE
+            teambox.imgJersey.visibility = View.GONE
+            teambox.imgFinish.visibility = View.VISIBLE
+        }
+
+        override fun onCreateContextMenu(menu: ContextMenu, teamBox: View, menuInfo: ContextMenu.ContextMenuInfo?) {
+            menu.add(adapterPosition, 121, 0, "Détails")
+            menu.add(adapterPosition, 122, 1, "Blblbl")
         }
     }
 
