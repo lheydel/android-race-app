@@ -6,6 +6,7 @@ import android.database.Cursor
 import android.provider.BaseColumns
 import com.example.lo52_f1_levier.model.Coureur
 import com.example.lo52_f1_levier.model.CourseDbHelper
+import com.example.lo52_f1_levier.model.Participe
 import java.lang.Exception
 
 class CoureurDao(context: Context) {
@@ -22,14 +23,14 @@ class CoureurDao(context: Context) {
         return db?.insert(Coureur.CoureurTable.NAME, null, values)
     }
 
-    fun getCoureur(titre:String): Cursor? {
+    fun getCoureur(titre:Int): Cursor? {
         val db = dbHelper.readableDatabase
 
         val projection = arrayOf(BaseColumns._ID, Coureur.CoureurTable.NUMC, Coureur.CoureurTable.CNAME,
             Coureur.CoureurTable.SURNAME)
 
         val selection = "${Coureur.CoureurTable.NUMC} = ?"
-        val selectionArgs = arrayOf(titre)
+        val selectionArgs = arrayOf(titre.toString())
 
         val sortOrder = "${Coureur.CoureurTable.CNAME} DESC"
 
@@ -96,6 +97,17 @@ class CoureurDao(context: Context) {
         }catch(e: Exception){
             return -1
         }
+
+    }
+
+    fun getCoureurFree(titre : String): Cursor? {
+        val db = dbHelper.readableDatabase
+
+        var query = "SELECT * FROM"+Coureur.CoureurTable.NAME+ "WHERE "+Coureur.CoureurTable.NUMC+
+        "NOT IN ( SELECT "+Participe.ParticipeTable.NUMC+"FROM "+Participe.ParticipeTable.NAME+
+                "WHERE "+Participe.ParticipeTable.TITLE+ " = "+titre + ");"
+
+        return db.rawQuery(query, null)
 
     }
 }
