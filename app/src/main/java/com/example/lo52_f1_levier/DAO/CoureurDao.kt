@@ -6,6 +6,7 @@ import android.database.Cursor
 import android.provider.BaseColumns
 import com.example.lo52_f1_levier.model.Coureur
 import com.example.lo52_f1_levier.model.CourseDbHelper
+import com.example.lo52_f1_levier.model.Participe
 import java.lang.Exception
 
 class CoureurDao(context: Context) {
