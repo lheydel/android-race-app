@@ -36,8 +36,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [ParticipantTabConsultFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-typealias MyRunnerClickListener = (View, Runner, ParticipantTabConsultFragment.RunnerAdapter.ViewHolder) -> Unit
-lateinit var selectedPosition : ParticipantTabConsultFragment.RunnerAdapter.ViewHolder
+typealias MyRunnerClickListener = (View, Runner) -> Unit
 
 class ParticipantTabConsultFragment : Fragment() {
     // TODO: Rename and change types of parameters
@@ -126,14 +125,9 @@ class ParticipantTabConsultFragment : Fragment() {
         }
     }
 
-    private fun selectItem(view: View,runner: Runner, holder: RunnerAdapter.ViewHolder) {
+    private fun selectItem(view: View,runner: Runner) {
         selectedRunner = runner
-        if(::selectedPosition.isInitialized){
-
-            selectedPosition.content.setBackgroundColor(Color.parseColor("#ffffff"))
-        }
-        holder.content.setBackgroundColor(Color.parseColor("#d1d1d1"))
-        selectedPosition = holder
+        edt_selectedParticipant.setText(selectedRunner.cname + " " + selectedRunner.surname)
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -205,7 +199,7 @@ class ParticipantTabConsultFragment : Fragment() {
             val runner = runners[position]
             holder.content.text = runner.cname + " " + runner.surname
             holder.content.setOnClickListener { view ->
-                onClickListener(view, runner, holder)
+                onClickListener(view, runner)
             }
         }
 
