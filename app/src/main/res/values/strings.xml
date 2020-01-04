@@ -1,4 +1,5 @@
 <resources>
+    <string name="teambox_menu_detail">Détails</string>
     <string name="app_name">F1_Levier</string>
     <string name="title_tab_list">F1_Levier</string>
     <string name="title_tab_detail">tab Detail</string>
