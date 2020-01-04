@@ -1,4 +1,4 @@
-package com.example.lo52_f1_levier.dummy
+package com.example.lo52_f1_levier.item
 
 import java.util.ArrayList
 import java.util.HashMap
@@ -9,7 +9,7 @@ import java.util.HashMap
  *
  * TODO: Replace all uses of this class before publishing your app.
  */
-object DummyContent {
+object MenuContent {
 
     /**
      * An array of sample (dummy) items.

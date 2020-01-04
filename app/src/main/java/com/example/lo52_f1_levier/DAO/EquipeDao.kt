@@ -40,6 +40,29 @@ class EquipeDao(context : Context) {
 
         return cursor
     }
+
+    fun getEquipeByID(ID:Int): Cursor? {
+        val db = dbHelper.readableDatabase
+
+        val projection = arrayOf(BaseColumns._ID, Equipe.EquipeTable.ENAME)
+
+        val selection = "${BaseColumns._ID} = ?"
+        val selectionArgs = arrayOf(ID.toString())
+
+
+        val cursor = db.query(
+            Equipe.EquipeTable.NAME,   // The table to query
+            projection,             // The array of columns to return (pass null to get all)
+            selection,              // The columns for the WHERE clause
+            selectionArgs,          // The values for the WHERE clause
+            null,                   // don't group the rows
+            null,                   // don't filter by row groups
+            null
+        )
+
+        return cursor
+    }
+
     fun deleteEquipe(ename: String): Int {
         val db = dbHelper.writableDatabase
         val selection = "${Equipe.EquipeTable.ENAME} LIKE ?"
@@ -53,6 +76,20 @@ class EquipeDao(context : Context) {
         }
         val selection = "${Equipe.EquipeTable.ENAME} LIKE ?"
         val selectionArgs = arrayOf(oldEname)
+        val count = db.update(
+            Equipe.EquipeTable.NAME,
+            values,
+            selection,
+            selectionArgs)
+        return count
+    }
+    fun updateEquipeByID(ID: Int,ename: String): Int {
+        val db = dbHelper.writableDatabase
+        val values = ContentValues().apply {
+            put(Equipe.EquipeTable.ENAME, ename)
+        }
+        val selection = "${BaseColumns._ID} LIKE ?"
+        val selectionArgs = arrayOf(ID.toString())
         val count = db.update(
             Equipe.EquipeTable.NAME,
             values,

@@ -52,6 +52,39 @@ class ParticipeDao(context : Context) {
             sortOrder               // The sort order
         )
     }
+    fun getParticipeByID(ID:Int): Cursor? {
+        val db = dbHelper.readableDatabase
+
+        val projection = arrayOf(
+            BaseColumns._ID, Participe.ParticipeTable.NUMC, Participe.ParticipeTable.TITLE,
+            Participe.ParticipeTable.ENAME,
+            Participe.ParticipeTable.TIME1,
+            Participe.ParticipeTable.TIME2,
+            Participe.ParticipeTable.TIME3,
+            Participe.ParticipeTable.TIME4,
+            Participe.ParticipeTable.TIME5,
+            Participe.ParticipeTable.TIME6,
+            Participe.ParticipeTable.TIME7,
+            Participe.ParticipeTable.TIME8,
+            Participe.ParticipeTable.TIME9,
+            Participe.ParticipeTable.TIME10
+        )
+
+        val selection = "${BaseColumns._ID} = ?"
+        val selectionArgs = arrayOf(ID.toString())
+
+        val sortOrder = "${Participe.ParticipeTable.ENAME} DESC"
+
+        return db.query(
+            Participe.ParticipeTable.NAME,   // The table to query
+            projection,             // The array of columns to return (pass null to get all)
+            selection,              // The columns for the WHERE clause
+            selectionArgs,          // The values for the WHERE clause
+            null,                   // don't group the rows
+            null,                   // don't filter by row groups
+            sortOrder               // The sort order
+        )
+    }
 
     fun getParticipeByEname(Ename:String): Cursor? {
         val db = dbHelper.readableDatabase
@@ -176,6 +209,21 @@ class ParticipeDao(context : Context) {
             selection,
             selectionArgs)
     }
+    fun updateParticipeByID(ID: Int,numc: String,titre: String, ename: String): Int {
+        val db = dbHelper.writableDatabase
+        val values = ContentValues().apply {
+            put(Participe.ParticipeTable.NUMC, numc )
+            put(Participe.ParticipeTable.TITLE, titre)
+            put(Participe.ParticipeTable.ENAME, ename)
+        }
+        val selection = "${BaseColumns._ID} LIKE ?"
+        val selectionArgs = arrayOf(ID.toString())
+        return db.update(
+            Participe.ParticipeTable.NAME,
+            values,
+            selection,
+            selectionArgs)
+    }
 
     fun setTimeByNumC(Numc: String,numTime : Int, time : Int): Int {
         val db = dbHelper.writableDatabase
@@ -219,6 +267,54 @@ class ParticipeDao(context : Context) {
 
         val selection = "${Participe.ParticipeTable.NUMC} LIKE ?"
         val selectionArgs = arrayOf(Numc)
+        return db.update(
+            Participe.ParticipeTable.NAME,
+            values,
+            selection,
+            selectionArgs)
+    }
+    fun setTimeByID(ID: Int,numTime : Int, time : Int): Int {
+        val db = dbHelper.writableDatabase
+        val values=ContentValues()
+        when(numTime){
+            1->  values.apply {
+                put(Participe.ParticipeTable.TIME1, time)
+            }
+            2->  values.apply {
+                put(Participe.ParticipeTable.TIME2, time)
+            }
+            3->  values.apply {
+                put(Participe.ParticipeTable.TIME3, time)
+            }
+            4->  values.apply {
+                put(Participe.ParticipeTable.TIME4, time)
+            }
+            5->  values.apply {
+                put(Participe.ParticipeTable.TIME5, time)
+            }
+            6->  values.apply {
+                put(Participe.ParticipeTable.TIME6, time)
+            }
+            7->  values.apply {
+                put(Participe.ParticipeTable.TIME7, time)
+            }
+            8->  values.apply {
+                put(Participe.ParticipeTable.TIME8, time)
+            }
+            9->  values.apply {
+                put(Participe.ParticipeTable.TIME9, time)
+            }
+            10->  values.apply {
+                put(Participe.ParticipeTable.TIME10, time)
+            }
+            else -> values.apply {
+                put(Participe.ParticipeTable.TIME1, time)
+            }
+
+        }
+
+        val selection = "${BaseColumns._ID} LIKE ?"
+        val selectionArgs = arrayOf(ID.toString())
         return db.update(
             Participe.ParticipeTable.NAME,
             values,

@@ -12,7 +12,8 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
-        <activity android:name=".view.ParticipantEditActivity"></activity>
+        <activity android:name=".view.CreateCourseActivity" />
+        <activity android:name=".view.ParticipantEditActivity" />
 
         <activity
             android:name=".view.TabListActivity"

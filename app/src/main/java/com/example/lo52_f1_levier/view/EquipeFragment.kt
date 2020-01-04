@@ -1,6 +1,5 @@
 package com.example.lo52_f1_levier.view
 
-import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.lo52_f1_levier.R
-import com.example.lo52_f1_levier.dummy.DummyContent
+import com.example.lo52_f1_levier.item.MenuContent
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_tab_detail.*
 import kotlinx.android.synthetic.main.fragment_participant.*
@@ -31,7 +30,7 @@ class EquipeFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private var listener: OnFragmentInteractionListener? = null
-    private var item: DummyContent.MainTab? = null
+    private var item: MenuContent.MainTab? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +39,7 @@ class EquipeFragment : Fragment() {
                 // Load the dummy content specified by the fragment
                 // arguments. In a real-world scenario, use a Loader
                 // to load content from a content provider.
-                item = DummyContent.ITEM_MAP[it.getString(TabDetailFragment.ARG_ITEM_ID)]
+                item = MenuContent.ITEM_MAP[it.getString(TabDetailFragment.ARG_ITEM_ID)]
                 activity?.toolbar_layout?.title = item?.content
             }
         }
