@@ -36,8 +36,8 @@ class CourseTimerActivity : AppCompatActivity() {
         teamBoxGrid.setHasFixedSize(true)
     }
 
-    fun redirectToDetails(teamNumber: Int): Boolean {
-        // TODO send intent to go to details (courseId and teamNumber dispo)
+    private fun redirectToDetails(teamNumber: Int): Boolean {
+        // TODO send intent to go to details (courseId and teamNumber dispo) (example in CourseFragment, line 85)
         return true
     }
 }
