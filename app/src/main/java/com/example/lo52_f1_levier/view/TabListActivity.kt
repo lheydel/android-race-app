@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +11,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.lo52_f1_levier.R
 
-import com.example.lo52_f1_levier.dummy.DummyContent
+import com.example.lo52_f1_levier.dummy.MenuContent
 import kotlinx.android.synthetic.main.activity_tab_list.*
 import kotlinx.android.synthetic.main.tab_list_content.view.*
 import kotlinx.android.synthetic.main.tab_list.*
@@ -52,12 +51,12 @@ class TabListActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView(recyclerView: RecyclerView) {
-        recyclerView.adapter = SimpleItemRecyclerViewAdapter(this, DummyContent.ITEMS, twoPane)
+        recyclerView.adapter = SimpleItemRecyclerViewAdapter(this, MenuContent.ITEMS, twoPane)
     }
 
     class SimpleItemRecyclerViewAdapter(
         private val parentActivity: TabListActivity,
-        private val values: List<DummyContent.MainTab>,
+        private val values: List<MenuContent.MainTab>,
         private val twoPane: Boolean
     ) :
         RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder>() {
@@ -66,8 +65,8 @@ class TabListActivity : AppCompatActivity() {
 
         init {
             onClickListener = View.OnClickListener { v ->
-                // DummyContent initialise les "onglets" de base
-                val item = v.tag as DummyContent.MainTab
+                // MenuContent initialise les "onglets" de base
+                val item = v.tag as MenuContent.MainTab
                 if (twoPane) {
 
                     // fragment par défault
