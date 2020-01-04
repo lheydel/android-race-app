@@ -21,7 +21,7 @@ class ParticipantEditActivity : AppCompatActivity() {
 
         runnerId = intent.getIntExtra("runnerId", -1)
         if(runnerId != -1){
-            var res : Cursor? = coureurDao.getCoureur(runnerId.toString())
+            var res : Cursor? = coureurDao.getCoureur(runnerId)
             res?.moveToFirst()
 
             firstName.setText(res?.getString(res?.getColumnIndexOrThrow(Coureur.CoureurTable.CNAME)))
