@@ -11,7 +11,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".view.ParticipantEditActivity"></activity>
+        <activity android:name=".view.CreateCourseActivity"></activity>
+        <activity android:name=".view.ParticipantEditActivity" />
         <activity
             android:name=".view.TabListActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
