@@ -10,10 +10,13 @@ import com.example.lo52_f1_levier.utils.GridAutofitLayoutManager
 class CourseTimerActivity : AppCompatActivity() {
 
     private lateinit var teamBoxGrid: RecyclerView
+    private var courseId: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_course_timer)
+
+        courseId = intent.getIntExtra("courseId", 0)
 
         val columnWidth = resources.getDimension(R.dimen.teambox_width) + resources.getDimension(R.dimen.teambox_margin_side)
 
@@ -28,24 +31,13 @@ class CourseTimerActivity : AppCompatActivity() {
         for (i in 1..13) {
             teams = teams.plus(TeamBoxData(i, arrayOf(r1, r2, r3)))
         }
-        teamBoxGrid.adapter = TeamBoxGridAdapter(teams)
+        teamBoxGrid.adapter = TeamBoxGridAdapter(teams, this::redirectToDetails)
 
         teamBoxGrid.setHasFixedSize(true)
-        //registerForContextMenu(teamBoxGrid)
     }
 
-    /*override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
-        super.onCreateContextMenu(menu, v, menuInfo)
-        menuInflater.inflate(R.menu.teambox_menu, menu)
+    fun redirectToDetails(teamNumber: Int): Boolean {
+        // TODO send intent to go to details (courseId and teamNumber dispo)
+        return true
     }
-
-    override fun onContextItemSelected(item: MenuItem): Boolean {
-        return when(item.itemId) {
-            R.id.teambox_menu_detail -> {
-                Toast.makeText(applicationContext, "blblbl", Toast.LENGTH_LONG).show()
-                return true
-            }
-            else -> super.onContextItemSelected(item)
-        }
-    }*/
 }

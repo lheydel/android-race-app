@@ -1,21 +1,25 @@
 package com.example.lo52_f1_levier.coursetimer
 
+import android.content.Intent
 import android.view.*
+import android.widget.AdapterView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lo52_f1_levier.R
+import com.example.lo52_f1_levier.view.TabDetailActivity
+import com.example.lo52_f1_levier.view.TabDetailFragment
 import kotlinx.android.synthetic.main.team_box.view.*
 
 /**
  * Link data to the RecyclerView listing the team boxes in the CourseTimerActivity
  */
-class TeamBoxGridAdapter(private val teams: Array<TeamBoxData>) : RecyclerView.Adapter<TeamBoxGridAdapter.TeamBoxGridViewHolder>() {
+class TeamBoxGridAdapter(private val teams: Array<TeamBoxData>, private val goToDetails: (Int) -> Boolean) : RecyclerView.Adapter<TeamBoxGridAdapter.TeamBoxGridViewHolder>() {
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder.
     // Each data item is just a string in this case that is shown in a TextView.
-    class TeamBoxGridViewHolder(private val teambox: View) :
+    class TeamBoxGridViewHolder(private val teambox: View, private val goToDetails: (Int) -> Boolean) :
         RecyclerView.ViewHolder(teambox), View.OnCreateContextMenuListener {
 
         init {
@@ -59,6 +63,7 @@ class TeamBoxGridAdapter(private val teams: Array<TeamBoxData>) : RecyclerView.A
 
         override fun onCreateContextMenu(menu: ContextMenu, teamBox: View, menuInfo: ContextMenu.ContextMenuInfo?) {
             menu.add(teambox.teamNumber.text.toString().toInt(), 0, 0, "Détails")
+                .setOnMenuItemClickListener { goToDetails(teamBox.teamNumber.text.toString().toInt()) }
         }
     }
 
@@ -69,7 +74,7 @@ class TeamBoxGridAdapter(private val teams: Array<TeamBoxData>) : RecyclerView.A
                                           .inflate(R.layout.team_box, parent, false)
 
         // set the view's size, margins, paddings and layout parameters
-        return TeamBoxGridViewHolder(teamBox)
+        return TeamBoxGridViewHolder(teamBox, goToDetails)
     }
 
     // Replace the contents of a view (invoked by the layout manager)
