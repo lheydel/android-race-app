@@ -7,8 +7,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import androidx.core.view.get
+import com.example.lo52_f1_levier.DAO.CourseDao
 
 import com.example.lo52_f1_levier.R
+import com.example.lo52_f1_levier.model.Run
+import kotlinx.android.synthetic.main.fragment_equipe_tab_ajouter.*
+import kotlinx.android.synthetic.main.fragment_equipe_tab_consult.*
+import kotlinx.android.synthetic.main.fragment_equipe_tab_consult.courseSelector
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -27,7 +35,7 @@ class EquipeTabConsultFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    private var listener: OnFragmentInteractionListener? = null
+    private lateinit var courseDao: CourseDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +51,42 @@ class EquipeTabConsultFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_equipe_tab_consult, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        courseDao = CourseDao(this.context!!)
+        val courseCursor = courseDao.getAllCourse()
+        val courses = ArrayList<Run>()
+
+        with(courseCursor!!){
+            while (moveToNext()){
+                val run = Run(
+                    getInt(getColumnIndexOrThrow(android.provider.BaseColumns._ID)),
+                    getString(getColumnIndexOrThrow(com.example.lo52_f1_levier.model.Course.Coursetable.TITLE)),
+                    getString(getColumnIndexOrThrow(com.example.lo52_f1_levier.model.Course.Coursetable.DATE))
+                )
+                courses.add(run)
+            }
+        }
+        val spinnerAdapter = ArrayAdapter<Run>(this.context!!,
+            android.R.layout.simple_spinner_item, courses)
+        courseSelector.adapter = spinnerAdapter
+
+        courseSelector?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val course = courseSelector.selectedItem as Run
+                //TODO : load data for this course
+
+
+            }
+
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event
