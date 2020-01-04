@@ -16,7 +16,7 @@ const val SQL_DELETE_COURSE = "DROP TABLE IF EXISTS ${Course.Coursetable.TABLE_N
 const val SQL_CREATE_EQUIPE =
     "CREATE TABLE ${Equipe.EquipeTable.NAME} (" +
             "${BaseColumns._ID} INTEGER PRIMARY KEY," +
-            "${Equipe.EquipeTable.ENAME} TEXT"
+            "${Equipe.EquipeTable.ENAME} TEXT)"
 
 const val SQL_DELETE_EQUIPE = "DROP TABLE IF EXISTS ${Equipe.EquipeTable.NAME}"
 
@@ -32,7 +32,7 @@ const val SQL_DELETE_COUREUR = "DROP TABLE IF EXISTS ${Coureur.CoureurTable.NAME
 const val SQL_CREATE_PARTICIPE =
     "CREATE TABLE ${Participe.ParticipeTable.NAME} (" +
             "${BaseColumns._ID} INTEGER PRIMARY KEY," +
-            "${Participe.ParticipeTable.TITLE} TEXT,)" +
+            "${Participe.ParticipeTable.TITLE} TEXT," +
             "${Participe.ParticipeTable.NUMC} NUMBER,"+
             "${Participe.ParticipeTable.ENAME} TEXT,"+
             "${Participe.ParticipeTable.TIME1} NUMBER,"+
@@ -44,7 +44,7 @@ const val SQL_CREATE_PARTICIPE =
             "${Participe.ParticipeTable.TIME7} NUMBER,"+
             "${Participe.ParticipeTable.TIME8} NUMBER,"+
             "${Participe.ParticipeTable.TIME9} NUMBER,"+
-            "${Participe.ParticipeTable.TIME10} NUMBER"
+            "${Participe.ParticipeTable.TIME10} NUMBER)"
 
 
 const val SQL_DELETE_PARTICIPE = "DROP TABLE IF EXISTS ${Participe.ParticipeTable.NAME}"

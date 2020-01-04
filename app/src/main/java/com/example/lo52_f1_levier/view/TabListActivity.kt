@@ -11,7 +11,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.lo52_f1_levier.R
 
-import com.example.lo52_f1_levier.dummy.MenuContent
+import com.example.lo52_f1_levier.item.MenuContent
 import kotlinx.android.synthetic.main.activity_tab_list.*
 import kotlinx.android.synthetic.main.tab_list_content.view.*
 import kotlinx.android.synthetic.main.tab_list.*
@@ -87,6 +87,7 @@ class TabListActivity : AppCompatActivity() {
                                 putString(EquipeFragment.ARG_ITEM_ID, item.id)
                             }
                         }
+                        "Courses" -> fragment = CourseFragment()
                         //TODO : ajouter les autres "onglets"
                     }
                     /*val fragment = TabDetailFragment().apply {

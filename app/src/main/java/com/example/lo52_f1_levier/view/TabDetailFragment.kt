@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.lo52_f1_levier.R
-import com.example.lo52_f1_levier.dummy.MenuContent
+import com.example.lo52_f1_levier.item.MenuContent
 import kotlinx.android.synthetic.main.activity_tab_detail.*
 
 /**
