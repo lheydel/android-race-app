@@ -11,7 +11,7 @@ class TeamBoxData(val teamNumber: Int, private val runners: Array<String>) {
     var passage = 1
     var runner = 1
     var step = 1
-    var totalStepsDone = 0  // could be calculated from the previous ones, but it would just be a pain
+    var totalStepsDone = 0  // could be computed from the previous ones, but it would just be a pain
     var isOver = false
 
     fun incrementStep() {

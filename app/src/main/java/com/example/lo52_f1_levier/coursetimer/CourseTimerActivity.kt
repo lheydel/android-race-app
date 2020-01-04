@@ -1,13 +1,7 @@
 package com.example.lo52_f1_levier.coursetimer
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.ContextMenu
-import android.view.MenuItem
-import android.view.View
-import android.widget.Toast
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lo52_f1_levier.R
 import com.example.lo52_f1_levier.utils.GridAutofitLayoutManager

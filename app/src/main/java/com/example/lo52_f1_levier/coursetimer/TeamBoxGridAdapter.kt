@@ -19,7 +19,7 @@ class TeamBoxGridAdapter(private val teams: Array<TeamBoxData>) : RecyclerView.A
         RecyclerView.ViewHolder(teambox), View.OnCreateContextMenuListener {
 
         init {
-            teambox.teamboxCV.setOnCreateContextMenuListener(this)
+            teambox.setOnCreateContextMenuListener(this)
         }
 
         fun setData(team: TeamBoxData) {
@@ -28,7 +28,6 @@ class TeamBoxGridAdapter(private val teams: Array<TeamBoxData>) : RecyclerView.A
             updateData(team)
 
             teambox.setOnClickListener { nextStep(team) }
-            //teamBox.setOnLongClickListener { true }
         }
 
         private fun updateData(team: TeamBoxData) {
@@ -59,8 +58,7 @@ class TeamBoxGridAdapter(private val teams: Array<TeamBoxData>) : RecyclerView.A
         }
 
         override fun onCreateContextMenu(menu: ContextMenu, teamBox: View, menuInfo: ContextMenu.ContextMenuInfo?) {
-            menu.add(adapterPosition, 121, 0, "Détails")
-            menu.add(adapterPosition, 122, 1, "Blblbl")
+            menu.add(teambox.teamNumber.text.toString().toInt(), 0, 0, "Détails")
         }
     }
 
