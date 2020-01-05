@@ -6,6 +6,7 @@ import android.database.Cursor
 import android.provider.BaseColumns
 import com.example.lo52_f1_levier.model.Equipe
 import com.example.lo52_f1_levier.model.CourseDbHelper
+import com.example.lo52_f1_levier.model.Participe
 
 class EquipeDao(context : Context) {
     val dbHelper = CourseDbHelper(context)
@@ -76,6 +77,17 @@ class EquipeDao(context : Context) {
         )
 
         return cursor
+    }
+
+    fun getTeamForACourse(titre : String): Cursor? {
+        val db = dbHelper.readableDatabase
+
+        var query = "SELECT * FROM "+Equipe.EquipeTable.NAME+ " WHERE "+Equipe.EquipeTable.ENAME+
+                " NOT IN ( SELECT "+ Participe.ParticipeTable.ENAME+" FROM "+Participe.ParticipeTable.NAME+
+                " WHERE "+Participe.ParticipeTable.TITLE+ " = '"+ titre + "');"
+
+        return db.rawQuery(query, null)
+
     }
 
 }

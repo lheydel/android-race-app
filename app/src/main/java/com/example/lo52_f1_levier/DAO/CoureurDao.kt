@@ -103,9 +103,9 @@ class CoureurDao(context: Context) {
     fun getCoureurFree(titre : String): Cursor? {
         val db = dbHelper.readableDatabase
 
-        var query = "SELECT * FROM"+Coureur.CoureurTable.NAME+ "WHERE "+Coureur.CoureurTable.NUMC+
-            "NOT IN ( SELECT "+Participe.ParticipeTable.NUMC+"FROM "+Participe.ParticipeTable.NAME+
-                "WHERE "+Participe.ParticipeTable.TITLE+ " = "+ titre + ");"
+        var query = "SELECT * FROM "+Coureur.CoureurTable.NAME+ " WHERE "+Coureur.CoureurTable.NUMC+
+            " NOT IN ( SELECT "+Participe.ParticipeTable.NUMC+" FROM "+Participe.ParticipeTable.NAME+
+                " WHERE "+Participe.ParticipeTable.TITLE+ " = '"+ titre + "');"
 
         return db.rawQuery(query, null)
 
