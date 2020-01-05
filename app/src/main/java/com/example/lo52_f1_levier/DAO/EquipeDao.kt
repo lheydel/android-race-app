@@ -83,7 +83,7 @@ class EquipeDao(context : Context) {
         val db = dbHelper.readableDatabase
 
         var query = "SELECT * FROM "+Equipe.EquipeTable.NAME+ " WHERE "+Equipe.EquipeTable.ENAME+
-                " NOT IN ( SELECT "+ Participe.ParticipeTable.ENAME+" FROM "+Participe.ParticipeTable.NAME+
+                " IN ( SELECT "+ Participe.ParticipeTable.ENAME+" FROM "+Participe.ParticipeTable.NAME+
                 " WHERE "+Participe.ParticipeTable.TITLE+ " = '"+ titre + "');"
 
         return db.rawQuery(query, null)

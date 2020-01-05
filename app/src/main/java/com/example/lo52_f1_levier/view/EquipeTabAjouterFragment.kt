@@ -59,6 +59,7 @@ class EquipeTabAjouterFragment : Fragment() {
     private lateinit var selectedMember : Runner
     private lateinit var adapter: RunnerAdapter
     private lateinit var teamAdapter: TeamMemberAdapter
+    private lateinit var course: Run
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,9 +90,9 @@ class EquipeTabAjouterFragment : Fragment() {
                     equipeDao = EquipeDao(this.context!!)
                     participeDao = ParticipeDao(this.context!!)
                     equipeDao.insertEquipe(edt_teamName.text.toString())
-                    participeDao.insertParticipe(courseSelector.selectedItem.toString(), teamAdapter.getItem(0).numc, edt_teamName.text.toString())
-                    participeDao.insertParticipe(courseSelector.selectedItem.toString(), teamAdapter.getItem(1).numc, edt_teamName.text.toString())
-                    participeDao.insertParticipe(courseSelector.selectedItem.toString(), teamAdapter.getItem(2).numc, edt_teamName.text.toString())
+                    participeDao.insertParticipe(course.name, teamAdapter.getItem(0).numc, edt_teamName.text.toString())
+                    participeDao.insertParticipe(course.name, teamAdapter.getItem(1).numc, edt_teamName.text.toString())
+                    participeDao.insertParticipe(course.name, teamAdapter.getItem(2).numc, edt_teamName.text.toString())
                 }
                 else{
                     Toast.makeText(this.context, "L'équipe doit avoir 3 memebres", Toast.LENGTH_SHORT).show()
@@ -204,7 +205,7 @@ class EquipeTabAjouterFragment : Fragment() {
             }
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val course = courseSelector.selectedItem as Run
+                course = courseSelector.selectedItem as Run
 
                 val freeRunnerCursor = coureurDao.getCoureurFree(course.name)
 
