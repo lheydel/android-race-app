@@ -1,22 +1,11 @@
-package com.example.lo52_f1_levier.view
+package com.example.lo52_f1_levier.coursetimer
 
-import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import androidx.core.view.get
-import com.example.lo52_f1_levier.DAO.CourseDao
-
 import com.example.lo52_f1_levier.R
-import com.example.lo52_f1_levier.model.Run
-import kotlinx.android.synthetic.main.fragment_equipe_tab_ajouter.*
-import kotlinx.android.synthetic.main.fragment_equipe_tab_consult.*
-import kotlinx.android.synthetic.main.fragment_equipe_tab_consult.courseSelector
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,16 +15,16 @@ private const val ARG_PARAM2 = "param2"
 /**
  * A simple [Fragment] subclass.
  * Activities that contain this fragment must implement the
- * [EquipeTabConsultFragment.OnFragmentInteractionListener] interface
+ * [TeamBox.OnFragmentInteractionListener] interface
  * to handle interaction events.
- * Use the [EquipeTabConsultFragment.newInstance] factory method to
+ * Use the [TeamBox.newInstance] factory method to
  * create an instance of this fragment.
  */
-class EquipeTabConsultFragment : Fragment() {
+class TeamBox : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    private lateinit var courseDao: CourseDao
+    //private var listener: OnFragmentInteractionListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,43 +39,7 @@ class EquipeTabConsultFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_equipe_tab_consult, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        courseDao = CourseDao(this.context!!)
-        val courseCursor = courseDao.getAllCourse()
-        val courses = ArrayList<Run>()
-
-        with(courseCursor!!){
-            while (moveToNext()){
-                val run = Run(
-                    getInt(getColumnIndexOrThrow(android.provider.BaseColumns._ID)),
-                    getString(getColumnIndexOrThrow(com.example.lo52_f1_levier.model.Course.Coursetable.TITLE)),
-                    getString(getColumnIndexOrThrow(com.example.lo52_f1_levier.model.Course.Coursetable.DATE))
-                )
-                courses.add(run)
-            }
-        }
-        val spinnerAdapter = ArrayAdapter<Run>(this.context!!,
-            android.R.layout.simple_spinner_item, courses)
-        courseSelector.adapter = spinnerAdapter
-
-        courseSelector?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-
-            }
-
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val course = courseSelector.selectedItem as Run
-                //TODO : load data for this course
-
-
-            }
-
-        }
+        return inflater.inflate(R.layout.team_box, container, false)
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -119,10 +72,10 @@ class EquipeTabConsultFragment : Fragment() {
      * (http://developer.android.com/training/basics/fragments/communicating.html)
      * for more information.
      */
-    interface OnFragmentInteractionListener {
+    /*interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         fun onFragmentInteraction(uri: Uri)
-    }
+    }*/
 
     companion object {
         /**
@@ -131,12 +84,12 @@ class EquipeTabConsultFragment : Fragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment EquipeTabConsultFragment.
+         * @return A new instance of fragment TeamBox.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            EquipeTabConsultFragment().apply {
+            TeamBox().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

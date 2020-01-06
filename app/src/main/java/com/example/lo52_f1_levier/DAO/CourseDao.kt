@@ -41,6 +41,27 @@ class CourseDao(context: Context) {
         )
     }
 
+    fun getCourseByID(ID:Int): Cursor? {
+        val db = dbHelper.readableDatabase
+
+        val projection = arrayOf(BaseColumns._ID, Course.Coursetable.TITLE, Course.Coursetable.DATE)
+
+        val selection = "${BaseColumns._ID} = ?"
+        val selectionArgs = arrayOf(ID.toString())
+
+        val sortOrder = "${Course.Coursetable.DATE} DESC"
+
+        return db.query(
+            Course.Coursetable.TABLE_NAME,   // The table to query
+            projection,             // The array of columns to return (pass null to get all)
+            selection,              // The columns for the WHERE clause
+            selectionArgs,          // The values for the WHERE clause
+            null,                   // don't group the rows
+            null,                   // don't filter by row groups
+            sortOrder               // The sort order
+        )
+    }
+
     fun getAllCourse(): Cursor? {
         val db = dbHelper.readableDatabase
 
@@ -75,6 +96,20 @@ class CourseDao(context: Context) {
         }
         val selection = "${Course.Coursetable.TITLE} LIKE ?"
         val selectionArgs = arrayOf(oldTitle)
+        return db.update(
+            Course.Coursetable.TABLE_NAME,
+            values,
+            selection,
+            selectionArgs)
+    }
+    fun updateCourseByID(ID: Int,title: String,date: String): Int {
+        val db = dbHelper.writableDatabase
+        val values = ContentValues().apply {
+            put(Course.Coursetable.TITLE, title)
+            put(Course.Coursetable.DATE,date)
+        }
+        val selection = "${BaseColumns._ID} LIKE ?"
+        val selectionArgs = arrayOf(ID.toString())
         return db.update(
             Course.Coursetable.TABLE_NAME,
             values,

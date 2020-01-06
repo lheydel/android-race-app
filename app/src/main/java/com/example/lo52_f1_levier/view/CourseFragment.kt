@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.lo52_f1_levier.DAO.CourseDao
 
 import com.example.lo52_f1_levier.R
+import com.example.lo52_f1_levier.coursetimer.CourseTimerActivity
 import com.example.lo52_f1_levier.model.Course
 import com.example.lo52_f1_levier.model.Run
 import kotlinx.android.extensions.LayoutContainer
@@ -71,18 +72,24 @@ class CourseFragment : Fragment() {
                 runs.add(run)
             }
         }
-        adapter = CourseAdapter()
+        adapter = CourseAdapter(this::redirectToCourseTimer)
         adapter.replaceItems(runs)
         listCourse.layoutManager = LinearLayoutManager(this.context)
         listCourse.adapter = adapter
 
         newCourse.setOnClickListener {
-            val intent = Intent(this.context, CreateCourseActivity::class.java)
+            val intent = Intent(context, CreateCourseActivity::class.java)
             startActivity(intent)
         }
     }
 
-    class CourseAdapter() : RecyclerView.Adapter<CourseAdapter.ViewHolder>(){
+    private fun redirectToCourseTimer(courseId: Int) {
+        val intent = Intent(context, CourseTimerActivity::class.java)
+        intent.putExtra("courseId", courseId)
+        startActivity(intent)
+    }
+
+    class CourseAdapter(private val goToCourseTimer: (Int) -> Unit) : RecyclerView.Adapter<CourseAdapter.ViewHolder>(){
         private var courses = ArrayList<Run>()
 
 
@@ -95,9 +102,7 @@ class CourseFragment : Fragment() {
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val course = courses[position]
             holder.content.text = course.name + " : " + course.date
-            holder.content.setOnClickListener { view ->
-                //intent here
-            }
+            holder.content.setOnClickListener { goToCourseTimer(course.id) }
         }
 
 
