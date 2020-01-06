@@ -44,6 +44,28 @@ class CoureurDao(context: Context) {
             sortOrder               // The sort order
         )
     }
+    fun getCoureurByID(ID:Int): Cursor? {
+        val db = dbHelper.readableDatabase
+
+        val projection = arrayOf(BaseColumns._ID, Coureur.CoureurTable.NUMC, Coureur.CoureurTable.CNAME,
+            Coureur.CoureurTable.SURNAME)
+
+        val selection = "${BaseColumns._ID} = ?"
+        val selectionArgs = arrayOf(ID.toString())
+
+        val sortOrder = "${Coureur.CoureurTable.CNAME} DESC"
+
+        return db.query(
+            Coureur.CoureurTable.NAME,   // The table to query
+            projection,             // The array of columns to return (pass null to get all)
+            selection,              // The columns for the WHERE clause
+            selectionArgs,          // The values for the WHERE clause
+            null,                   // don't group the rows
+            null,                   // don't filter by row groups
+            sortOrder               // The sort order
+        )
+    }
+
 
     fun getAllCoureur(): Cursor? {
         val db = dbHelper.readableDatabase
@@ -86,6 +108,21 @@ class CoureurDao(context: Context) {
             selection,
             selectionArgs)
     }
+    fun updateCoureurByID(ID: Int,numc: Int,cname: String, surname: String): Int {
+        val db = dbHelper.writableDatabase
+        val values = ContentValues().apply {
+            put(Coureur.CoureurTable.NUMC, numc)
+            put(Coureur.CoureurTable.CNAME,cname)
+            put(Coureur.CoureurTable.SURNAME,surname)
+        }
+        val selection = "${BaseColumns._ID} LIKE ?"
+        val selectionArgs = arrayOf(ID.toString())
+        return db.update(
+            Coureur.CoureurTable.NAME,
+            values,
+            selection,
+            selectionArgs)
+    }
 
     fun getLastId() : Int {
         val db = dbHelper.writableDatabase
@@ -106,6 +143,16 @@ class CoureurDao(context: Context) {
         var query = "SELECT * FROM "+Coureur.CoureurTable.NAME+ " WHERE "+Coureur.CoureurTable.NUMC+
             " NOT IN ( SELECT "+Participe.ParticipeTable.NUMC+" FROM "+Participe.ParticipeTable.NAME+
                 " WHERE "+Participe.ParticipeTable.TITLE+ " = '"+ titre + "');"
+
+        return db.rawQuery(query, null)
+
+    }
+    fun getCoureurFree(ID : Int): Cursor? {
+        val db = dbHelper.readableDatabase
+
+        var query = "SELECT * FROM"+Coureur.CoureurTable.NAME+ "WHERE "+Coureur.CoureurTable.NUMC+
+                "NOT IN ( SELECT "+Participe.ParticipeTable.NUMC+"FROM "+Participe.ParticipeTable.NAME+
+                "WHERE "+Participe.ParticipeTable.NAME+"."+BaseColumns._ID+ " = "+ ID.toString() + ");"
 
         return db.rawQuery(query, null)
 
