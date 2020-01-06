@@ -1,5 +1,6 @@
 package com.example.lo52_f1_levier.view
 
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -170,9 +171,7 @@ class EquipeTabAjouterFragment : Fragment() {
         listFreeParticipant.layoutManager = LinearLayoutManager(this.context)
         listFreeParticipant.adapter = adapter
 
-        teamAdapter = TeamMemberAdapter(
-            onClickListener = this::selectMember
-        )
+        teamAdapter = TeamMemberAdapter(this::selectMember, context)
         listTeamMembers.layoutManager = LinearLayoutManager(this.context)
         listTeamMembers.adapter = teamAdapter
 
@@ -296,7 +295,7 @@ class EquipeTabAjouterFragment : Fragment() {
             LayoutContainer
     }
 
-    class TeamMemberAdapter(private val onClickListener: TeamRunnerClickListener) : RecyclerView.Adapter<TeamMemberAdapter.ViewHolder>(){
+    class TeamMemberAdapter(private val onClickListener: TeamRunnerClickListener, private val context: Context?) : RecyclerView.Adapter<TeamMemberAdapter.ViewHolder>(){
 
         private var members = ArrayList<Runner>()
 
@@ -308,14 +307,15 @@ class EquipeTabAjouterFragment : Fragment() {
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val member = members[position]
-            holder.content.text = member.cname + " " + member.surname
+            holder.content.text = "${member.cname} ${member.surname}"
             holder.content.setOnClickListener { view ->
                 onClickListener(view, member)
             }
+
             when(position){
-                0 -> holder.imageView.setBackgroundColor(Color.parseColor("#EDBE1414"))
-                1 -> holder.imageView.setBackgroundColor(Color.parseColor("#ED1FBE14"))
-                3 -> holder.imageView.setBackgroundColor(Color.parseColor("#ED144DBE"))
+                0 -> holder.imageView.setBackgroundColor(context!!.resources.getColor(R.color.runner1))
+                1 -> holder.imageView.setBackgroundColor(context!!.resources.getColor(R.color.runner2))
+                2 -> holder.imageView.setBackgroundColor(context!!.resources.getColor(R.color.runner3))
             }
         }
 
