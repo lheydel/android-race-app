@@ -1,5 +1,6 @@
 package com.example.lo52_f1_levier.view
 
+import android.app.AlertDialog
 import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -88,6 +89,18 @@ class EquipeTabAjouterFragment : Fragment() {
                     participeDao.insertParticipe(course.id, teamAdapter.getItem(0).numc, equipeRowId!!.toInt())
                     participeDao.insertParticipe(course.id, teamAdapter.getItem(1).numc, equipeRowId!!.toInt())
                     participeDao.insertParticipe(course.id, teamAdapter.getItem(2).numc, equipeRowId!!.toInt())
+
+                    edt_teamName.text.clear()
+                    if (fragmentManager != null) {
+
+                        fragmentManager!!
+                            .beginTransaction()
+                            .detach(this)
+                            .attach(this)
+                            .commit()
+                    }
+
+
                 }
                 else{
                     Toast.makeText(this.context, "L'équipe doit avoir 3 memebres", Toast.LENGTH_SHORT).show()
@@ -190,9 +203,17 @@ class EquipeTabAjouterFragment : Fragment() {
                 courses.add(run)
             }
         }
-        val spinnerAdapter = ArrayAdapter<Run>(this.context!!,
-            android.R.layout.simple_spinner_item, courses)
-        courseSelector.adapter = spinnerAdapter
+        if (courses.isEmpty()) {
+            val alert = AlertDialog.Builder(this.context!!)
+            alert.setTitle("Aucune course de disponible")
+            alert.setMessage("Pour pouvoir créer un équipe vous devez avoir au moins une courses de disponible")
+            alert.show()
+        }
+        else{
+            val spinnerAdapter = ArrayAdapter<Run>(this.context!!,
+                android.R.layout.simple_spinner_item, courses)
+            courseSelector.adapter = spinnerAdapter
+        }
 
         courseSelector?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
