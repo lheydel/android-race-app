@@ -21,6 +21,8 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_course.*
 import kotlinx.android.synthetic.main.tab_list_content.*
 
+
+
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
@@ -80,6 +82,7 @@ class CourseFragment : Fragment() {
         newCourse.setOnClickListener {
             val intent = Intent(context, CreateCourseActivity::class.java)
             startActivity(intent)
+            this.onDetach()
         }
     }
 
@@ -87,6 +90,22 @@ class CourseFragment : Fragment() {
         val intent = Intent(context, CourseTimerActivity::class.java)
         intent.putExtra("courseId", courseId)
         startActivity(intent)
+    }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+
+        super.setUserVisibleHint(isVisibleToUser)
+
+        // Refresh tab data:
+
+        if (fragmentManager != null) {
+
+            fragmentManager!!
+                .beginTransaction()
+                .detach(this)
+                .attach(this)
+                .commit()
+        }
     }
 
     class CourseAdapter(private val goToCourseTimer: (Int) -> Unit) : RecyclerView.Adapter<CourseAdapter.ViewHolder>(){

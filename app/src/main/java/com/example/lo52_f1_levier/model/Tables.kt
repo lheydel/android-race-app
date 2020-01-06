@@ -35,7 +35,7 @@ const val SQL_CREATE_PARTICIPE =
             "${BaseColumns._ID} INTEGER PRIMARY KEY," +
             "${Participe.ParticipeTable.C_ID} INTEGER," +
             "${Participe.ParticipeTable.CR_ID} INTEGER,"+
-            "${Participe.ParticipeTable.E_ID} INTERGER,"+
+            "${Participe.ParticipeTable.E_ID} INTEGER,"+
             "${Participe.ParticipeTable.TIME1} NUMBER,"+
             "${Participe.ParticipeTable.TIME2} NUMBER,"+
             "${Participe.ParticipeTable.TIME3} NUMBER,"+

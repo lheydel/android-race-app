@@ -2,13 +2,13 @@ package com.example.lo52_f1_levier.view
 
 import android.graphics.Color
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lo52_f1_levier.DAO.CoureurDao
@@ -16,85 +16,55 @@ import com.example.lo52_f1_levier.DAO.CourseDao
 import com.example.lo52_f1_levier.DAO.EquipeDao
 import com.example.lo52_f1_levier.DAO.ParticipeDao
 import com.example.lo52_f1_levier.R
-import com.example.lo52_f1_levier.model.Coureur
-import com.example.lo52_f1_levier.model.Run
-import com.example.lo52_f1_levier.model.Runner
+import com.example.lo52_f1_levier.model.*
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.fragment_equipe_tab_ajouter.*
-import kotlinx.android.synthetic.main.fragment_equipe_tab_ajouter.courseSelector
+import kotlinx.android.synthetic.main.activity_team_edit.*
 import kotlinx.android.synthetic.main.tab_list_content.content
 import kotlinx.android.synthetic.main.team_member_list_content.*
 
+typealias aAvailableRunnerClickListener = (View, Runner) -> Unit
+typealias aTeamRunnerClickListener = (View, Runner) -> Unit
 
-
-
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-typealias AvailableRunnerClickListener = (View, Runner) -> Unit
-typealias TeamRunnerClickListener = (View, Runner) -> Unit
-
-/**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [EquipeTabAjouterFragment.OnFragmentInteractionListener] interface
- * to handle interaction events.
- * Use the [EquipeTabAjouterFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class EquipeTabAjouterFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+class TeamEditActivity : AppCompatActivity() {
 
     private lateinit var coureurDao : CoureurDao
     private lateinit var equipeDao : EquipeDao
     private lateinit var participeDao: ParticipeDao
-    private lateinit var courseDao: CourseDao
     private lateinit var selectedRunner : Runner
     private lateinit var selectedMember : Runner
     private lateinit var adapter: RunnerAdapter
     private lateinit var teamAdapter: TeamMemberAdapter
-    private lateinit var course: Run
+
+    private var teamId : Int = -1
+    private var courseId : Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+        setContentView(R.layout.activity_team_edit)
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_equipe_tab_ajouter, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?){
-        equipeDao = EquipeDao(this.context!!)
+        coureurDao = CoureurDao(this)
+        equipeDao = EquipeDao(this)
+        participeDao = ParticipeDao(this)
 
         save.setOnClickListener{
             if(!edt_teamName.text.isEmpty()) {
 
                 if (teamAdapter.getItemCount() == 3) {
-                    equipeDao = EquipeDao(this.context!!)
-                    participeDao = ParticipeDao(this.context!!)
-                    val equipeRowId = equipeDao.insertEquipe(edt_teamName.text.toString(),edt_teamNumber.text.toString().toInt())
-                    participeDao.insertParticipe(course.id, teamAdapter.getItem(0).numc, equipeRowId!!.toInt())
-                    participeDao.insertParticipe(course.id, teamAdapter.getItem(1).numc, equipeRowId!!.toInt())
-                    participeDao.insertParticipe(course.id, teamAdapter.getItem(2).numc, equipeRowId!!.toInt())
+                    equipeDao = EquipeDao(this)
+                    participeDao = ParticipeDao(this)
+                    participeDao.deleteParticipeByC_ID_E_ID(courseId,teamId)
+                    equipeDao.updateEquipeByID(teamId,edt_teamName.text.toString(),edt_teamNumber.text.toString().toInt())
+
+                    participeDao.insertParticipe(courseId, teamAdapter.getItem(0).numc, teamId)
+                    participeDao.insertParticipe(courseId, teamAdapter.getItem(1).numc, teamId)
+                    participeDao.insertParticipe(courseId, teamAdapter.getItem(2).numc, teamId)
                 }
                 else{
-                    Toast.makeText(this.context, "L'équipe doit avoir 3 memebres", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "L'équipe doit avoir 3 memebres", Toast.LENGTH_SHORT).show()
                 }
             }
             else
-                Toast.makeText(this.context, "Veuiller renseigner le nom de l'équipe", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Veuiller renseigner le nom de l'équipe", Toast.LENGTH_SHORT).show()
         }
 
         btn_left.setOnClickListener{
@@ -108,10 +78,10 @@ class EquipeTabAjouterFragment : Fragment() {
                     edt_selectedMember.text.clear()
                 }
                 else
-                    Toast.makeText(this.context, "Vous devez sélectionner un membre de l'équipe", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Vous devez sélectionner un membre de l'équipe", Toast.LENGTH_SHORT).show()
             }
             else
-                Toast.makeText(this.context, "Vous devez sélectionner un membre de l'équipe", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Vous devez sélectionner un membre de l'équipe", Toast.LENGTH_SHORT).show()
         }
 
         btn_right.setOnClickListener{
@@ -127,10 +97,10 @@ class EquipeTabAjouterFragment : Fragment() {
                     edt_selectedParticipant.text.clear()
                 }
                 else
-                    Toast.makeText(this.context, "Vous devez sélectionner un Participant", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Vous devez sélectionner un Participant", Toast.LENGTH_SHORT).show()
             }
             else
-                Toast.makeText(this.context, "Vous devez sélectionner un Participant", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Vous devez sélectionner un Participant", Toast.LENGTH_SHORT).show()
         }
 
         btn_up.setOnClickListener{
@@ -140,10 +110,10 @@ class EquipeTabAjouterFragment : Fragment() {
                         teamAdapter.moveUp(selectedMember)
                 }
                 else
-                    Toast.makeText(this.context, "Vous devez sélectionner un membre de l'équipe", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Vous devez sélectionner un membre de l'équipe", Toast.LENGTH_SHORT).show()
             }
             else
-                Toast.makeText(this.context, "Vous devez sélectionner un membre de l'équipe", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Vous devez sélectionner un membre de l'équipe", Toast.LENGTH_SHORT).show()
         }
 
         btn_down.setOnClickListener{
@@ -153,13 +123,13 @@ class EquipeTabAjouterFragment : Fragment() {
                         teamAdapter.moveDown(selectedMember)
                 }
                 else
-                    Toast.makeText(this.context, "Vous devez sélectionner un membre de l'équipe", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Vous devez sélectionner un membre de l'équipe", Toast.LENGTH_SHORT).show()
             }
             else
-                Toast.makeText(this.context, "Vous devez sélectionner un membre de l'équipe", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Vous devez sélectionner un membre de l'équipe", Toast.LENGTH_SHORT).show()
         }
 
-        coureurDao = CoureurDao(this.context!!)
+
 
         val coureurs = ArrayList<Runner>()
 
@@ -167,76 +137,69 @@ class EquipeTabAjouterFragment : Fragment() {
             onClickListener = this::selectItem
         )
         adapter.replaceItems(coureurs)
-        listFreeParticipant.layoutManager = LinearLayoutManager(this.context)
+        listFreeParticipant.layoutManager = LinearLayoutManager(this)
         listFreeParticipant.adapter = adapter
 
         teamAdapter = TeamMemberAdapter(
             onClickListener = this::selectMember
         )
-        listTeamMembers.layoutManager = LinearLayoutManager(this.context)
+        listTeamMembers.layoutManager = LinearLayoutManager(this)
         listTeamMembers.adapter = teamAdapter
 
-        courseDao = CourseDao(this.context!!)
-        val courseCursor = courseDao.getAllCourse()
-        val courses = ArrayList<Run>()
-
-        with(courseCursor!!){
-            while (moveToNext()){
-                val run = Run(
-                    getInt(getColumnIndexOrThrow(android.provider.BaseColumns._ID)),
-                    getString(getColumnIndexOrThrow(com.example.lo52_f1_levier.model.Course.Coursetable.TITLE)),
-                    getString(getColumnIndexOrThrow(com.example.lo52_f1_levier.model.Course.Coursetable.DATE))
-                )
-                courses.add(run)
+        teamId = intent.getIntExtra("teamId", -1)
+        courseId = intent.getIntExtra("courseId", -1)
+        if(teamId != -1 && courseId != -1){
+            var res = participeDao.getParticipeByC_ID_E_ID(courseId,teamId)
+            var listIdTeamMember = ArrayList<Int>()
+            with(res!!){
+                while (moveToNext()){
+                    listIdTeamMember.add(getInt(getColumnIndexOrThrow(Participe.ParticipeTable.CR_ID)))
+                }
             }
-        }
-        val spinnerAdapter = ArrayAdapter<Run>(this.context!!,
-            android.R.layout.simple_spinner_item, courses)
-        courseSelector.adapter = spinnerAdapter
-
-        courseSelector?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-
+            res = equipeDao.getEquipeByID(teamId)
+            with(res!!){
+                var team : Team
+                while (moveToNext()){
+                    team = Team(
+                        teamId,
+                        getString(getColumnIndexOrThrow(Equipe.EquipeTable.ENAME)),
+                        getInt(getColumnIndexOrThrow(Equipe.EquipeTable.ENUM))
+                    )
+                    edt_teamName.setText(team.name)
+                    edt_teamNumber.setText(team.number.toString())
+                }
             }
-
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                course = courseSelector.selectedItem as Run
-
-
-                val freeRunnerCursor = coureurDao.getCoureurFree(course.id)
-
-                with(freeRunnerCursor!!){
-                    coureurs.clear()
+            var teamRunners = ArrayList<Runner>()
+            listIdTeamMember.forEach{
+                res = coureurDao.getCoureurByNumc(it)
+                with(res!!){
                     while (moveToNext()){
-                        val freeRunner = Runner(
+                        var teamMember = Runner(
                             getInt(getColumnIndexOrThrow(Coureur.CoureurTable.NUMC)),
                             getString(getColumnIndexOrThrow(Coureur.CoureurTable.CNAME)),
-                            getString(getColumnIndexOrThrow(Coureur.CoureurTable.SURNAME))
-                        )
-                        coureurs.add(freeRunner)
+                            getString(getColumnIndexOrThrow(Coureur.CoureurTable.SURNAME)))
+                        teamMember.isTeamMember = true
+                        teamRunners.add(teamMember)
                     }
                 }
-                val teamsCursor = equipeDao.getTeamForACourse(course.id)
-                var nb = 0
-                with(teamsCursor!!){
-                    while (moveToNext()){
-                        nb ++
-                    }
+            }
+            teamAdapter.replaceItems(teamRunners)
+            res = coureurDao.getCoureurFree(courseId)
+            with(res!!){
+                coureurs.clear()
+                while (moveToNext()){
+                    val freeRunner = Runner(
+                        getInt(getColumnIndexOrThrow(Coureur.CoureurTable.NUMC)),
+                        getString(getColumnIndexOrThrow(Coureur.CoureurTable.CNAME)),
+                        getString(getColumnIndexOrThrow(Coureur.CoureurTable.SURNAME))
+                    )
+                    coureurs.add(freeRunner)
                 }
-
-                nb ++
-                edt_teamNumber.setText(nb.toString())
-
-                setFreeRunner(coureurs)
-
+                adapter.replaceItems(coureurs)
             }
 
+
         }
-
-    }
-
-    private fun setFreeRunner(runners : ArrayList<Runner>){
-        adapter.replaceItems(runners)
     }
 
     private fun selectItem(view: View,runner: Runner) {
@@ -250,10 +213,10 @@ class EquipeTabAjouterFragment : Fragment() {
     }
 
     fun teamMaxSize(){
-        Toast.makeText(this.context, "Taille maximum de l'équipe atteinte", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Taille maximum de l'équipe atteinte", Toast.LENGTH_SHORT).show()
     }
 
-    class RunnerAdapter(private val onClickListener: AvailableRunnerClickListener) : RecyclerView.Adapter<RunnerAdapter.ViewHolder>(){
+    class RunnerAdapter(private val onClickListener: aAvailableRunnerClickListener) : RecyclerView.Adapter<RunnerAdapter.ViewHolder>(){
         private var runners = ArrayList<Runner>()
         private var selectedPos = RecyclerView.NO_POSITION
 
@@ -296,7 +259,7 @@ class EquipeTabAjouterFragment : Fragment() {
             LayoutContainer
     }
 
-    class TeamMemberAdapter(private val onClickListener: TeamRunnerClickListener) : RecyclerView.Adapter<TeamMemberAdapter.ViewHolder>(){
+    class TeamMemberAdapter(private val onClickListener: aTeamRunnerClickListener) : RecyclerView.Adapter<TeamMemberAdapter.ViewHolder>(){
 
         private var members = ArrayList<Runner>()
 
@@ -319,10 +282,10 @@ class EquipeTabAjouterFragment : Fragment() {
             }
         }
 
-        /*fun replaceItems(runner: ArrayList<Runner>) {
+        fun replaceItems(runner: ArrayList<Runner>) {
             this.members = runner
             notifyDataSetChanged()
-        }*/
+        }
 
         fun addItem(runner: Runner) : Boolean{
             if(members.size < 3){
@@ -374,25 +337,4 @@ class EquipeTabAjouterFragment : Fragment() {
         inner class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView),
             LayoutContainer
     }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment EquipeTabAjouterFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            EquipeTabAjouterFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
 }
-

@@ -154,6 +154,40 @@ class ParticipeDao(context : Context) {
         )
     }
 
+    fun getParticipeByC_ID_E_ID(C_ID:Int,E_ID: Int): Cursor? {
+        val db = dbHelper.readableDatabase
+
+        val projection = arrayOf(
+            BaseColumns._ID, Participe.ParticipeTable.CR_ID, Participe.ParticipeTable.C_ID,
+            Participe.ParticipeTable.E_ID,
+            Participe.ParticipeTable.TIME1,
+            Participe.ParticipeTable.TIME2,
+            Participe.ParticipeTable.TIME3,
+            Participe.ParticipeTable.TIME4,
+            Participe.ParticipeTable.TIME5,
+            Participe.ParticipeTable.TIME6,
+            Participe.ParticipeTable.TIME7,
+            Participe.ParticipeTable.TIME8,
+            Participe.ParticipeTable.TIME9,
+            Participe.ParticipeTable.TIME10
+        )
+
+        val selection = "${Participe.ParticipeTable.C_ID} = ? AND ${Participe.ParticipeTable.E_ID} = ?"
+        val selectionArgs = arrayOf(C_ID.toString(), E_ID.toString())
+
+        val sortOrder = "${Participe.ParticipeTable.CR_ID} DESC"
+
+        return db.query(
+            Participe.ParticipeTable.NAME,   // The table to query
+            projection,             // The array of columns to return (pass null to get all)
+            selection,              // The columns for the WHERE clause
+            selectionArgs,          // The values for the WHERE clause
+            null,                   // don't group the rows
+            null,                   // don't filter by row groups
+            sortOrder               // The sort order
+        )
+    }
+
     fun getAllParticipe(): Cursor? {
         val db = dbHelper.readableDatabase
 
@@ -194,6 +228,15 @@ class ParticipeDao(context : Context) {
         val deletedRows = db.delete(Participe.ParticipeTable.NAME, selection, selectionArgs)
         return deletedRows
     }
+
+    fun deleteParticipeByC_ID_E_ID(C_ID: Int, E_ID: Int): Int {
+        val db = dbHelper.writableDatabase
+        val selection = "${Participe.ParticipeTable.C_ID} LIKE ? AND ${Participe.ParticipeTable.E_ID} LIKE ?"
+        val selectionArgs = arrayOf(C_ID.toString(),E_ID.toString())
+        val deletedRows = db.delete(Participe.ParticipeTable.NAME, selection, selectionArgs)
+        return deletedRows
+    }
+
     fun updateParticipeByCR_ID(oldCR_ID: Int,CR_ID: Int,C_ID: Int, E_ID: Int): Int {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {

@@ -66,6 +66,28 @@ class CoureurDao(context: Context) {
         )
     }
 
+    fun getCoureurByNumc(numc:Int): Cursor? {
+        val db = dbHelper.readableDatabase
+
+        val projection = arrayOf(BaseColumns._ID, Coureur.CoureurTable.NUMC, Coureur.CoureurTable.CNAME,
+            Coureur.CoureurTable.SURNAME)
+
+        val selection = "${Coureur.CoureurTable.NUMC} = ?"
+        val selectionArgs = arrayOf(numc.toString())
+
+        val sortOrder = "${Coureur.CoureurTable.CNAME} DESC"
+
+        return db.query(
+            Coureur.CoureurTable.NAME,   // The table to query
+            projection,             // The array of columns to return (pass null to get all)
+            selection,              // The columns for the WHERE clause
+            selectionArgs,          // The values for the WHERE clause
+            null,                   // don't group the rows
+            null,                   // don't filter by row groups
+            sortOrder               // The sort order
+        )
+    }
+
 
     fun getAllCoureur(): Cursor? {
         val db = dbHelper.readableDatabase
@@ -137,22 +159,12 @@ class CoureurDao(context: Context) {
 
     }
 
-    fun getCoureurFree(titre : String): Cursor? {
-        val db = dbHelper.readableDatabase
-
-        var query = "SELECT * FROM "+Coureur.CoureurTable.NAME+ " WHERE "+Coureur.CoureurTable.NUMC+
-            " NOT IN ( SELECT "+Participe.ParticipeTable.NUMC+" FROM "+Participe.ParticipeTable.NAME+
-                " WHERE "+Participe.ParticipeTable.TITLE+ " = '"+ titre + "');"
-
-        return db.rawQuery(query, null)
-
-    }
     fun getCoureurFree(ID : Int): Cursor? {
         val db = dbHelper.readableDatabase
 
-        var query = "SELECT * FROM"+Coureur.CoureurTable.NAME+ "WHERE "+Coureur.CoureurTable.NUMC+
-                "NOT IN ( SELECT "+Participe.ParticipeTable.NUMC+"FROM "+Participe.ParticipeTable.NAME+
-                "WHERE "+Participe.ParticipeTable.NAME+"."+BaseColumns._ID+ " = "+ ID.toString() + ");"
+        var query = "SELECT * FROM "+Coureur.CoureurTable.NAME+  " WHERE "+Coureur.CoureurTable.NUMC+
+                " NOT IN ( SELECT "+Participe.ParticipeTable.CR_ID+" FROM "+Participe.ParticipeTable.NAME+
+                " WHERE "+Participe.ParticipeTable.C_ID+ " = "+ ID.toString() + ");"
 
         return db.rawQuery(query, null)
 

@@ -1,5 +1,6 @@
 package com.example.lo52_f1_levier.view
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -51,6 +52,7 @@ class EquipeTabConsultFragment : Fragment() {
     private lateinit var participeDao: ParticipeDao
     private lateinit var teamAdapter : TeamAdapter
     private lateinit var selectedTeam : Team
+    private lateinit var course : Run
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,15 +81,22 @@ class EquipeTabConsultFragment : Fragment() {
         }
 
         edit_team.setOnClickListener {
-
+            if(::selectedTeam.isInitialized) {
+                val intent = Intent(this.context, TeamEditActivity::class.java)
+                intent
+                    .putExtra("teamId", selectedTeam.id)
+                    .putExtra("courseId", course.id)
+                startActivity(intent)
+                this.parentFragment?.tab_layout?.getTabAt(0)?.select()
+            }else
+                Toast.makeText(this.context, "Vous devez sélectionner un Participant", Toast.LENGTH_SHORT).show()
         }
 
         delete_team.setOnClickListener {
             if(::selectedTeam.isInitialized){
 
-
-                equipeDao.deleteEquipe(selectedTeam.id.toString()
-                )
+                participeDao.deleteParticipeByC_ID_E_ID(course.id,selectedTeam.id)
+                equipeDao.deleteEquipe(selectedTeam.id.toString())
 
                 val ft = fragmentManager!!.beginTransaction()
                 if (Build.VERSION.SDK_INT >= 26) {
@@ -131,9 +140,9 @@ class EquipeTabConsultFragment : Fragment() {
             }
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val course = courseSelector.selectedItem as Run
+                course = courseSelector.selectedItem as Run
 
-                val teamInCourseCursor = equipeDao.getTeamForACourse(course.name)
+                val teamInCourseCursor = equipeDao.getTeamForACourse(course.id)
                 with(teamInCourseCursor!!){
                     teams.clear()
                     while (moveToNext()){

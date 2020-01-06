@@ -67,8 +67,8 @@ class EquipeDao(context : Context) {
 
     fun deleteEquipe(ename: String): Int {
         val db = dbHelper.writableDatabase
-        val selection = "${BaseColumns._ID} = ?"
-        val selectionArgs = arrayOf(id)
+        val selection = "${BaseColumns._ID} LIKE ?"
+        val selectionArgs = arrayOf(ename)
         return db.delete(Equipe.EquipeTable.NAME, selection, selectionArgs)
     }
     fun deleteEquipeByID(ID: Int): Int {
@@ -125,12 +125,12 @@ class EquipeDao(context : Context) {
         return cursor
     }
 
-    fun getTeamForACourse(titre : String): Cursor? {
+    fun getTeamForACourse(ID : Int): Cursor? {
         val db = dbHelper.readableDatabase
 
-        var query = "SELECT * FROM "+Equipe.EquipeTable.NAME+ " WHERE "+Equipe.EquipeTable.ENAME+
-                " IN ( SELECT "+ Participe.ParticipeTable.ENAME+" FROM "+Participe.ParticipeTable.NAME+
-                " WHERE "+Participe.ParticipeTable.TITLE+ " = '"+ titre + "');"
+        var query = "SELECT * FROM "+Equipe.EquipeTable.NAME+ " WHERE "+BaseColumns._ID +
+                " IN ( SELECT "+ Participe.ParticipeTable.E_ID+" FROM "+Participe.ParticipeTable.NAME+
+                " WHERE "+Participe.ParticipeTable.C_ID+  " = "+ ID.toString() + ");"
 
         return db.rawQuery(query, null)
 
