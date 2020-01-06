@@ -141,7 +141,7 @@ class ParticipeDao(context : Context) {
         val selection = "${Participe.ParticipeTable.C_ID} = ?"
         val selectionArgs = arrayOf(C_ID.toString())
 
-        val sortOrder = "${Participe.ParticipeTable.CR_ID} DESC"
+        val sortOrder = Participe.ParticipeTable.E_ID  // important for TeamBoxGridAdapter
 
         return db.query(
             Participe.ParticipeTable.NAME,   // The table to query
