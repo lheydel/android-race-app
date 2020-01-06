@@ -1,5 +1,6 @@
 package com.example.lo52_f1_levier.view
 
+import android.app.Activity
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -58,6 +59,10 @@ class TeamEditActivity : AppCompatActivity() {
                     participeDao.insertParticipe(courseId, teamAdapter.getItem(0).numc, teamId)
                     participeDao.insertParticipe(courseId, teamAdapter.getItem(1).numc, teamId)
                     participeDao.insertParticipe(courseId, teamAdapter.getItem(2).numc, teamId)
+
+                    Toast.makeText(this, "Modification enregistrée", Toast.LENGTH_SHORT).show()
+                    setResult(Activity.RESULT_OK)
+                    finish()
                 }
                 else{
                     Toast.makeText(this, "L'équipe doit avoir 3 memebres", Toast.LENGTH_SHORT).show()

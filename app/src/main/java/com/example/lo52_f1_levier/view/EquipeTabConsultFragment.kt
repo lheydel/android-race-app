@@ -1,5 +1,6 @@
 package com.example.lo52_f1_levier.view
 
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -86,8 +87,7 @@ class EquipeTabConsultFragment : Fragment() {
                 intent
                     .putExtra("teamId", selectedTeam.id)
                     .putExtra("courseId", course.id)
-                startActivity(intent)
-                this.parentFragment?.tab_layout?.getTabAt(0)?.select()
+                startActivityForResult(intent, 10001)
             }else
                 Toast.makeText(this.context, "Vous devez sélectionner un Participant", Toast.LENGTH_SHORT).show()
         }
@@ -173,6 +173,18 @@ class EquipeTabConsultFragment : Fragment() {
     private fun selectTeam(view: View,team: Team) {
         selectedTeam = team
         editTextSelectedTeam.setText("Equipe " + selectedTeam.number + " : " + selectedTeam.name)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 10001 && resultCode == Activity.RESULT_OK) {
+            // recreate your fragment here
+            fragmentManager!!
+                .beginTransaction()
+                .detach(this)
+                .attach(this)
+                .commit()
+        }
     }
 
     class TeamAdapter(private val onClickListener: TeamClickListener) : RecyclerView.Adapter<TeamAdapter.ViewHolder>(){

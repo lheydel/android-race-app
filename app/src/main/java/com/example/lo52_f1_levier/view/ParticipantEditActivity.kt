@@ -1,5 +1,6 @@
 package com.example.lo52_f1_levier.view
 
+import android.app.Activity
 import android.database.Cursor
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -34,6 +35,8 @@ class ParticipantEditActivity : AppCompatActivity() {
                 coureurDao.updateCoureur(runnerId,runnerId,
                     firstName.text.toString(), lastName.text.toString())
                 Toast.makeText(this, "Modification enregistrée", Toast.LENGTH_SHORT).show()
+                setResult(Activity.RESULT_OK)
+                finish()
             }
             else{
                 val builder = AlertDialog.Builder(this)
