@@ -3,6 +3,7 @@ package com.example.lo52_f1_levier.view
 import android.app.AlertDialog
 import android.graphics.Color
 import android.os.Bundle
+import android.provider.BaseColumns
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -82,13 +83,13 @@ class EquipeTabAjouterFragment : Fragment() {
         save.setOnClickListener{
             if(!edt_teamName.text.isEmpty()) {
 
-                if (teamAdapter.getItemCount() == 3) {
+                if (teamAdapter.getItemCount() == 3 /*&& teamAdapter.getItemCount() >=1*/) {
                     equipeDao = EquipeDao(this.context!!)
                     participeDao = ParticipeDao(this.context!!)
                     val equipeRowId = equipeDao.insertEquipe(edt_teamName.text.toString(),edt_teamNumber.text.toString().toInt())
-                    participeDao.insertParticipe(course.id, teamAdapter.getItem(0).numc, equipeRowId!!.toInt())
-                    participeDao.insertParticipe(course.id, teamAdapter.getItem(1).numc, equipeRowId!!.toInt())
-                    participeDao.insertParticipe(course.id, teamAdapter.getItem(2).numc, equipeRowId!!.toInt())
+                    participeDao.insertParticipe(course.id, teamAdapter.getItem(0).id, equipeRowId!!.toInt())
+                    participeDao.insertParticipe(course.id, teamAdapter.getItem(1).id, equipeRowId!!.toInt())
+                    participeDao.insertParticipe(course.id, teamAdapter.getItem(2).id, equipeRowId!!.toInt())
 
                     edt_teamName.text.clear()
                 }
@@ -220,10 +221,10 @@ class EquipeTabAjouterFragment : Fragment() {
                     coureurs.clear()
                     while (moveToNext()){
                         val freeRunner = Runner(
+                            getInt(getColumnIndexOrThrow(BaseColumns._ID)),
                             getInt(getColumnIndexOrThrow(Coureur.CoureurTable.NUMC)),
                             getString(getColumnIndexOrThrow(Coureur.CoureurTable.CNAME)),
-                            getString(getColumnIndexOrThrow(Coureur.CoureurTable.SURNAME))
-                        )
+                            getString(getColumnIndexOrThrow(Coureur.CoureurTable.SURNAME)))
                         coureurs.add(freeRunner)
                     }
                 }

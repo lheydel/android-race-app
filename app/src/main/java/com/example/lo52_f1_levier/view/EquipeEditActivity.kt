@@ -3,6 +3,7 @@ package com.example.lo52_f1_levier.view
 import android.app.Activity
 import android.graphics.Color
 import android.os.Bundle
+import android.provider.BaseColumns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -56,9 +57,9 @@ class TeamEditActivity : AppCompatActivity() {
                     participeDao.deleteParticipeByC_ID_E_ID(courseId,teamId)
                     equipeDao.updateEquipeByID(teamId,edt_teamName.text.toString(),edt_teamNumber.text.toString().toInt())
 
-                    participeDao.insertParticipe(courseId, teamAdapter.getItem(0).numc, teamId)
-                    participeDao.insertParticipe(courseId, teamAdapter.getItem(1).numc, teamId)
-                    participeDao.insertParticipe(courseId, teamAdapter.getItem(2).numc, teamId)
+                    participeDao.insertParticipe(courseId, teamAdapter.getItem(0).id, teamId)
+                    participeDao.insertParticipe(courseId, teamAdapter.getItem(1).id, teamId)
+                    participeDao.insertParticipe(courseId, teamAdapter.getItem(2).id, teamId)
 
                     Toast.makeText(this, "Modification enregistrée", Toast.LENGTH_SHORT).show()
                     setResult(Activity.RESULT_OK)
@@ -176,10 +177,11 @@ class TeamEditActivity : AppCompatActivity() {
             }
             var teamRunners = ArrayList<Runner>()
             listIdTeamMember.forEach{
-                res = coureurDao.getCoureurByNumc(it)
+                res = coureurDao.getCoureurByID(it)
                 with(res!!){
                     while (moveToNext()){
                         var teamMember = Runner(
+                            it,
                             getInt(getColumnIndexOrThrow(Coureur.CoureurTable.NUMC)),
                             getString(getColumnIndexOrThrow(Coureur.CoureurTable.CNAME)),
                             getString(getColumnIndexOrThrow(Coureur.CoureurTable.SURNAME)))
@@ -194,6 +196,7 @@ class TeamEditActivity : AppCompatActivity() {
                 coureurs.clear()
                 while (moveToNext()){
                     val freeRunner = Runner(
+                        getInt(getColumnIndexOrThrow(BaseColumns._ID)),
                         getInt(getColumnIndexOrThrow(Coureur.CoureurTable.NUMC)),
                         getString(getColumnIndexOrThrow(Coureur.CoureurTable.CNAME)),
                         getString(getColumnIndexOrThrow(Coureur.CoureurTable.SURNAME))

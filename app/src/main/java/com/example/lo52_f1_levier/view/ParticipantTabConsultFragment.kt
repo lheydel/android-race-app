@@ -21,8 +21,7 @@ import kotlinx.android.synthetic.main.tab_list_content.*
 import android.os.Build
 import kotlinx.android.synthetic.main.fragment_participant.*
 import android.app.Activity
-
-
+import android.provider.BaseColumns
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -73,10 +72,10 @@ class ParticipantTabConsultFragment : Fragment() {
 
         with(cursor!!){
             while (moveToNext()){
-                val runner = Runner(getInt(getColumnIndexOrThrow(Coureur.CoureurTable.NUMC)),
+                val runner = Runner(getInt(getColumnIndexOrThrow(BaseColumns._ID)),
+                    getInt(getColumnIndexOrThrow(Coureur.CoureurTable.NUMC)),
                     getString(getColumnIndexOrThrow(Coureur.CoureurTable.CNAME)),
-                    getString(getColumnIndexOrThrow(Coureur.CoureurTable.SURNAME))
-                )
+                    getString(getColumnIndexOrThrow(Coureur.CoureurTable.SURNAME)))
                 coureurs.add(runner)
             }
         }
@@ -112,7 +111,7 @@ class ParticipantTabConsultFragment : Fragment() {
 
             if(::selectedRunner.isInitialized) {
                 val intent = Intent(this.context, ParticipantEditActivity::class.java)
-                intent.putExtra("runnerId", selectedRunner.numc)
+                intent.putExtra("runnerId", selectedRunner.id)
                 startActivityForResult(intent, 10001)
 
 
@@ -142,6 +141,7 @@ class ParticipantTabConsultFragment : Fragment() {
                 .detach(this)
                 .attach(this)
                 .commit()
+            edt_selectedParticipant.text.clear()
         }
     }
 
