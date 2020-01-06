@@ -1,20 +1,57 @@
 package com.example.lo52_f1_levier.view
 
-import androidx.appcompat.app.AppCompatActivity
+import android.app.DatePickerDialog
 import android.os.Bundle
-import com.example.lo52_f1_levier.DAO.CoureurDao
+import android.view.View.OnFocusChangeListener
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.lo52_f1_levier.DAO.CourseDao
 import com.example.lo52_f1_levier.R
 import kotlinx.android.synthetic.main.activity_create_course.*
+import java.text.SimpleDateFormat
+import java.util.*
+
 
 class CreateCourseActivity : AppCompatActivity() {
 
     private lateinit var courseDao : CourseDao
+    private lateinit var cal : Calendar
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?)
+    {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_course)
         courseDao = CourseDao(this)
+
+        cal = Calendar.getInstance()
+        courseDate.setText(SimpleDateFormat("dd.MM.yyyy").format(System.currentTimeMillis()))
+        val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+            cal.set(Calendar.YEAR, year)
+            cal.set(Calendar.MONTH, monthOfYear)
+            cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+
+            val myFormat = "dd.MM.yyyy" // mention the format you need
+            val sdf = SimpleDateFormat(myFormat, Locale.FRANCE)
+            courseDate.setText(sdf.format(cal.time))
+
+        }
+
+
+
+        courseDate.setOnClickListener {
+            editDateClicked(dateSetListener)
+        }
+
+
+        courseDate.setOnFocusChangeListener{ view, hasFocus ->
+            if (hasFocus) {
+               editDateClicked(dateSetListener)
+            }
+        }
+
+
+
+
 
         createCourse.setOnClickListener {
             if(courseName.text.isNotEmpty() && courseDate.text.isNotEmpty()){
@@ -24,4 +61,15 @@ class CreateCourseActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun editDateClicked(dateSetListener : DatePickerDialog.OnDateSetListener)
+    {
+        DatePickerDialog(this, dateSetListener,
+            cal.get(Calendar.YEAR),
+            cal.get(Calendar.MONTH),
+            cal.get(Calendar.DAY_OF_MONTH)).show()
+    }
+
 }
+
+
