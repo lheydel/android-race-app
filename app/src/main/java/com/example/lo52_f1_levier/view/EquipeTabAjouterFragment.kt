@@ -1,15 +1,16 @@
 package com.example.lo52_f1_levier.view
 
+import android.app.AlertDialog
 import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.provider.BaseColumns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lo52_f1_levier.DAO.CoureurDao
@@ -22,12 +23,8 @@ import com.example.lo52_f1_levier.model.Run
 import com.example.lo52_f1_levier.model.Runner
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_equipe_tab_ajouter.*
-import kotlinx.android.synthetic.main.fragment_equipe_tab_ajouter.courseSelector
 import kotlinx.android.synthetic.main.tab_list_content.content
 import kotlinx.android.synthetic.main.team_member_list_content.*
-
-
-
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -82,13 +79,15 @@ class EquipeTabAjouterFragment : Fragment() {
         save.setOnClickListener{
             if(!edt_teamName.text.isEmpty()) {
 
-                if (teamAdapter.getItemCount() == 3) {
+                if (teamAdapter.getItemCount() == 3 /*&& teamAdapter.getItemCount() >=1*/) {
                     equipeDao = EquipeDao(this.context!!)
                     participeDao = ParticipeDao(this.context!!)
                     val equipeRowId = equipeDao.insertEquipe(edt_teamName.text.toString(),edt_teamNumber.text.toString().toInt())
-                    participeDao.insertParticipe(course.id, teamAdapter.getItem(0).numc, equipeRowId!!.toInt())
-                    participeDao.insertParticipe(course.id, teamAdapter.getItem(1).numc, equipeRowId!!.toInt())
-                    participeDao.insertParticipe(course.id, teamAdapter.getItem(2).numc, equipeRowId!!.toInt())
+                    participeDao.insertParticipe(course.id, teamAdapter.getItem(0).id, equipeRowId!!.toInt())
+                    participeDao.insertParticipe(course.id, teamAdapter.getItem(1).id, equipeRowId!!.toInt())
+                    participeDao.insertParticipe(course.id, teamAdapter.getItem(2).id, equipeRowId!!.toInt())
+
+                    edt_teamName.text.clear()
                 }
                 else{
                     Toast.makeText(this.context, "L'équipe doit avoir 3 memebres", Toast.LENGTH_SHORT).show()
@@ -189,9 +188,17 @@ class EquipeTabAjouterFragment : Fragment() {
                 courses.add(run)
             }
         }
-        val spinnerAdapter = ArrayAdapter<Run>(this.context!!,
-            android.R.layout.simple_spinner_item, courses)
-        courseSelector.adapter = spinnerAdapter
+        if (courses.isEmpty()) {
+            val alert = AlertDialog.Builder(this.context!!)
+            alert.setTitle("Aucune course de disponible")
+            alert.setMessage("Pour pouvoir créer un équipe vous devez avoir au moins une courses de disponible")
+            alert.show()
+        }
+        else{
+            val spinnerAdapter = ArrayAdapter<Run>(this.context!!,
+                android.R.layout.simple_spinner_item, courses)
+            courseSelector.adapter = spinnerAdapter
+        }
 
         courseSelector?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -208,10 +215,10 @@ class EquipeTabAjouterFragment : Fragment() {
                     coureurs.clear()
                     while (moveToNext()){
                         val freeRunner = Runner(
+                            getInt(getColumnIndexOrThrow(BaseColumns._ID)),
                             getInt(getColumnIndexOrThrow(Coureur.CoureurTable.NUMC)),
                             getString(getColumnIndexOrThrow(Coureur.CoureurTable.CNAME)),
-                            getString(getColumnIndexOrThrow(Coureur.CoureurTable.SURNAME))
-                        )
+                            getString(getColumnIndexOrThrow(Coureur.CoureurTable.SURNAME)))
                         coureurs.add(freeRunner)
                     }
                 }
@@ -307,7 +314,7 @@ class EquipeTabAjouterFragment : Fragment() {
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val member = members[position]
-            holder.content.text = "${member.cname} ${member.surname}"
+            holder.content.text = member.cname + " " + member.surname
             holder.content.setOnClickListener { view ->
                 onClickListener(view, member)
             }
