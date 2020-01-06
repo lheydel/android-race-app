@@ -1,22 +1,29 @@
 package com.example.lo52_f1_levier.view
 
-import android.content.Context
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import androidx.core.view.get
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.lo52_f1_levier.DAO.CourseDao
-
+import com.example.lo52_f1_levier.DAO.EquipeDao
 import com.example.lo52_f1_levier.R
+import com.example.lo52_f1_levier.model.Equipe
 import com.example.lo52_f1_levier.model.Run
-import kotlinx.android.synthetic.main.fragment_equipe_tab_ajouter.*
+import com.example.lo52_f1_levier.model.Team
+import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_equipe_tab_consult.*
 import kotlinx.android.synthetic.main.fragment_equipe_tab_consult.courseSelector
+import kotlinx.android.synthetic.main.fragment_equipe_tab_consult.editTextNbTeam
+import kotlinx.android.synthetic.main.fragment_equipe_tab_consult.listTeam
+import kotlinx.android.synthetic.main.fragment_participant_tab_consult.*
+import kotlinx.android.synthetic.main.tab_list_content.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -36,6 +43,8 @@ class EquipeTabConsultFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var courseDao: CourseDao
+    private lateinit var equipeDao: EquipeDao
+    private lateinit var teamAdapter : TeamAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,6 +65,8 @@ class EquipeTabConsultFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val teams = ArrayList<Team>()
+        equipeDao = EquipeDao(this.context!!)
         courseDao = CourseDao(this.context!!)
         val courseCursor = courseDao.getAllCourse()
         val courses = ArrayList<Run>()
@@ -70,6 +81,12 @@ class EquipeTabConsultFragment : Fragment() {
                 courses.add(run)
             }
         }
+
+        teamAdapter = TeamAdapter()
+        teamAdapter.replaceItems(teams)
+        listTeam.layoutManager = LinearLayoutManager(this.context)
+        listTeam.adapter = teamAdapter
+
         val spinnerAdapter = ArrayAdapter<Run>(this.context!!,
             android.R.layout.simple_spinner_item, courses)
         courseSelector.adapter = spinnerAdapter
@@ -81,32 +98,75 @@ class EquipeTabConsultFragment : Fragment() {
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val course = courseSelector.selectedItem as Run
-                //TODO : load data for this course
+
+                val teamInCourseCursor = equipeDao.getTeamForACourse(course.name)
+                with(teamInCourseCursor!!){
+                    teams.clear()
+                    while (moveToNext()){
+                        val team = Team(
+                            getInt(getColumnIndexOrThrow(android.provider.BaseColumns._ID)),
+                            getString(getColumnIndexOrThrow(Equipe.EquipeTable.ENAME))
+                        )
+                        teams.add(team)
 
 
+                    }
+                    Log.d("TESTSTSTSTSTST", teams.toString())
+                }
+                editTextNbTeam.setText(teams.size.toString())
+                setTeam(teams)
+                Log.d("TESTSTSTSTSTST", teamAdapter.itemCount.toString())
             }
 
         }
+
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    /*fun onButtonPressed(uri: Uri) {
-        listener?.onFragmentInteraction(uri)
-    }*/
+    private fun setTeam(team : ArrayList<Team>){
+        teamAdapter.replaceItems(team)
+    }
 
-    /*override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is OnFragmentInteractionListener) {
-            listener = context
-        } else {
-            throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
+    class TeamAdapter : RecyclerView.Adapter<TeamAdapter.ViewHolder>(){
+        private var equipes = ArrayList<Team>()
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.tab_list_content, parent, false)
+            return ViewHolder(view)
         }
-    }*/
 
-    /*override fun onDetach() {
-        super.onDetach()
-        listener = null
-    }*/
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            val team = equipes[position]
+            holder.content.text = team.name
+            /*holder.content.setOnClickListener { view ->
+
+            }*/
+        }
+
+        fun replaceItems(team: ArrayList<Team>) {
+            this.equipes = team
+            notifyDataSetChanged()
+        }
+
+        fun addItem(team: Team){
+            this.equipes.add(team)
+            notifyDataSetChanged()
+        }
+
+        fun removeItem(team: Team){
+            this.equipes.remove(team)
+            notifyDataSetChanged()
+
+        }
+
+        override fun getItemCount(): Int {
+            return equipes.size
+        }
+
+        inner class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView),
+            LayoutContainer
+    }
+
 
     /**
      * This interface must be implemented by activities that contain this

@@ -2,7 +2,6 @@ package com.example.lo52_f1_levier.view
 
 
 import android.content.Intent
-import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment

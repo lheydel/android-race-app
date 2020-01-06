@@ -22,6 +22,8 @@ import com.example.lo52_f1_levier.model.Run
 import com.example.lo52_f1_levier.model.Runner
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_equipe_tab_ajouter.*
+import kotlinx.android.synthetic.main.fragment_equipe_tab_ajouter.courseSelector
+import kotlinx.android.synthetic.main.fragment_equipe_tab_consult.*
 import kotlinx.android.synthetic.main.tab_list_content.content
 import kotlinx.android.synthetic.main.team_member_list_content.*
 
@@ -57,6 +59,7 @@ class EquipeTabAjouterFragment : Fragment() {
     private lateinit var selectedMember : Runner
     private lateinit var adapter: RunnerAdapter
     private lateinit var teamAdapter: TeamMemberAdapter
+    private lateinit var course: Run
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,36 +78,6 @@ class EquipeTabAjouterFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?){
-        courseDao = CourseDao(this.context!!)
-        val courseCursor = courseDao.getAllCourse()
-        val courses = ArrayList<Run>()
-
-        with(courseCursor!!){
-            while (moveToNext()){
-                val run = Run(
-                    getInt(getColumnIndexOrThrow(android.provider.BaseColumns._ID)),
-                    getString(getColumnIndexOrThrow(com.example.lo52_f1_levier.model.Course.Coursetable.TITLE)),
-                    getString(getColumnIndexOrThrow(com.example.lo52_f1_levier.model.Course.Coursetable.DATE))
-                )
-                courses.add(run)
-            }
-        }
-        val spinnerAdapter = ArrayAdapter<Run>(this.context!!,
-            android.R.layout.simple_spinner_item, courses)
-        courseSelector.adapter = spinnerAdapter
-
-        courseSelector?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-
-            }
-
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val course = courseSelector.selectedItem as Run
-
-                //TODO : load data for this course
-            }
-
-        }
 
         newParticipant.setOnClickListener{
             Toast.makeText(this.context, "TODO", Toast.LENGTH_SHORT).show()
@@ -114,16 +87,19 @@ class EquipeTabAjouterFragment : Fragment() {
             if(!edt_teamName.text.isEmpty()) {
 
                 if (teamAdapter.getItemCount() == 3) {
+                    equipeDao = EquipeDao(this.context!!)
+                    participeDao = ParticipeDao(this.context!!)
                     equipeDao.insertEquipe(edt_teamName.text.toString())
-                    participeDao.insertParticipe("", teamAdapter.getItem(0).numc, edt_teamName.text.toString())
-                    participeDao.insertParticipe("", teamAdapter.getItem(1).numc, edt_teamName.text.toString())
-                    participeDao.insertParticipe("", teamAdapter.getItem(2).numc, edt_teamName.text.toString())
+                    participeDao.insertParticipe(course.name, teamAdapter.getItem(0).numc, edt_teamName.text.toString())
+                    participeDao.insertParticipe(course.name, teamAdapter.getItem(1).numc, edt_teamName.text.toString())
+                    participeDao.insertParticipe(course.name, teamAdapter.getItem(2).numc, edt_teamName.text.toString())
                 }
                 else{
                     Toast.makeText(this.context, "L'équipe doit avoir 3 memebres", Toast.LENGTH_SHORT).show()
                 }
             }
-            Toast.makeText(this.context, "Veuiller renseigner le nom de l'équipe", Toast.LENGTH_SHORT).show()
+            else
+                Toast.makeText(this.context, "Veuiller renseigner le nom de l'équipe", Toast.LENGTH_SHORT).show()
         }
 
         btn_left.setOnClickListener{
@@ -191,19 +167,7 @@ class EquipeTabAjouterFragment : Fragment() {
         coureurDao = CoureurDao(this.context!!)
 
         val coureurs = ArrayList<Runner>()
-        val cursorCoureur = coureurDao.getAllCoureur()
 
-        // TODO: filter runner by courses et team
-
-        with(cursorCoureur!!){
-            while (moveToNext()){
-                val runner = Runner(getInt(getColumnIndexOrThrow(Coureur.CoureurTable.NUMC)),
-                    getString(getColumnIndexOrThrow(Coureur.CoureurTable.CNAME)),
-                    getString(getColumnIndexOrThrow(Coureur.CoureurTable.SURNAME))
-                )
-                coureurs.add(runner)
-            }
-        }
         adapter = RunnerAdapter(
             onClickListener = this::selectItem
         )
@@ -216,6 +180,57 @@ class EquipeTabAjouterFragment : Fragment() {
         )
         listTeamMembers.layoutManager = LinearLayoutManager(this.context)
         listTeamMembers.adapter = teamAdapter
+
+        courseDao = CourseDao(this.context!!)
+        val courseCursor = courseDao.getAllCourse()
+        val courses = ArrayList<Run>()
+
+        with(courseCursor!!){
+            while (moveToNext()){
+                val run = Run(
+                    getInt(getColumnIndexOrThrow(android.provider.BaseColumns._ID)),
+                    getString(getColumnIndexOrThrow(com.example.lo52_f1_levier.model.Course.Coursetable.TITLE)),
+                    getString(getColumnIndexOrThrow(com.example.lo52_f1_levier.model.Course.Coursetable.DATE))
+                )
+                courses.add(run)
+            }
+        }
+        val spinnerAdapter = ArrayAdapter<Run>(this.context!!,
+            android.R.layout.simple_spinner_item, courses)
+        courseSelector.adapter = spinnerAdapter
+
+        courseSelector?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                course = courseSelector.selectedItem as Run
+
+                val freeRunnerCursor = coureurDao.getCoureurFree(course.name)
+
+                with(freeRunnerCursor!!){
+                    coureurs.clear()
+                    while (moveToNext()){
+                        val freeRunner = Runner(
+                            getInt(getColumnIndexOrThrow(Coureur.CoureurTable.NUMC)),
+                            getString(getColumnIndexOrThrow(Coureur.CoureurTable.CNAME)),
+                            getString(getColumnIndexOrThrow(Coureur.CoureurTable.SURNAME))
+                        )
+                        coureurs.add(freeRunner)
+                    }
+                }
+
+                setFreeRunner(coureurs)
+
+            }
+
+        }
+
+    }
+
+    private fun setFreeRunner(runners : ArrayList<Runner>){
+        adapter.replaceItems(runners)
     }
 
     private fun selectItem(view: View,runner: Runner) {

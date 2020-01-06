@@ -73,7 +73,7 @@
         android:inputType="text"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="@+id/textView8"
-        app:layout_constraintStart_toStartOf="@+id/editTextNbParticipant"
+        app:layout_constraintStart_toStartOf="@id/editTextNbParticipant"
         app:layout_constraintTop_toTopOf="@+id/textView8"
         tools:layout_conversion_absoluteHeight="53dp"
         tools:layout_conversion_absoluteWidth="285dp" />
@@ -113,7 +113,7 @@
         android:text="@string/add"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="@+id/edit"
-        app:layout_constraintTop_toTopOf="@+id/listParticipant"
+        app:layout_constraintTop_toTopOf="@id/listParticipant"
         tools:layout_conversion_absoluteHeight="52dp"
         tools:layout_conversion_absoluteWidth="128dp" />
 
