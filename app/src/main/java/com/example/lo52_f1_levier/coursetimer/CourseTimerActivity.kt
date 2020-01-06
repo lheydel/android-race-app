@@ -1,7 +1,7 @@
 package com.example.lo52_f1_levier.coursetimer
 
-import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lo52_f1_levier.R
 import com.example.lo52_f1_levier.utils.GridAutofitLayoutManager
@@ -31,21 +31,5 @@ class CourseTimerActivity : AppCompatActivity() {
         teamBoxGrid.adapter = TeamBoxGridAdapter(teams)
 
         teamBoxGrid.setHasFixedSize(true)
-        //registerForContextMenu(teamBoxGrid)
     }
-
-    /*override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
-        super.onCreateContextMenu(menu, v, menuInfo)
-        menuInflater.inflate(R.menu.teambox_menu, menu)
-    }
-
-    override fun onContextItemSelected(item: MenuItem): Boolean {
-        return when(item.itemId) {
-            R.id.teambox_menu_detail -> {
-                Toast.makeText(applicationContext, "blblbl", Toast.LENGTH_LONG).show()
-                return true
-            }
-            else -> super.onContextItemSelected(item)
-        }
-    }*/
 }
