@@ -101,7 +101,7 @@ class ParticipantTabConsultFragment : Fragment() {
                 Toast.makeText(this.context, "Vous devez sélectionner un Participant", Toast.LENGTH_SHORT).show()
         }
 
-        add.setOnClickListener{
+        add_participant.setOnClickListener{
             this.parentFragment?.tab_layout?.getTabAt(0)?.select()
         }
 

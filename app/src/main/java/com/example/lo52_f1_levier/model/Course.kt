@@ -23,6 +23,7 @@ object Equipe{
     object EquipeTable : BaseColumns {
         const val NAME = "Equipe"
         const val ENAME = "Ename"
+        const val ENUM = "Enum"
     }
 }
 object Participe{

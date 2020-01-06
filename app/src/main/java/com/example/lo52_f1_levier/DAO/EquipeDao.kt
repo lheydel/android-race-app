@@ -11,10 +11,11 @@ import com.example.lo52_f1_levier.model.Participe
 class EquipeDao(context : Context) {
     val dbHelper = CourseDbHelper(context)
 
-    fun insertEquipe(titre: String): Long? {
+    fun insertEquipe(titre: String, number: Int): Long? {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
             put(Equipe.EquipeTable.ENAME, titre)
+            put(Equipe.EquipeTable.ENUM, number)
         }
         val newRowId = db?.insert(Equipe.EquipeTable.NAME, null, values)
         return newRowId
@@ -41,10 +42,10 @@ class EquipeDao(context : Context) {
 
         return cursor
     }
-    fun deleteEquipe(ename: String): Int {
+    fun deleteEquipe(id: String): Int {
         val db = dbHelper.writableDatabase
-        val selection = "${Equipe.EquipeTable.ENAME} LIKE ?"
-        val selectionArgs = arrayOf(ename)
+        val selection = "${BaseColumns._ID} = ?"
+        val selectionArgs = arrayOf(id)
         return db.delete(Equipe.EquipeTable.NAME, selection, selectionArgs)
     }
     fun updateEquipe(oldEname: String,ename: String): Int {

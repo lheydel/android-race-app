@@ -16,7 +16,8 @@ const val SQL_DELETE_COURSE = "DROP TABLE IF EXISTS ${Course.Coursetable.TABLE_N
 const val SQL_CREATE_EQUIPE =
     "CREATE TABLE ${Equipe.EquipeTable.NAME} (" +
             "${BaseColumns._ID} INTEGER PRIMARY KEY," +
-            "${Equipe.EquipeTable.ENAME} TEXT)"
+            "${Equipe.EquipeTable.ENAME} TEXT," +
+            "${Equipe.EquipeTable.ENUM} NUMBER)"
 
 const val SQL_DELETE_EQUIPE = "DROP TABLE IF EXISTS ${Equipe.EquipeTable.NAME}"
 

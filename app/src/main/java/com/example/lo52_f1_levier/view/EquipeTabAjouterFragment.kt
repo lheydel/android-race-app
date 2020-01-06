@@ -78,6 +78,7 @@ class EquipeTabAjouterFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?){
+        equipeDao = EquipeDao(this.context!!)
 
         newParticipant.setOnClickListener{
             Toast.makeText(this.context, "TODO", Toast.LENGTH_SHORT).show()
@@ -89,7 +90,7 @@ class EquipeTabAjouterFragment : Fragment() {
                 if (teamAdapter.getItemCount() == 3) {
                     equipeDao = EquipeDao(this.context!!)
                     participeDao = ParticipeDao(this.context!!)
-                    equipeDao.insertEquipe(edt_teamName.text.toString())
+                    equipeDao.insertEquipe(edt_teamName.text.toString(),edt_teamNumber.text.toString().toInt())
                     participeDao.insertParticipe(course.name, teamAdapter.getItem(0).numc, edt_teamName.text.toString())
                     participeDao.insertParticipe(course.name, teamAdapter.getItem(1).numc, edt_teamName.text.toString())
                     participeDao.insertParticipe(course.name, teamAdapter.getItem(2).numc, edt_teamName.text.toString())
@@ -207,6 +208,7 @@ class EquipeTabAjouterFragment : Fragment() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 course = courseSelector.selectedItem as Run
 
+
                 val freeRunnerCursor = coureurDao.getCoureurFree(course.name)
 
                 with(freeRunnerCursor!!){
@@ -220,6 +222,16 @@ class EquipeTabAjouterFragment : Fragment() {
                         coureurs.add(freeRunner)
                     }
                 }
+                val teamsCursor = equipeDao.getTeamForACourse(course.name)
+                var nb = 0
+                with(teamsCursor!!){
+                    while (moveToNext()){
+                        nb ++
+                    }
+                }
+                if(nb == 0)
+                    nb ++
+                edt_teamNumber.setText(nb.toString())
 
                 setFreeRunner(coureurs)
 

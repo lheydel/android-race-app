@@ -161,6 +161,7 @@ class ParticipeDao(context : Context) {
         val deletedRows = db.delete(Participe.ParticipeTable.NAME, selection, selectionArgs)
         return deletedRows
     }
+
     fun updateParticipeByNumC(oldNumc: String,numc: String,titre: String, ename: String): Int {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {

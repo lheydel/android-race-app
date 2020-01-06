@@ -1,6 +1,7 @@
 package com.example.lo52_f1_levier.view
 
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -9,10 +10,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lo52_f1_levier.DAO.CourseDao
 import com.example.lo52_f1_levier.DAO.EquipeDao
+import com.example.lo52_f1_levier.DAO.ParticipeDao
 import com.example.lo52_f1_levier.R
 import com.example.lo52_f1_levier.model.Equipe
 import com.example.lo52_f1_levier.model.Run
@@ -22,13 +25,14 @@ import kotlinx.android.synthetic.main.fragment_equipe_tab_consult.*
 import kotlinx.android.synthetic.main.fragment_equipe_tab_consult.courseSelector
 import kotlinx.android.synthetic.main.fragment_equipe_tab_consult.editTextNbTeam
 import kotlinx.android.synthetic.main.fragment_equipe_tab_consult.listTeam
-import kotlinx.android.synthetic.main.fragment_participant_tab_consult.*
 import kotlinx.android.synthetic.main.tab_list_content.*
+import kotlinx.android.synthetic.main.fragment_equipe.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
+typealias TeamClickListener = (View, Team) -> Unit
 
 /**
  * A simple [Fragment] subclass.
@@ -44,7 +48,9 @@ class EquipeTabConsultFragment : Fragment() {
     private var param2: String? = null
     private lateinit var courseDao: CourseDao
     private lateinit var equipeDao: EquipeDao
+    private lateinit var participeDao: ParticipeDao
     private lateinit var teamAdapter : TeamAdapter
+    private lateinit var selectedTeam : Team
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,10 +70,36 @@ class EquipeTabConsultFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val teams = ArrayList<Team>()
         equipeDao = EquipeDao(this.context!!)
         courseDao = CourseDao(this.context!!)
+        participeDao = ParticipeDao(this.context!!)
+
+        add_team.setOnClickListener {
+            this.parentFragment?.tab_layout?.getTabAt(0)?.select()
+        }
+
+        edit_team.setOnClickListener {
+
+        }
+
+        delete_team.setOnClickListener {
+            if(::selectedTeam.isInitialized){
+
+
+                equipeDao.deleteEquipe(selectedTeam.id.toString()
+                )
+
+                val ft = fragmentManager!!.beginTransaction()
+                if (Build.VERSION.SDK_INT >= 26) {
+                    ft.setReorderingAllowed(false)
+                }
+                ft.detach(this).attach(this).commit()
+            }
+            else
+                Toast.makeText(this.context, "Vous devez sélectionner une Equipe", Toast.LENGTH_SHORT).show()
+        }
+
+        val teams = ArrayList<Team>()
         val courseCursor = courseDao.getAllCourse()
         val courses = ArrayList<Run>()
 
@@ -82,7 +114,9 @@ class EquipeTabConsultFragment : Fragment() {
             }
         }
 
-        teamAdapter = TeamAdapter()
+        teamAdapter = TeamAdapter(
+            onClickListener = this::selectTeam
+        )
         teamAdapter.replaceItems(teams)
         listTeam.layoutManager = LinearLayoutManager(this.context)
         listTeam.adapter = teamAdapter
@@ -105,7 +139,8 @@ class EquipeTabConsultFragment : Fragment() {
                     while (moveToNext()){
                         val team = Team(
                             getInt(getColumnIndexOrThrow(android.provider.BaseColumns._ID)),
-                            getString(getColumnIndexOrThrow(Equipe.EquipeTable.ENAME))
+                            getString(getColumnIndexOrThrow(Equipe.EquipeTable.ENAME)),
+                            getInt(getColumnIndexOrThrow(Equipe.EquipeTable.ENUM))
                         )
                         teams.add(team)
 
@@ -126,7 +161,12 @@ class EquipeTabConsultFragment : Fragment() {
         teamAdapter.replaceItems(team)
     }
 
-    class TeamAdapter : RecyclerView.Adapter<TeamAdapter.ViewHolder>(){
+    private fun selectTeam(view: View,team: Team) {
+        selectedTeam = team
+        editTextSelectedTeam.setText("Equipe " + selectedTeam.number + " : " + selectedTeam.name)
+    }
+
+    class TeamAdapter(private val onClickListener: TeamClickListener) : RecyclerView.Adapter<TeamAdapter.ViewHolder>(){
         private var equipes = ArrayList<Team>()
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -137,10 +177,10 @@ class EquipeTabConsultFragment : Fragment() {
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val team = equipes[position]
-            holder.content.text = team.name
-            /*holder.content.setOnClickListener { view ->
-
-            }*/
+            holder.content.text = "Equipe " + team.number + " : " + team.name
+            holder.content.setOnClickListener { view ->
+                onClickListener(view, team)
+            }
         }
 
         fun replaceItems(team: ArrayList<Team>) {
