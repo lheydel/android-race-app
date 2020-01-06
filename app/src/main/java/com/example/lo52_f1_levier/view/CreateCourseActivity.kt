@@ -1,5 +1,6 @@
 package com.example.lo52_f1_levier.view
 
+import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.lo52_f1_levier.DAO.CoureurDao
@@ -20,6 +21,7 @@ class CreateCourseActivity : AppCompatActivity() {
             if(courseName.text.isNotEmpty() && courseDate.text.isNotEmpty()){
                 courseDao.insertCourse(courseName.text.toString(),
                     courseDate.text.toString())
+                setResult(Activity.RESULT_OK)
                 finish()
             }
         }
