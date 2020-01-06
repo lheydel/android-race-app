@@ -11,8 +11,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".view.CreateCourseActivity"></activity>
+
+        <activity android:name=".view.CreateCourseActivity" />
         <activity android:name=".view.ParticipantEditActivity" />
+
         <activity
             android:name=".view.TabListActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
@@ -21,10 +23,10 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".view.TabDetailActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
@@ -36,11 +38,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.lo52_f1_levier.view.TabListActivity" />
         </activity>
-        <activity android:name=".coursetimer.CourseTimerActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
+        <activity android:name=".coursetimer.CourseTimerActivity"
+            android:screenOrientation="landscape">
         </activity>
     </application>
 

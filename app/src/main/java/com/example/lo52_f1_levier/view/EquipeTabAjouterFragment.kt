@@ -6,19 +6,28 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.core.view.get
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lo52_f1_levier.DAO.CoureurDao
+import com.example.lo52_f1_levier.DAO.CourseDao
 import com.example.lo52_f1_levier.DAO.EquipeDao
 import com.example.lo52_f1_levier.DAO.ParticipeDao
 import com.example.lo52_f1_levier.R
 import com.example.lo52_f1_levier.model.Coureur
+import com.example.lo52_f1_levier.model.Run
 import com.example.lo52_f1_levier.model.Runner
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_equipe_tab_ajouter.*
 import kotlinx.android.synthetic.main.tab_list_content.content
 import kotlinx.android.synthetic.main.team_member_list_content.*
+
+
+
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -43,6 +52,7 @@ class EquipeTabAjouterFragment : Fragment() {
     private lateinit var coureurDao : CoureurDao
     private lateinit var equipeDao : EquipeDao
     private lateinit var participeDao: ParticipeDao
+    private lateinit var courseDao: CourseDao
     private lateinit var selectedRunner : Runner
     private lateinit var selectedMember : Runner
     private lateinit var adapter: RunnerAdapter
@@ -65,6 +75,37 @@ class EquipeTabAjouterFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?){
+        courseDao = CourseDao(this.context!!)
+        val courseCursor = courseDao.getAllCourse()
+        val courses = ArrayList<Run>()
+
+        with(courseCursor!!){
+            while (moveToNext()){
+                val run = Run(
+                    getInt(getColumnIndexOrThrow(android.provider.BaseColumns._ID)),
+                    getString(getColumnIndexOrThrow(com.example.lo52_f1_levier.model.Course.Coursetable.TITLE)),
+                    getString(getColumnIndexOrThrow(com.example.lo52_f1_levier.model.Course.Coursetable.DATE))
+                )
+                courses.add(run)
+            }
+        }
+        val spinnerAdapter = ArrayAdapter<Run>(this.context!!,
+            android.R.layout.simple_spinner_item, courses)
+        courseSelector.adapter = spinnerAdapter
+
+        courseSelector?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val course = courseSelector.selectedItem as Run
+
+                //TODO : load data for this course
+            }
+
+        }
+
         newParticipant.setOnClickListener{
             Toast.makeText(this.context, "TODO", Toast.LENGTH_SHORT).show()
         }
@@ -333,3 +374,4 @@ class EquipeTabAjouterFragment : Fragment() {
             }
     }
 }
+
