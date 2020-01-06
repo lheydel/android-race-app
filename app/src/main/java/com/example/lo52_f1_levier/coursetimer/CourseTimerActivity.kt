@@ -10,6 +10,7 @@ import com.example.lo52_f1_levier.utils.GridAutofitLayoutManager
 class CourseTimerActivity : AppCompatActivity() {
 
     private lateinit var teamBoxGrid: RecyclerView
+    private lateinit var timerFragment: Timer
     private var courseId: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,10 +19,8 @@ class CourseTimerActivity : AppCompatActivity() {
 
         courseId = intent.getIntExtra("courseId", 0)
 
-        val columnWidth = resources.getDimension(R.dimen.teambox_width) + resources.getDimension(R.dimen.teambox_margin_side)
-
-        teamBoxGrid = findViewById(R.id.teamBoxes)
-        teamBoxGrid.layoutManager = GridAutofitLayoutManager(this, columnWidth.toInt())
+        // get timer fragment
+        timerFragment = supportFragmentManager.findFragmentById(R.id.timerFgmt) as Timer
 
         // TODO replace by real data
         val r1 = "Tim Yratraprapa"
@@ -31,8 +30,12 @@ class CourseTimerActivity : AppCompatActivity() {
         for (i in 1..13) {
             teams = teams.plus(TeamBoxData(i, arrayOf(r1, r2, r3)))
         }
-        teamBoxGrid.adapter = TeamBoxGridAdapter(teams, this::redirectToDetails)
 
+        // setup team box grid
+        val columnWidth = resources.getDimension(R.dimen.teambox_width) + resources.getDimension(R.dimen.teambox_margin_side)
+        teamBoxGrid = findViewById(R.id.teamBoxes)
+        teamBoxGrid.layoutManager = GridAutofitLayoutManager(this, columnWidth.toInt())
+        teamBoxGrid.adapter = TeamBoxGridAdapter(teams, this::redirectToDetails, timerFragment::getTimeInMilliseconds, timerFragment::isStarted)
         teamBoxGrid.setHasFixedSize(true)
     }
 

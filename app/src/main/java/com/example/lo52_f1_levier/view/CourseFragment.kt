@@ -1,18 +1,16 @@
 package com.example.lo52_f1_levier.view
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.BaseColumns
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lo52_f1_levier.DAO.CourseDao
-
 import com.example.lo52_f1_levier.R
 import com.example.lo52_f1_levier.coursetimer.CourseTimerActivity
 import com.example.lo52_f1_levier.model.Course
