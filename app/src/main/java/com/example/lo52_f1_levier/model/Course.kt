@@ -23,14 +23,15 @@ object Equipe{
     object EquipeTable : BaseColumns {
         const val NAME = "Equipe"
         const val ENAME = "Ename"
+        const val ENUM = "Enum"
     }
 }
 object Participe{
 object ParticipeTable : BaseColumns {
     const val NAME = "Participe"
-    const val TITLE = "title"
-    const val NUMC = "Numc"
-    const val ENAME = "Ename"
+    const val C_ID = "C_ID"
+    const val CR_ID = "CR_ID"
+    const val E_ID = "E_ID"
     const val TIME1 = "Time1"
     const val TIME2 = "Time2"
     const val TIME3 = "Time3"

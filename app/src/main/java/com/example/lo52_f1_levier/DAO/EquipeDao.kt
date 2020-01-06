@@ -10,10 +10,11 @@ import com.example.lo52_f1_levier.model.CourseDbHelper
 class EquipeDao(context : Context) {
     val dbHelper = CourseDbHelper(context)
 
-    fun insertEquipe(titre: String): Long? {
+    fun insertEquipe(titre: String, enum : Int): Long? {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
             put(Equipe.EquipeTable.ENAME, titre)
+            put(Equipe.EquipeTable.ENUM, enum)
         }
         val newRowId = db?.insert(Equipe.EquipeTable.NAME, null, values)
         return newRowId
@@ -22,7 +23,7 @@ class EquipeDao(context : Context) {
     fun getEquipe(ename:String): Cursor? {
         val db = dbHelper.readableDatabase
 
-        val projection = arrayOf(BaseColumns._ID, Equipe.EquipeTable.ENAME)
+        val projection = arrayOf(BaseColumns._ID, Equipe.EquipeTable.ENAME, Equipe.EquipeTable.ENUM)
 
         val selection = "${Equipe.EquipeTable.ENAME} = ?"
         val selectionArgs = arrayOf(ename)
@@ -44,7 +45,7 @@ class EquipeDao(context : Context) {
     fun getEquipeByID(ID:Int): Cursor? {
         val db = dbHelper.readableDatabase
 
-        val projection = arrayOf(BaseColumns._ID, Equipe.EquipeTable.ENAME)
+        val projection = arrayOf(BaseColumns._ID, Equipe.EquipeTable.ENAME, Equipe.EquipeTable.ENUM)
 
         val selection = "${BaseColumns._ID} = ?"
         val selectionArgs = arrayOf(ID.toString())
@@ -69,10 +70,17 @@ class EquipeDao(context : Context) {
         val selectionArgs = arrayOf(ename)
         return db.delete(Equipe.EquipeTable.NAME, selection, selectionArgs)
     }
-    fun updateEquipe(oldEname: String,ename: String): Int {
+    fun deleteEquipeByID(ID: Int): Int {
+        val db = dbHelper.writableDatabase
+        val selection = "${BaseColumns._ID} LIKE ?"
+        val selectionArgs = arrayOf(ID.toString())
+        return db.delete(Equipe.EquipeTable.NAME, selection, selectionArgs)
+    }
+    fun updateEquipe(oldEname: String,ename: String, enum : Int): Int {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
             put(Equipe.EquipeTable.ENAME, ename)
+            put(Equipe.EquipeTable.ENUM, enum)
         }
         val selection = "${Equipe.EquipeTable.ENAME} LIKE ?"
         val selectionArgs = arrayOf(oldEname)
@@ -83,10 +91,11 @@ class EquipeDao(context : Context) {
             selectionArgs)
         return count
     }
-    fun updateEquipeByID(ID: Int,ename: String): Int {
+    fun updateEquipeByID(ID: Int,ename: String, enum : Int): Int {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
             put(Equipe.EquipeTable.ENAME, ename)
+            put(Equipe.EquipeTable.ENUM, enum)
         }
         val selection = "${BaseColumns._ID} LIKE ?"
         val selectionArgs = arrayOf(ID.toString())
@@ -100,7 +109,7 @@ class EquipeDao(context : Context) {
     fun getAllEquipe(): Cursor? {
         val db = dbHelper.readableDatabase
 
-        val projection = arrayOf(BaseColumns._ID, Equipe.EquipeTable.ENAME)
+        val projection = arrayOf(BaseColumns._ID, Equipe.EquipeTable.ENAME, Equipe.EquipeTable.ENUM)
 
         val cursor = db.query(
             Equipe.EquipeTable.NAME,   // The table to query
