@@ -91,16 +91,6 @@ class EquipeTabAjouterFragment : Fragment() {
                     participeDao.insertParticipe(course.id, teamAdapter.getItem(2).numc, equipeRowId!!.toInt())
 
                     edt_teamName.text.clear()
-                    if (fragmentManager != null) {
-
-                        fragmentManager!!
-                            .beginTransaction()
-                            .detach(this)
-                            .attach(this)
-                            .commit()
-                    }
-
-
                 }
                 else{
                     Toast.makeText(this.context, "L'équipe doit avoir 3 memebres", Toast.LENGTH_SHORT).show()

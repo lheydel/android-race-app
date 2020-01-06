@@ -20,6 +20,9 @@ import kotlinx.android.synthetic.main.fragment_participant_tab_consult.*
 import kotlinx.android.synthetic.main.tab_list_content.*
 import android.os.Build
 import kotlinx.android.synthetic.main.fragment_participant.*
+import android.app.Activity
+
+
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -110,8 +113,9 @@ class ParticipantTabConsultFragment : Fragment() {
             if(::selectedRunner.isInitialized) {
                 val intent = Intent(this.context, ParticipantEditActivity::class.java)
                 intent.putExtra("runnerId", selectedRunner.numc)
-                startActivity(intent)
-                this.parentFragment?.tab_layout?.getTabAt(0)?.select()
+                startActivityForResult(intent, 10001)
+
+
             }else
                 Toast.makeText(this.context, "Vous devez sélectionner un Participant", Toast.LENGTH_SHORT).show()
         }
@@ -127,6 +131,18 @@ class ParticipantTabConsultFragment : Fragment() {
     private fun selectItem(view: View,runner: Runner) {
         selectedRunner = runner
         edt_selectedParticipant.setText(selectedRunner.cname + " " + selectedRunner.surname)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 10001 && resultCode == Activity.RESULT_OK) {
+            // recreate your fragment here
+            fragmentManager!!
+                .beginTransaction()
+                .detach(this)
+                .attach(this)
+                .commit()
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event
