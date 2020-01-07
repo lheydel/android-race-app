@@ -82,7 +82,7 @@ class TeamBoxGridAdapter(private val context: Context,
             }
 
             // add the current runner to the data of its team
-            currentTeamRunners = currentTeamRunners.plus(fetchRunnerName(courseCursor.getInt(runnerIdIndex)))
+            currentTeamRunners = fetchRunnerName(currentTeamRunners, courseCursor.getInt(runnerIdIndex))
         } while (courseCursor.moveToNext())
 
         // add the last team to the list
@@ -90,26 +90,51 @@ class TeamBoxGridAdapter(private val context: Context,
     }
 
     /**
-     * Get and return the name of a given runner
+     * Get the name of a given runner
+     * and add it to the given list at the right position (depending on numc)
+     * @return the new array
      */
-    private fun fetchRunnerName(runnerId: Int): String {
+    private fun fetchRunnerName(runners: Array<String>, runnerId: Int): Array<String> {
         val runnerCursor = runnerDao.getCoureurByID(runnerId)
 
         if (runnerCursor === null || !runnerCursor.moveToFirst()) {
-            return "????"
+            return addRunner(runners, "????", -1)
         }
 
-        // get the first and last name of the runner
+        // get the relevant data of the runner
         val firstName = runnerCursor.getString(runnerCursor.getColumnIndex(Coureur.CoureurTable.CNAME))
         val lastName = runnerCursor.getString(runnerCursor.getColumnIndex(Coureur.CoureurTable.SURNAME))
+        val position = runnerCursor.getInt(runnerCursor.getColumnIndex(Coureur.CoureurTable.NUMC))
 
         // test if full name fit in the team box
         if (("$firstName $lastName").length <= RUNNER_NAME_MAX_LENGTH) {
-            return "$firstName $lastName"
+            return addRunner(runners, "$firstName $lastName", position)
         }
 
         // truncate the full name to make it fit
-        return "${firstName[0]}. ${lastName.slice(0..12)}"
+        return addRunner(runners, "${firstName[0]}. ${lastName.slice(0..12)}", position)
+    }
+
+    /**
+     * Add a given runner name to a given list of runners at a given position
+     * Increase the size of the array if necessary
+     * @return the new array
+     */
+    private fun addRunner(runners: Array<String>, name: String, position: Int): Array<String> {
+        if (position < 0) {
+            return runners.plus(name)
+        }
+
+        // increase the size of the array just enough as to be able to fit the runner at the right pos
+        var tmpRunners = runners.clone()
+        if (position >= runners.size) {
+            val tmp = (0..(position - runners.size)).toList().map { "????" }.toTypedArray()
+            tmpRunners = runners.plus(tmp)
+        }
+
+        // add the runner to the list and return it
+        tmpRunners[position] = name
+        return tmpRunners
     }
 
     /**

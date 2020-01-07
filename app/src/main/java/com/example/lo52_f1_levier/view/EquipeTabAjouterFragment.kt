@@ -83,9 +83,12 @@ class EquipeTabAjouterFragment : Fragment() {
                     equipeDao = EquipeDao(this.context!!)
                     participeDao = ParticipeDao(this.context!!)
                     val equipeRowId = equipeDao.insertEquipe(edt_teamName.text.toString(),edt_teamNumber.text.toString().toInt())
-                    participeDao.insertParticipe(course.id, teamAdapter.getItem(0).id, equipeRowId!!.toInt())
-                    participeDao.insertParticipe(course.id, teamAdapter.getItem(1).id, equipeRowId!!.toInt())
-                    participeDao.insertParticipe(course.id, teamAdapter.getItem(2).id, equipeRowId!!.toInt())
+
+                    for (position in 0 until teamAdapter.itemCount) {
+                        participeDao.insertParticipe(course.id, teamAdapter.getItem(position).id, equipeRowId!!.toInt())
+                        coureurDao.updateCoureurNumc(teamAdapter.getItem(position).id, position)
+                    }
+
 
                     edt_teamName.text.clear()
                 }

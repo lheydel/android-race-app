@@ -54,9 +54,10 @@ class TeamEditActivity : AppCompatActivity() {
                     participeDao.deleteParticipeByC_ID_E_ID(courseId,teamId)
                     equipeDao.updateEquipeByID(teamId,edt_teamName.text.toString(),edt_teamNumber.text.toString().toInt())
 
-                    participeDao.insertParticipe(courseId, teamAdapter.getItem(0).id, teamId)
-                    participeDao.insertParticipe(courseId, teamAdapter.getItem(1).id, teamId)
-                    participeDao.insertParticipe(courseId, teamAdapter.getItem(2).id, teamId)
+                    for (position in 0 until teamAdapter.itemCount) {
+                        participeDao.insertParticipe(courseId, teamAdapter.getItem(position).id, teamId)
+                        coureurDao.updateCoureurNumc(teamAdapter.getItem(position).id, position)
+                    }
 
                     Toast.makeText(this, "Modification enregistrée", Toast.LENGTH_SHORT).show()
                     setResult(Activity.RESULT_OK)

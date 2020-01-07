@@ -62,7 +62,7 @@
             android:layout_marginStart="20dp"
             android:autofillHints=""
             android:ems="10"
-            android:hint="@string/firstname"
+            android:hint="@string/lastname"
             android:inputType="textPersonName"
             android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="@+id/textView2"
