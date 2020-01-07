@@ -1,18 +1,17 @@
 package com.example.lo52_f1_levier.view
 
-import android.content.Context
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.BaseColumns
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lo52_f1_levier.DAO.CourseDao
-
 import com.example.lo52_f1_levier.R
 import com.example.lo52_f1_levier.coursetimer.CourseTimerActivity
 import com.example.lo52_f1_levier.model.Course
@@ -20,6 +19,8 @@ import com.example.lo52_f1_levier.model.Run
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_course.*
 import kotlinx.android.synthetic.main.tab_list_content.*
+
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -79,7 +80,7 @@ class CourseFragment : Fragment() {
 
         newCourse.setOnClickListener {
             val intent = Intent(context, CreateCourseActivity::class.java)
-            startActivity(intent)
+            startActivityForResult(intent, 10001)
         }
     }
 
@@ -87,6 +88,34 @@ class CourseFragment : Fragment() {
         val intent = Intent(context, CourseTimerActivity::class.java)
         intent.putExtra("courseId", courseId)
         startActivity(intent)
+    }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+
+        super.setUserVisibleHint(isVisibleToUser)
+
+        // Refresh tab data:
+
+        if (fragmentManager != null) {
+
+            fragmentManager!!
+                .beginTransaction()
+                .detach(this)
+                .attach(this)
+                .commit()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 10001 && resultCode == Activity.RESULT_OK) {
+            // recreate your fragment here
+            fragmentManager!!
+                .beginTransaction()
+                .detach(this)
+                .attach(this)
+                .commit()
+        }
     }
 
     class CourseAdapter(private val goToCourseTimer: (Int) -> Unit) : RecyclerView.Adapter<CourseAdapter.ViewHolder>(){

@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".view.DetailsCourseTimerFragment"></activity>
+        <activity android:name=".view.TeamEditActivity"></activity>
         <activity android:name=".view.CreateCourseActivity" />
         <activity android:name=".view.ParticipantEditActivity" />
         <activity
