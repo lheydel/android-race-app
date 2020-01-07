@@ -7,8 +7,24 @@ import android.provider.BaseColumns
 import com.example.lo52_f1_levier.model.Participe
 import com.example.lo52_f1_levier.model.CourseDbHelper
 
+/**
+ * TODO
+ *
+ * @constructor
+ * TODO
+ *
+ * @param context
+ */
 class ParticipeDao(context : Context) {
     val dbHelper = CourseDbHelper(context)
+    /**
+     * TODO
+     *
+     * @param C_ID
+     * @param CR_ID
+     * @param E_ID
+     * @return
+     */
     fun insertParticipe(C_ID: Int, CR_ID: Int, E_ID : Int): Long? {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
@@ -19,6 +35,12 @@ class ParticipeDao(context : Context) {
         return db?.insert(Participe.ParticipeTable.NAME, null, values)
     }
 
+    /**
+     * TODO
+     *
+     * @param CR_ID
+     * @return
+     */
     fun getParticipeByCR_ID(CR_ID:Int): Cursor? {
         val db = dbHelper.readableDatabase
 
@@ -52,6 +74,13 @@ class ParticipeDao(context : Context) {
             sortOrder               // The sort order
         )
     }
+
+    /**
+     * TODO
+     *
+     * @param ID
+     * @return
+     */
     fun getParticipeByID(ID:Int): Cursor? {
         val db = dbHelper.readableDatabase
 
@@ -86,6 +115,12 @@ class ParticipeDao(context : Context) {
         )
     }
 
+    /**
+     * TODO
+     *
+     * @param E_ID
+     * @return
+     */
     fun getParticipeByE_ID(E_ID:Int): Cursor? {
         val db = dbHelper.readableDatabase
 
@@ -120,6 +155,12 @@ class ParticipeDao(context : Context) {
         )
     }
 
+    /**
+     * TODO
+     *
+     * @param C_ID
+     * @return
+     */
     fun getParticipeByC_ID(C_ID:Int): Cursor? {
         val db = dbHelper.readableDatabase
 
@@ -154,6 +195,13 @@ class ParticipeDao(context : Context) {
         )
     }
 
+    /**
+     * TODO
+     *
+     * @param C_ID
+     * @param E_ID
+     * @return
+     */
     fun getParticipeByC_ID_E_ID(C_ID:Int,E_ID: Int): Cursor? {
         val db = dbHelper.readableDatabase
 
@@ -188,6 +236,11 @@ class ParticipeDao(context : Context) {
         )
     }
 
+    /**
+     * TODO
+     *
+     * @return
+     */
     fun getAllParticipe(): Cursor? {
         val db = dbHelper.readableDatabase
 
@@ -221,6 +274,12 @@ class ParticipeDao(context : Context) {
         )
     }
 
+    /**
+     * TODO
+     *
+     * @param CR_ID
+     * @return
+     */
     fun deleteParticipeByCR_ID(CR_ID: Int): Int {
         val db = dbHelper.writableDatabase
         val selection = "${Participe.ParticipeTable.CR_ID} LIKE ?"
@@ -229,6 +288,13 @@ class ParticipeDao(context : Context) {
         return deletedRows
     }
 
+    /**
+     * TODO
+     *
+     * @param C_ID
+     * @param E_ID
+     * @return
+     */
     fun deleteParticipeByC_ID_E_ID(C_ID: Int, E_ID: Int): Int {
         val db = dbHelper.writableDatabase
         val selection = "${Participe.ParticipeTable.C_ID} LIKE ? AND ${Participe.ParticipeTable.E_ID} LIKE ?"
@@ -237,6 +303,15 @@ class ParticipeDao(context : Context) {
         return deletedRows
     }
 
+    /**
+     * TODO
+     *
+     * @param oldCR_ID
+     * @param CR_ID
+     * @param C_ID
+     * @param E_ID
+     * @return
+     */
     fun updateParticipeByCR_ID(oldCR_ID: Int,CR_ID: Int,C_ID: Int, E_ID: Int): Int {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
@@ -252,6 +327,16 @@ class ParticipeDao(context : Context) {
             selection,
             selectionArgs)
     }
+
+    /**
+     * TODO
+     *
+     * @param ID
+     * @param CR_ID
+     * @param C_ID
+     * @param E_ID
+     * @return
+     */
     fun updateParticipeByID(ID: Int,CR_ID: Int,C_ID: Int, E_ID: Int): Int {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
@@ -268,6 +353,14 @@ class ParticipeDao(context : Context) {
             selectionArgs)
     }
 
+    /**
+     * TODO
+     *
+     * @param CR_ID
+     * @param numTime
+     * @param time
+     * @return
+     */
     fun setTimeByCR_ID(CR_ID: Int,numTime : Int, time : Int): Int {
         val db = dbHelper.writableDatabase
         val values=ContentValues()
@@ -316,6 +409,15 @@ class ParticipeDao(context : Context) {
             selection,
             selectionArgs)
     }
+
+    /**
+     * TODO
+     *
+     * @param ID
+     * @param numTime
+     * @param time
+     * @return
+     */
     fun setTimeByID(ID: Int,numTime : Int, time : Int): Int {
         val db = dbHelper.writableDatabase
         val values=ContentValues()

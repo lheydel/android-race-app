@@ -7,10 +7,24 @@ import android.provider.BaseColumns
 import com.example.lo52_f1_levier.model.Course
 import com.example.lo52_f1_levier.model.CourseDbHelper
 
+/**
+ * TODO
+ *
+ * @constructor
+ * TODO
+ *
+ * @param context
+ */
 class CourseDao(context: Context) {
     val dbHelper = CourseDbHelper(context)
 
-
+    /**
+     * TODO
+     *
+     * @param titre
+     * @param date
+     * @return
+     */
     fun insertCourse(titre: String, date: String): Long? {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
@@ -20,6 +34,12 @@ class CourseDao(context: Context) {
         return db?.insert(Course.Coursetable.TABLE_NAME, null, values)
     }
 
+    /**
+     * TODO
+     *
+     * @param titre
+     * @return
+     */
     fun getCourse(titre:String): Cursor? {
         val db = dbHelper.readableDatabase
 
@@ -41,6 +61,12 @@ class CourseDao(context: Context) {
         )
     }
 
+    /**
+     * TODO
+     *
+     * @param ID
+     * @return
+     */
     fun getCourseByID(ID:Int): Cursor? {
         val db = dbHelper.readableDatabase
 
@@ -62,6 +88,12 @@ class CourseDao(context: Context) {
         )
     }
 
+    /**
+     * TODO
+     *
+     * @return
+     */
+
     fun getAllCourse(): Cursor? {
         val db = dbHelper.readableDatabase
 
@@ -81,6 +113,12 @@ class CourseDao(context: Context) {
         )
     }
 
+    /**
+     * TODO
+     *
+     * @param titre
+     * @return
+     */
     fun deleteCourse(titre: String): Int {
         val db = dbHelper.writableDatabase
         val selection = "${Course.Coursetable.TITLE} LIKE ?"
@@ -88,6 +126,15 @@ class CourseDao(context: Context) {
         val deletedRows = db.delete(Course.Coursetable.TABLE_NAME, selection, selectionArgs)
         return deletedRows
     }
+
+    /**
+     * TODO
+     *
+     * @param oldTitle
+     * @param title
+     * @param date
+     * @return
+     */
     fun updateCourse(oldTitle: String,title: String,date: String): Int {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
@@ -102,6 +149,15 @@ class CourseDao(context: Context) {
             selection,
             selectionArgs)
     }
+
+    /**
+     * TODO
+     *
+     * @param ID
+     * @param title
+     * @param date
+     * @return
+     */
     fun updateCourseByID(ID: Int,title: String,date: String): Int {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {

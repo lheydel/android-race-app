@@ -11,6 +11,9 @@ object Course {
         const val DATE = "date"
     }
 }
+
+
+
 object Coureur{
     object CoureurTable : BaseColumns {
         const val NAME = "Coureur"
