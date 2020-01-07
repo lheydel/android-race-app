@@ -1,18 +1,40 @@
 package com.example.lo52_f1_levier.view
 
+import android.database.Cursor
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
+import com.example.lo52_f1_levier.DAO.EquipeDao
 import com.example.lo52_f1_levier.R
 import kotlinx.android.synthetic.main.activity_details_course_timer.*
 
 class DetailsCourseTimerFragment : AppCompatActivity() {
 
     private var courseId: Int = -1
-    override fun onCreate(savedInstanceState: Bundle?) {
+    private var teamId: Int = -1
+    private lateinit var equipeDao: EquipeDao
+
+    override fun onCreate(savedInstanceState: Bundle?)
+    {
         super.onCreate(savedInstanceState)
         courseId = intent.getIntExtra("courseId", 0)
+        teamId = intent.getIntExtra("teamId", 0)
+
+        equipeDao = EquipeDao(this!!)
+        // Get the different runners
+        // for each of them, create a new "timer"
+        // set the progression according to the times
+
+        val cursor = equipeDao.getEquipeByID(teamId)
+
+
+
         setContentView(R.layout.activity_details_course_timer)
+
+        equipeDao = EquipeDao(this)
+
+
+
         for(i in 1..4)
         {
             var view = LayoutInflater.from(this).inflate(R.layout.fragment_progression,null,false)

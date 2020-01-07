@@ -3,8 +3,6 @@ package com.example.lo52_f1_levier.coursetimer
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lo52_f1_levier.R
@@ -44,10 +42,8 @@ class CourseTimerActivity : AppCompatActivity() {
     private fun redirectToDetails(teamNumber: Int): Boolean {
         val intent = Intent(this, DetailsCourseTimerFragment::class.java)
         intent.putExtra("courseId", courseId)
+        intent.putExtra("teamId",teamNumber)
         startActivity(intent)
-        // Initialize a new instance of
-
-        Log.d("tag",teamNumber.toString())
         // TODO send intent to go to details (courseId and teamNumber dispo) (example in CourseFragment, line 85)
         return true
     }

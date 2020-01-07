@@ -9,6 +9,7 @@ import com.example.lo52_f1_levier.model.CourseDbHelper
 
 class ParticipeDao(context : Context) {
     val dbHelper = CourseDbHelper(context)
+
     fun insertParticipe(titre: String, numc: Int, ename : String): Long? {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
@@ -52,6 +53,7 @@ class ParticipeDao(context : Context) {
             sortOrder               // The sort order
         )
     }
+
     fun getParticipeByID(ID:Int): Cursor? {
         val db = dbHelper.readableDatabase
 
@@ -194,6 +196,7 @@ class ParticipeDao(context : Context) {
         val deletedRows = db.delete(Participe.ParticipeTable.NAME, selection, selectionArgs)
         return deletedRows
     }
+
     fun updateParticipeByNumC(oldNumc: String,numc: String,titre: String, ename: String): Int {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
@@ -209,6 +212,7 @@ class ParticipeDao(context : Context) {
             selection,
             selectionArgs)
     }
+
     fun updateParticipeByID(ID: Int,numc: String,titre: String, ename: String): Int {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
@@ -273,6 +277,7 @@ class ParticipeDao(context : Context) {
             selection,
             selectionArgs)
     }
+
     fun setTimeByID(ID: Int,numTime : Int, time : Int): Int {
         val db = dbHelper.writableDatabase
         val values=ContentValues()
