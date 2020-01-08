@@ -6,6 +6,7 @@ import android.provider.BaseColumns
 import android.util.Log
 import android.view.LayoutInflater
 import com.example.lo52_f1_levier.DAO.ParticipeDao
+import com.example.lo52_f1_levier.DAO.CoureurDao
 import com.example.lo52_f1_levier.R
 import com.example.lo52_f1_levier.model.Coureur
 import com.example.lo52_f1_levier.model.Participe
@@ -17,6 +18,7 @@ class DetailsCourseTimerFragment : AppCompatActivity() {
     private var courseId: Int = -1
     private var teamId: Int = -1
     private lateinit var participeDao: ParticipeDao
+    private lateinit var runnerDao : CoureurDao
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -26,7 +28,8 @@ class DetailsCourseTimerFragment : AppCompatActivity() {
         courseId = intent.getIntExtra("courseId",0)
         teamId = intent.getIntExtra("teamId", 0)
 
-        participeDao = ParticipeDao(this!!)
+        participeDao = ParticipeDao(this)
+        runnerDao = CoureurDao(this)
 
         // Get the different runners
 
@@ -35,18 +38,27 @@ class DetailsCourseTimerFragment : AppCompatActivity() {
 
         // The list contanining the runners
         val runners = ArrayList<Runner>()
-        // Let's iterate
+        // Let's iterate through the team's runners
         with(cursor!!){
             // While we still have something in our cursor
             while (moveToNext())
             {
-                // We create an instance of a runner
-                val runner = Runner(getInt(getColumnIndexOrThrow(BaseColumns._ID)),
-                    getInt(getColumnIndexOrThrow(Coureur.CoureurTable.NUMC)),
-                    getString(getColumnIndexOrThrow(Coureur.CoureurTable.CNAME)),
-                    getString(getColumnIndexOrThrow(Coureur.CoureurTable.SURNAME)))
-                // We add the runner to our list
-                runners.add(runner)
+                // We get the Id of the runner
+                val runId = getInt(getColumnIndexOrThrow(BaseColumns._ID))
+
+                // We now get the runner from the runner table
+                val runCursor = runnerDao.getCoureurByID(runId)
+                while(runCursor.moveToNext())
+                {
+                    // We create an instance of a runner
+                    val runner = Runner(runId,
+                        getInt(1),
+                        getString(2),
+                        getString(3))
+                    // We add the runner to our list
+                    runners.add(runner)
+                }
+                runCursor?.close()
             }
         }
         // We close the cursor
@@ -60,12 +72,12 @@ class DetailsCourseTimerFragment : AppCompatActivity() {
             with(cRunner!!){
                 while(moveToNext())
                 {
-                    t1 = getString(getColumnIndexOrThrow(Participe.ParticipeTable.TIME1)) // do the same for every time
+                    t1 = getString(getColumnIndex(Participe.ParticipeTable.TIME1)) // do the same for every time
                 }
             }
 
             // set the progression according to the times
-            if(t1 !== "" )
+            if(t1 !== null )
             {
                 Log.d("Tag",t1)
             }

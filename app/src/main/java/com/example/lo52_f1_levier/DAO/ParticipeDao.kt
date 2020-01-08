@@ -372,7 +372,7 @@ class ParticipeDao(context : Context) {
      * @param numc
      * @return
      */
-    fun getCoureurByTeamIdAndNumc(teamId: Int, numc: Int): Cursor? {
+    fun getCoureurByTeamIdAndNumc(teamId: Int, numc: Int): Cursor {
         val db = dbHelper.readableDatabase
 
         val projection = arrayOf(Participe.ParticipeTable.CR_ID)

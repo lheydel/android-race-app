@@ -44,7 +44,7 @@ class CoureurDao(context: Context) {
             sortOrder               // The sort order
         )
     }
-    fun getCoureurByID(ID:Int): Cursor? {
+    fun getCoureurByID(ID:Int): Cursor {
         val db = dbHelper.readableDatabase
 
         val projection = arrayOf(BaseColumns._ID, Coureur.CoureurTable.NUMC, Coureur.CoureurTable.CNAME,

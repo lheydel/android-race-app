@@ -111,9 +111,18 @@ class TeamBoxGridAdapter(private val context: Context,
         if (("$firstName $lastName").length <= RUNNER_NAME_MAX_LENGTH) {
             return addRunner(runners, "$firstName $lastName", position)
         }
-
+        val firstPart = "${firstName[0]}. "
+        var secondPart = ""
         // truncate the full name to make it fit
         return addRunner(runners, "${firstName[0]}. ${lastName.slice(0..12)}", position)
+        if(lastName.length<13)
+        {
+            secondPart =  lastName
+        }
+        else "${lastName.slice(0..12)}"
+
+        val name =  firstPart+secondPart
+        return addRunner(runners, name, position)
     }
 
     /**
