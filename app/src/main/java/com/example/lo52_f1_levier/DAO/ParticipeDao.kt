@@ -364,8 +364,10 @@ class ParticipeDao(context : Context) {
         }
 
         val projection = arrayOf("MAX(${Equipe.EquipeTable.POSITION})")
-        val selection = "${BaseColumns._ID} IN (?)"
-        val selectionArgs = arrayOf(teamIds.joinToString(", "))
+        val queryIdsParameter = teamIds.map { "?" }.joinToString(", ", "(", ")")
+        val selection = "${BaseColumns._ID} IN $queryIdsParameter"
+        val selectionArgs = teamIds.map { id -> id.toString() }.toTypedArray()
+
         val posCursor = db.query(
             Equipe.EquipeTable.NAME,
             projection, // The array of columns to return (pass null to get all)
@@ -377,6 +379,8 @@ class ParticipeDao(context : Context) {
         )
 
         posCursor.moveToFirst()
-        return posCursor.getInt(0)
+        val nextPos = posCursor.getInt(0) + 1
+        posCursor.close()
+        return nextPos
     }
 }

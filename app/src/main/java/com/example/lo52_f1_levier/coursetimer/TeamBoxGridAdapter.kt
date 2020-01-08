@@ -42,7 +42,7 @@ class TeamBoxGridAdapter(private val context: Context,
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TeamBoxGridViewHolder {
         val teamBox: View = LayoutInflater.from(parent.context)
             .inflate(R.layout.team_box, parent, false)
-        return TeamBoxGridViewHolder(teamBox, goToDetails, isTimerStarted, this::saveTime, this::calcTeamPosition)
+        return TeamBoxGridViewHolder(teamBox, goToDetails, isTimerStarted, this::saveTime, this::setTeamPosition)
     }
 
     override fun onBindViewHolder(viewHolder: TeamBoxGridViewHolder, position: Int) {
@@ -186,8 +186,10 @@ class TeamBoxGridAdapter(private val context: Context,
     }
 
     @Synchronized
-    private fun calcTeamPosition(): Int {
-        return participeDao.nextTeamPosition(courseId)
+    private fun setTeamPosition(teamId: Int): Int {
+        val nextPos = participeDao.nextTeamPosition(courseId)
+        teamDao.updatePosition(teamId, nextPos)
+        return nextPos
     }
 
 
@@ -198,7 +200,7 @@ class TeamBoxGridAdapter(private val context: Context,
                                 private val goToDetails: (Int) -> Boolean,
                                 private val isTimerStarted: () -> Boolean,
                                 private val saveTime: (teamId: Int, runnerPos: Int, numTime: Int) -> Long,
-                                private val calcTeamPosition: () -> Int) :
+                                private val setTeamPosition: (teamId: Int) -> Int) :
         RecyclerView.ViewHolder(teambox), View.OnCreateContextMenuListener {
 
         init {
@@ -225,7 +227,7 @@ class TeamBoxGridAdapter(private val context: Context,
          */
         private fun updateData(team: TeamBoxData) {
             if (team.isOver) {
-                team.position = calcTeamPosition()
+                team.position = setTeamPosition(team.teamId)
                 displayFinish(team)
                 return
             }
@@ -248,7 +250,7 @@ class TeamBoxGridAdapter(private val context: Context,
             }
 
             val runnerStep = team.step + (team.passage - 1) * team.NB_STEPS
-            team.lastTime = saveTime(team.teamId, team.runner, runnerStep)
+            team.lastTime = saveTime(team.teamId, team.runner-1, runnerStep)
             team.incrementStep()
             updateData(team)
         }

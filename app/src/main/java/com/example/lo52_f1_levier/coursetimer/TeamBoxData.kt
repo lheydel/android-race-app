@@ -77,7 +77,13 @@ class TeamBoxData(val teamId: Int, val teamNumber: Int, private val runners: Arr
     }
 
     fun formattedLastTime(): String {
-        return "${lastTime / 60000}:${(lastTime / 1000) % 60}"
+        var minutes = "${lastTime / 60000}"
+        if (minutes.length < 2) minutes = "0$minutes"
+
+        var seconds = "${(lastTime / 1000) % 60}"
+        if (seconds.length < 2) seconds = "0$seconds"
+
+        return "$minutes:$seconds"
     }
 }
 

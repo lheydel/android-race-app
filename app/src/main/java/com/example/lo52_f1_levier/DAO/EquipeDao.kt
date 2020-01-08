@@ -128,12 +128,25 @@ class EquipeDao(context : Context) {
     fun getTeamForACourse(ID : Int): Cursor? {
         val db = dbHelper.readableDatabase
 
-        var query = "SELECT * FROM "+Equipe.EquipeTable.NAME+ " WHERE "+BaseColumns._ID +
+        val query = "SELECT * FROM "+Equipe.EquipeTable.NAME+ " WHERE "+BaseColumns._ID +
                 " IN ( SELECT "+ Participe.ParticipeTable.E_ID+" FROM "+Participe.ParticipeTable.NAME+
                 " WHERE "+Participe.ParticipeTable.C_ID+  " = "+ ID.toString() + ");"
 
         return db.rawQuery(query, null)
 
+    }
+
+    fun updatePosition(ID: Int, pos: Int) {
+        val db = dbHelper.writableDatabase
+        val values = ContentValues().apply { put(Equipe.EquipeTable.POSITION, pos) }
+        val selection = "${BaseColumns._ID} = ?"
+        val selectionArgs = arrayOf(ID.toString())
+        db.update(
+            Equipe.EquipeTable.NAME,
+            values,
+            selection,
+            selectionArgs
+        )
     }
 
 }
