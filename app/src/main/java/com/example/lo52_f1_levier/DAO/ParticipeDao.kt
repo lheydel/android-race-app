@@ -9,8 +9,15 @@ import com.example.lo52_f1_levier.model.Participe
 import com.example.lo52_f1_levier.model.CourseDbHelper
 import com.example.lo52_f1_levier.model.Equipe
 
+/**
+ * ensemble des fonction permettant de modifier le contenue de la table participe
+ */
 class ParticipeDao(context : Context) {
     val dbHelper = CourseDbHelper(context)
+
+    /**
+     * Permet l'insertion dans la table participe
+     */
     fun insertParticipe(C_ID: Int, CR_ID: Int, E_ID : Int): Long? {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
@@ -21,6 +28,9 @@ class ParticipeDao(context : Context) {
         return db?.insert(Participe.ParticipeTable.NAME, null, values)
     }
 
+    /**
+     * Renvoie les enregistrements dont l'id du coureur = CR_ID
+     */
     fun getParticipeByCR_ID(CR_ID:Int): Cursor? {
         val db = dbHelper.readableDatabase
 
@@ -55,6 +65,9 @@ class ParticipeDao(context : Context) {
         )
     }
 
+    /**
+     * Renvoie un enregistrement de la table participe  via leur ID
+     */
     fun getParticipeByID(ID:Int): Cursor? {
         val db = dbHelper.readableDatabase
 
@@ -89,6 +102,9 @@ class ParticipeDao(context : Context) {
         )
     }
 
+    /**
+     *Renvoie les enregistrements dont l'id de l'équipe  = E_ID
+     */
     fun getParticipeByE_ID(E_ID:Int): Cursor? {
         val db = dbHelper.readableDatabase
 
@@ -123,6 +139,9 @@ class ParticipeDao(context : Context) {
         )
     }
 
+    /**
+     * Renvoie les enregistrements dont l'id de la course  = C_ID
+     */
     fun getParticipeByC_ID(C_ID:Int): Cursor? {
         val db = dbHelper.readableDatabase
 
@@ -157,6 +176,9 @@ class ParticipeDao(context : Context) {
         )
     }
 
+    /**
+     * Renvoie les enregistrements dont l'id de la course  = C_ID et l'id de l'équipe =E_ID
+     */
     fun getParticipeByC_ID_E_ID(C_ID:Int,E_ID: Int): Cursor? {
         val db = dbHelper.readableDatabase
 
@@ -210,6 +232,9 @@ class ParticipeDao(context : Context) {
         )
     }
 
+    /**
+     * Supprime les enregistrements dont l'id du coureur = CR_ID
+     */
     fun deleteParticipeByCR_ID(CR_ID: Int): Int {
         val db = dbHelper.writableDatabase
         val selection = "${Participe.ParticipeTable.CR_ID} = ?"
@@ -218,6 +243,10 @@ class ParticipeDao(context : Context) {
         return deletedRows
     }
 
+    /**
+     * deleteParticipeByCourseIdAndTeamId est utilisé pour supprimer des enregistrement dans la base
+     * participe en focntion de l'id de la course et l'id de l'équipe
+     */
     fun deleteParticipeByCourseIdAndTeamId(C_ID: Int, E_ID: Int): Int {
         val db = dbHelper.writableDatabase
         val selection = "${Participe.ParticipeTable.C_ID} = ? AND ${Participe.ParticipeTable.E_ID} = ?"
@@ -226,6 +255,9 @@ class ParticipeDao(context : Context) {
         return deletedRows
     }
 
+    /**
+     * setTimeByRunnerId permet de definir le temps numTime du coureur CR_ID  a la valeur time
+     */
     fun setTimeByRunnerId(CR_ID: Int, numTime : Int, time : Long): Int {
         val db = dbHelper.writableDatabase
         val values=ContentValues()
@@ -275,7 +307,10 @@ class ParticipeDao(context : Context) {
             selectionArgs)
     }
 
-    fun getCoureurByTeamIdAndNumc(teamId: Int, numc: Int): Cursor? {
+    /**
+     * Get a runner by its team and position in the team
+     */
+    fun getCoureurByTeamIdAndNumc(teamId: Int, numc: Int): Cursor {
         val db = dbHelper.readableDatabase
 
         val projection = arrayOf(Participe.ParticipeTable.CR_ID)
