@@ -41,16 +41,16 @@ const val SQL_CREATE_PARTICIPE =
         "${Participe.ParticipeTable.C_ID} INTEGER," +
         "${Participe.ParticipeTable.CR_ID} INTEGER,"+
         "${Participe.ParticipeTable.E_ID} INTEGER,"+
-        "${Participe.ParticipeTable.TIME1} NUMBER,"+
-        "${Participe.ParticipeTable.TIME2} NUMBER,"+
-        "${Participe.ParticipeTable.TIME3} NUMBER,"+
-        "${Participe.ParticipeTable.TIME4} NUMBER,"+
-        "${Participe.ParticipeTable.TIME5} NUMBER,"+
-        "${Participe.ParticipeTable.TIME6} NUMBER,"+
-        "${Participe.ParticipeTable.TIME7} NUMBER,"+
-        "${Participe.ParticipeTable.TIME8} NUMBER,"+
-        "${Participe.ParticipeTable.TIME9} NUMBER,"+
-        "${Participe.ParticipeTable.TIME10} NUMBER" +
+        "${Participe.ParticipeTable.TIME1} NUMBER DEFAULT -1,"+
+        "${Participe.ParticipeTable.TIME2} NUMBER DEFAULT -1,"+
+        "${Participe.ParticipeTable.TIME3} NUMBER DEFAULT -1,"+
+        "${Participe.ParticipeTable.TIME4} NUMBER DEFAULT -1,"+
+        "${Participe.ParticipeTable.TIME5} NUMBER DEFAULT -1,"+
+        "${Participe.ParticipeTable.TIME6} NUMBER DEFAULT -1,"+
+        "${Participe.ParticipeTable.TIME7} NUMBER DEFAULT -1,"+
+        "${Participe.ParticipeTable.TIME8} NUMBER DEFAULT -1,"+
+        "${Participe.ParticipeTable.TIME9} NUMBER DEFAULT -1,"+
+        "${Participe.ParticipeTable.TIME10} NUMBER DEFAULT -1" +
     ")"
 
 
