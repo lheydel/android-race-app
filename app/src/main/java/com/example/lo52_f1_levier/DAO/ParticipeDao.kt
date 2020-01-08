@@ -145,7 +145,7 @@ class ParticipeDao(context : Context) {
         val selection = "${Participe.ParticipeTable.E_ID} = ?"
         val selectionArgs = arrayOf(E_ID.toString())
 
-        val sortOrder = "${Participe.ParticipeTable.CR_ID} DESC"
+        val sortOrder = "${Participe.ParticipeTable.CR_ID} ASC"
 
         return db.query(
             Participe.ParticipeTable.NAME,   // The table to query

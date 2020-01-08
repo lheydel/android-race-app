@@ -1,6 +1,5 @@
 package com.example.lo52_f1_levier.coursetimer
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
