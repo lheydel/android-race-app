@@ -9,9 +9,23 @@ import com.example.lo52_f1_levier.model.CourseDbHelper
 import com.example.lo52_f1_levier.model.Participe
 import java.lang.Exception
 
+/**
+ * TODO
+ *
+ * @constructor
+ * TODO
+ *
+ * @param context
+ */
 class CoureurDao(context: Context) {
     val dbHelper = CourseDbHelper(context)
-
+    /**
+     * TODO
+     *
+     * @param cname
+     * @param surname
+     * @return
+     */
     fun insertCoureur(cname: String, surname: String): Long? {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
@@ -23,6 +37,12 @@ class CoureurDao(context: Context) {
         return db?.insert(Coureur.CoureurTable.NAME, null, values)
     }
 
+    /**
+     * TODO
+     *
+     * @param titre
+     * @return
+     */
     fun getCoureur(titre:Int): Cursor? {
         val db = dbHelper.readableDatabase
 
@@ -44,6 +64,13 @@ class CoureurDao(context: Context) {
             sortOrder               // The sort order
         )
     }
+
+    /**
+     * TODO
+     *
+     * @param ID
+     * @return
+     */
     fun getCoureurByID(ID:Int): Cursor? {
         val db = dbHelper.readableDatabase
 
@@ -66,6 +93,12 @@ class CoureurDao(context: Context) {
         )
     }
 
+    /**
+     * TODO
+     *
+     * @param numc
+     * @return
+     */
     fun getCoureurByNumc(numc:Int): Cursor? {
         val db = dbHelper.readableDatabase
 
@@ -88,7 +121,11 @@ class CoureurDao(context: Context) {
         )
     }
 
-
+    /**
+     * TODO
+     *
+     * @return
+     */
     fun getAllCoureur(): Cursor? {
         val db = dbHelper.readableDatabase
 
@@ -108,6 +145,12 @@ class CoureurDao(context: Context) {
         )
     }
 
+    /**
+     * TODO
+     *
+     * @param numc
+     * @return
+     */
     fun deleteCoureur(numc: Int): Int {
         val db = dbHelper.writableDatabase
         val selection = "${Coureur.CoureurTable.NUMC} LIKE ?"
@@ -115,6 +158,16 @@ class CoureurDao(context: Context) {
         val deletedRows = db.delete(Coureur.CoureurTable.NAME, selection, selectionArgs)
         return deletedRows
     }
+
+    /**
+     * TODO
+     *
+     * @param oldNumc
+     * @param numc
+     * @param cname
+     * @param surname
+     * @return
+     */
     fun updateCoureur(oldNumc: Int,numc: Int,cname: String, surname: String): Int {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
@@ -130,6 +183,16 @@ class CoureurDao(context: Context) {
             selection,
             selectionArgs)
     }
+
+    /**
+     * TODO
+     *
+     * @param ID
+     * @param numc
+     * @param cname
+     * @param surname
+     * @return
+     */
     fun updateCoureurByID(ID: Int,numc: Int,cname: String, surname: String): Int {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
@@ -146,6 +209,13 @@ class CoureurDao(context: Context) {
             selectionArgs)
     }
 
+    /**
+     * TODO
+     *
+     * @param ID
+     * @param numc
+     * @return
+     */
     fun updateCoureurNumc(ID: Int, numc: Int): Int {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
@@ -160,6 +230,11 @@ class CoureurDao(context: Context) {
             selectionArgs)
     }
 
+    /**
+     * TODO
+     *
+     * @return
+     */
     fun getLastId() : Int {
         val db = dbHelper.writableDatabase
 
@@ -173,6 +248,12 @@ class CoureurDao(context: Context) {
 
     }
 
+    /**
+     * TODO
+     *
+     * @param ID
+     * @return
+     */
     fun getCoureurFree(ID : Int): Cursor? {
         val db = dbHelper.readableDatabase
 
