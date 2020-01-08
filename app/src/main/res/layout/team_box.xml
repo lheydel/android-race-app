@@ -63,7 +63,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:visibility="invisible"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/runnerInfo">
@@ -108,7 +108,7 @@
             android:id="@+id/finishState"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="visible"
+            android:visibility="invisible"
             app:layout_constraintBottom_toTopOf="@+id/progressBar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -118,28 +118,30 @@
                 android:id="@+id/teamPos"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
                 android:textSize="35sp"
                 android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="@id/imgFinish"
-                app:layout_constraintEnd_toStartOf="@+id/imgFinish"
+                app:layout_constraintEnd_toEndOf="@+id/imgFinish"
                 app:layout_constraintStart_toStartOf="@id/imgFinish"
                 app:layout_constraintTop_toTopOf="@id/imgFinish" />
 
             <ImageView
                 android:id="@+id/imgFinish"
-                android:layout_width="60dp"
-                android:layout_height="35dp"
+                android:layout_width="83dp"
+                android:layout_height="47dp"
                 android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/end_flag" />
+                app:srcCompat="@drawable/laurel" />
 
             <TextView
                 android:id="@+id/teamTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
                 android:text="00:00"
                 android:textSize="21sp"
                 android:visibility="visible"

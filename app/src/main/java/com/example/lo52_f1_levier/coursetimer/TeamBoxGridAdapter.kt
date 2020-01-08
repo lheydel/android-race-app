@@ -6,6 +6,8 @@ import android.view.ContextMenu
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lo52_f1_levier.DAO.CoureurDao
 import com.example.lo52_f1_levier.DAO.EquipeDao
@@ -16,6 +18,7 @@ import com.example.lo52_f1_levier.model.Equipe
 import com.example.lo52_f1_levier.model.Participe
 import kotlinx.android.synthetic.main.team_box.view.*
 import kotlin.math.min
+
 
 /**
  * Link data to the RecyclerView listing the team boxes in the CourseTimerActivity
@@ -42,7 +45,7 @@ class TeamBoxGridAdapter(private val context: Context,
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TeamBoxGridViewHolder {
         val teamBox: View = LayoutInflater.from(parent.context)
             .inflate(R.layout.team_box, parent, false)
-        return TeamBoxGridViewHolder(teamBox, goToDetails, isTimerStarted, this::saveTime, this::setTeamPosition)
+        return TeamBoxGridViewHolder(context, teamBox, goToDetails, isTimerStarted, this::saveTime, this::setTeamPosition)
     }
 
     override fun onBindViewHolder(viewHolder: TeamBoxGridViewHolder, position: Int) {
@@ -189,6 +192,7 @@ class TeamBoxGridAdapter(private val context: Context,
     private fun setTeamPosition(teamId: Int): Int {
         val nextPos = participeDao.nextTeamPosition(courseId)
         teamDao.updatePosition(teamId, nextPos)
+//        teamDao.updatePosition(teamId, 0)
         return nextPos
     }
 
@@ -196,7 +200,8 @@ class TeamBoxGridAdapter(private val context: Context,
     /**
      * Data management of a single team box
      */
-    class TeamBoxGridViewHolder(private val teambox: View,
+    class TeamBoxGridViewHolder(private val context: Context?,
+                                private val teambox: View,
                                 private val goToDetails: (Int) -> Boolean,
                                 private val isTimerStarted: () -> Boolean,
                                 private val saveTime: (teamId: Int, runnerPos: Int, numTime: Int) -> Long,
@@ -259,12 +264,19 @@ class TeamBoxGridAdapter(private val context: Context,
          * Display the final state of the team box
          */
         private fun displayFinish(team: TeamBoxData) {
-            teambox.runnerName.text = "Parcours Terminé"
+            // disable running state
             teambox.runningState.visibility = View.INVISIBLE
             teambox.imgJersey.visibility = View.GONE
 
+            // setup finish state
             teambox.finishState.visibility = View.VISIBLE
+            teambox.runnerName.text = "Parcours Terminé"
+            teambox.imgFinish.setImageResource(team.getDrawablePosition())
             teambox.teamTime.text = team.formattedLastTime()
+
+            // setup team pos (image + text offset)
+            val offset = context!!.resources.getDimension(team.getOffsetPosition()).toInt()
+            teambox.teamPos.updateLayoutParams<ConstraintLayout.LayoutParams> { setMargins(0, 0, 0, offset) }
             teambox.teamPos.text = team.position.toString()
         }
 
