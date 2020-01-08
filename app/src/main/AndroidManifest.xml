@@ -39,9 +39,7 @@
         </activity>
         <activity
             android:name=".coursetimer.CourseTimerActivity"
-            android:screenOrientation="landscape">
-        </activity>
-        <activity android:name=".view.DetailsCourseTimerFragment"/>
+            android:screenOrientation="landscape"></activity>
     </application>
 
 </manifest>

@@ -26,7 +26,7 @@ class DetailsCourseTimerFragment : AppCompatActivity() {
         courseId = intent.getIntExtra("courseId",0)
         teamId = intent.getIntExtra("teamId", 0)
 
-        participeDao = ParticipeDao(this.baseContext)
+        participeDao = ParticipeDao(this!!)
 
         // Get the different runners
 
@@ -41,7 +41,8 @@ class DetailsCourseTimerFragment : AppCompatActivity() {
             while (moveToNext())
             {
                 // We create an instance of a runner
-                val runner = Runner(getInt(getColumnIndexOrThrow(Coureur.CoureurTable.NUMC)),
+                val runner = Runner(getInt(getColumnIndexOrThrow(BaseColumns._ID)),
+                    getInt(getColumnIndexOrThrow(Coureur.CoureurTable.NUMC)),
                     getString(getColumnIndexOrThrow(Coureur.CoureurTable.CNAME)),
                     getString(getColumnIndexOrThrow(Coureur.CoureurTable.SURNAME)))
                 // We add the runner to our list
@@ -54,7 +55,7 @@ class DetailsCourseTimerFragment : AppCompatActivity() {
         // for each of them, create a new "timer"
         runners.forEach{
             var view = LayoutInflater.from(this).inflate(R.layout.fragment_progression,null,false)
-            val cRunner = participeDao.getParticipeByC_ID(it.numc)
+            val cRunner = participeDao.getParticipeByC_ID(it.id)
             var t1 =""
             with(cRunner!!){
                 while(moveToNext())
