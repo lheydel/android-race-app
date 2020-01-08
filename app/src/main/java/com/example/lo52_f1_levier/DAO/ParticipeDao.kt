@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.provider.BaseColumns
+import com.example.lo52_f1_levier.model.Coureur
 import com.example.lo52_f1_levier.model.Participe
 import com.example.lo52_f1_levier.model.CourseDbHelper
 
@@ -142,7 +143,7 @@ class ParticipeDao(context : Context) {
         val selection = "${Participe.ParticipeTable.C_ID} = ?"
         val selectionArgs = arrayOf(C_ID.toString())
 
-        val sortOrder = "${Participe.ParticipeTable.CR_ID} DESC"
+        val sortOrder = Participe.ParticipeTable.E_ID  // important for TeamBoxGridAdapter
 
         return db.query(
             Participe.ParticipeTable.NAME,   // The table to query
@@ -224,52 +225,21 @@ class ParticipeDao(context : Context) {
 
     fun deleteParticipeByCR_ID(CR_ID: Int): Int {
         val db = dbHelper.writableDatabase
-        val selection = "${Participe.ParticipeTable.CR_ID} LIKE ?"
+        val selection = "${Participe.ParticipeTable.CR_ID} = ?"
         val selectionArgs = arrayOf(CR_ID.toString())
         val deletedRows = db.delete(Participe.ParticipeTable.NAME, selection, selectionArgs)
         return deletedRows
     }
 
-    fun deleteParticipeByC_ID_E_ID(C_ID: Int, E_ID: Int): Int {
+    fun deleteParticipeByCourseIdAndTeamId(C_ID: Int, E_ID: Int): Int {
         val db = dbHelper.writableDatabase
-        val selection = "${Participe.ParticipeTable.C_ID} LIKE ? AND ${Participe.ParticipeTable.E_ID} LIKE ?"
+        val selection = "${Participe.ParticipeTable.C_ID} = ? AND ${Participe.ParticipeTable.E_ID} = ?"
         val selectionArgs = arrayOf(C_ID.toString(),E_ID.toString())
         val deletedRows = db.delete(Participe.ParticipeTable.NAME, selection, selectionArgs)
         return deletedRows
     }
 
-    fun updateParticipeByCR_ID(oldCR_ID: Int,CR_ID: Int,C_ID: Int, E_ID: Int): Int {
-        val db = dbHelper.writableDatabase
-        val values = ContentValues().apply {
-            put(Participe.ParticipeTable.CR_ID, CR_ID )
-            put(Participe.ParticipeTable.C_ID, C_ID)
-            put(Participe.ParticipeTable.E_ID, E_ID)
-        }
-        val selection = "${Participe.ParticipeTable.CR_ID} LIKE ?"
-        val selectionArgs = arrayOf(oldCR_ID.toString())
-        return db.update(
-            Participe.ParticipeTable.NAME,
-            values,
-            selection,
-            selectionArgs)
-    }
-    fun updateParticipeByID(ID: Int,CR_ID: Int,C_ID: Int, E_ID: Int): Int {
-        val db = dbHelper.writableDatabase
-        val values = ContentValues().apply {
-            put(Participe.ParticipeTable.CR_ID, CR_ID )
-            put(Participe.ParticipeTable.C_ID, C_ID)
-            put(Participe.ParticipeTable.E_ID, E_ID)
-        }
-        val selection = "${BaseColumns._ID} LIKE ?"
-        val selectionArgs = arrayOf(ID.toString())
-        return db.update(
-            Participe.ParticipeTable.NAME,
-            values,
-            selection,
-            selectionArgs)
-    }
-
-    fun setTimeByCR_ID(CR_ID: Int,numTime : Int, time : Int): Int {
+    fun setTimeByRunnerId(CR_ID: Int, numTime : Int, time : Long): Int {
         val db = dbHelper.writableDatabase
         val values=ContentValues()
         when(numTime){
@@ -309,7 +279,7 @@ class ParticipeDao(context : Context) {
 
         }
 
-        val selection = "${Participe.ParticipeTable.CR_ID} LIKE ?"
+        val selection = "${Participe.ParticipeTable.CR_ID} = ?"
         val selectionArgs = arrayOf(CR_ID.toString())
         return db.update(
             Participe.ParticipeTable.NAME,
@@ -364,5 +334,42 @@ class ParticipeDao(context : Context) {
             values,
             selection,
             selectionArgs)
+    }
+
+    fun getCoureurByTeamIdAndNumc(teamId: Int, numc: Int): Cursor? {
+        val db = dbHelper.readableDatabase
+
+        val projection = arrayOf(Participe.ParticipeTable.CR_ID)
+
+        val selection = "${Participe.ParticipeTable.E_ID} = ?"
+        val selectionArgs = arrayOf(teamId.toString())
+
+        val teamCursor = db.query(
+            Participe.ParticipeTable.NAME,   // The table to query
+            projection,             // The array of columns to return (pass null to get all)
+            selection,              // The columns for the WHERE clause
+            selectionArgs,          // The values for the WHERE clause
+            null,                   // don't group the rows
+            null,                   // don't filter by row groups
+            null               // The sort order
+        )
+
+        var rIds = emptyArray<Int>()
+        while (teamCursor.moveToNext()) {
+            val rId = teamCursor.getInt(teamCursor.getColumnIndex(Participe.ParticipeTable.CR_ID))
+            rIds = rIds.plus(rId)
+        }
+
+        val runnerSelection = "${BaseColumns._ID} IN (?) AND ${Coureur.CoureurTable.NUMC} = ?"
+        val runnerSelectionArgs = arrayOf(rIds.joinToString(", "), numc.toString())
+        return db.query(
+            Coureur.CoureurTable.NAME,
+            null, // The array of columns to return (pass null to get all)
+            runnerSelection, // The columns for the WHERE clause
+            runnerSelectionArgs,          // The values for the WHERE clause
+            null,                   // don't group the rows
+            null,                   // don't filter by row groups
+            null               // The sort order
+        )
     }
 }

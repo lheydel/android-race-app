@@ -137,7 +137,21 @@ class CoureurDao(context: Context) {
             put(Coureur.CoureurTable.CNAME,cname)
             put(Coureur.CoureurTable.SURNAME,surname)
         }
-        val selection = "${BaseColumns._ID} LIKE ?"
+        val selection = "${BaseColumns._ID} = ?"
+        val selectionArgs = arrayOf(ID.toString())
+        return db.update(
+            Coureur.CoureurTable.NAME,
+            values,
+            selection,
+            selectionArgs)
+    }
+
+    fun updateCoureurNumc(ID: Int, numc: Int): Int {
+        val db = dbHelper.writableDatabase
+        val values = ContentValues().apply {
+            put(Coureur.CoureurTable.NUMC, numc)
+        }
+        val selection = "${BaseColumns._ID} = ?"
         val selectionArgs = arrayOf(ID.toString())
         return db.update(
             Coureur.CoureurTable.NAME,
