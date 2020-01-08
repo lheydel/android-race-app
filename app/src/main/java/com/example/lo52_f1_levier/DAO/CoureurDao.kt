@@ -9,9 +9,23 @@ import com.example.lo52_f1_levier.model.CourseDbHelper
 import com.example.lo52_f1_levier.model.Participe
 import java.lang.Exception
 
+/**
+ * ensemble des fonctions permettant de modifier le contenue de la table Coureur
+ *@author G muller
+ * @constructor
+ * TODO
+ *
+ * @param context
+ */
 class CoureurDao(context: Context) {
     val dbHelper = CourseDbHelper(context)
-
+    /**
+     * Permet d'inserer un enregistrement dans la base coureur
+     *
+     * @param cname
+     * @param surname
+     * @return
+     */
     fun insertCoureur(cname: String, surname: String): Long? {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
@@ -23,14 +37,20 @@ class CoureurDao(context: Context) {
         return db?.insert(Coureur.CoureurTable.NAME, null, values)
     }
 
-    fun getCoureur(titre:Int): Cursor? {
+    /**
+     * Permet de recupere un coureur en fonction de son numero
+     *
+     * @param numc
+     * @return cursor
+     */
+    fun getCoureur(numc:Int): Cursor? {
         val db = dbHelper.readableDatabase
 
         val projection = arrayOf(BaseColumns._ID, Coureur.CoureurTable.NUMC, Coureur.CoureurTable.CNAME,
             Coureur.CoureurTable.SURNAME)
 
         val selection = "${Coureur.CoureurTable.NUMC} = ?"
-        val selectionArgs = arrayOf(titre.toString())
+        val selectionArgs = arrayOf(numc.toString())
 
         val sortOrder = "${Coureur.CoureurTable.CNAME} DESC"
 
@@ -44,6 +64,13 @@ class CoureurDao(context: Context) {
             sortOrder               // The sort order
         )
     }
+
+    /**
+     * Permet de recupere un coureur en fonction de son ID
+     *
+     * @param ID
+     * @return
+     */
     fun getCoureurByID(ID:Int): Cursor? {
         val db = dbHelper.readableDatabase
 
@@ -66,6 +93,12 @@ class CoureurDao(context: Context) {
         )
     }
 
+    /**
+     * Permet de recupere un coureur en fonction de son numero
+     *
+     * @param numc
+     * @return
+     */
     fun getCoureurByNumc(numc:Int): Cursor? {
         val db = dbHelper.readableDatabase
 
@@ -88,7 +121,11 @@ class CoureurDao(context: Context) {
         )
     }
 
-
+    /**
+     * Permet de recupere tout les coureurs
+     *
+     * @return
+     */
     fun getAllCoureur(): Cursor? {
         val db = dbHelper.readableDatabase
 
@@ -108,6 +145,12 @@ class CoureurDao(context: Context) {
         )
     }
 
+    /**
+     * Permet de supprimer un coureur en fonction de son numero
+     *
+     * @param numc
+     * @return
+     */
     fun deleteCoureur(numc: Int): Int {
         val db = dbHelper.writableDatabase
         val selection = "${Coureur.CoureurTable.NUMC} LIKE ?"
@@ -115,6 +158,16 @@ class CoureurDao(context: Context) {
         val deletedRows = db.delete(Coureur.CoureurTable.NAME, selection, selectionArgs)
         return deletedRows
     }
+
+    /**
+     * Permet de modifier un coureur en fonction de son numero
+     *
+     * @param oldNumc
+     * @param numc
+     * @param cname
+     * @param surname
+     * @return
+     */
     fun updateCoureur(oldNumc: Int,numc: Int,cname: String, surname: String): Int {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
@@ -130,6 +183,16 @@ class CoureurDao(context: Context) {
             selection,
             selectionArgs)
     }
+
+    /**
+     * Permet de modifier un coureur en fonction de son ID
+     *
+     * @param ID
+     * @param numc
+     * @param cname
+     * @param surname
+     * @return
+     */
     fun updateCoureurByID(ID: Int,numc: Int,cname: String, surname: String): Int {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
@@ -146,6 +209,13 @@ class CoureurDao(context: Context) {
             selectionArgs)
     }
 
+    /**
+     * Permet de modifier un coureur en fonction de son numero
+     *
+     * @param ID
+     * @param numc
+     * @return
+     */
     fun updateCoureurNumc(ID: Int, numc: Int): Int {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
@@ -160,6 +230,11 @@ class CoureurDao(context: Context) {
             selectionArgs)
     }
 
+    /**
+     * Permet de recupere le dernier numerode coureur utilisé
+     *
+     * @return dernier numeroe de coureur utilisé Int
+     */
     fun getLastId() : Int {
         val db = dbHelper.writableDatabase
 
@@ -173,6 +248,12 @@ class CoureurDao(context: Context) {
 
     }
 
+    /**
+     * Récupere les coureur qui ne sont pas inscrit a une course dont lid est ID
+     *
+     * @param ID
+     * @return cusor
+     */
     fun getCoureurFree(ID : Int): Cursor? {
         val db = dbHelper.readableDatabase
 

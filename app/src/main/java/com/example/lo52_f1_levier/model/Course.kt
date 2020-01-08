@@ -1,9 +1,13 @@
 package com.example.lo52_f1_levier.model
 
 import android.provider.BaseColumns
-/*
-Objects contenants les noms des champs des tables
- */
+/**
+ *
+ *Objects contenants les noms des champs des tables
+ *
+ * @author GMuller
+ *
+ * */
 object Course {
     object Coursetable : BaseColumns {
         const val TABLE_NAME = "Course"
@@ -11,6 +15,9 @@ object Course {
         const val DATE = "date"
     }
 }
+
+
+
 object Coureur{
     object CoureurTable : BaseColumns {
         const val NAME = "Coureur"
