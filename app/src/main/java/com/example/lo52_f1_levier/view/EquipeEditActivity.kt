@@ -1,20 +1,17 @@
 package com.example.lo52_f1_levier.view
 
 import android.app.Activity
-import android.graphics.Color
+import android.content.Context
 import android.os.Bundle
 import android.provider.BaseColumns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lo52_f1_levier.DAO.CoureurDao
-import com.example.lo52_f1_levier.DAO.CourseDao
 import com.example.lo52_f1_levier.DAO.EquipeDao
 import com.example.lo52_f1_levier.DAO.ParticipeDao
 import com.example.lo52_f1_levier.R
@@ -54,12 +51,13 @@ class TeamEditActivity : AppCompatActivity() {
                 if (teamAdapter.getItemCount() == 3) {
                     equipeDao = EquipeDao(this)
                     participeDao = ParticipeDao(this)
-                    participeDao.deleteParticipeByC_ID_E_ID(courseId,teamId)
+                    participeDao.deleteParticipeByCourseIdAndTeamId(courseId,teamId)
                     equipeDao.updateEquipeByID(teamId,edt_teamName.text.toString(),edt_teamNumber.text.toString().toInt())
 
-                    participeDao.insertParticipe(courseId, teamAdapter.getItem(0).id, teamId)
-                    participeDao.insertParticipe(courseId, teamAdapter.getItem(1).id, teamId)
-                    participeDao.insertParticipe(courseId, teamAdapter.getItem(2).id, teamId)
+                    for (position in 0 until teamAdapter.itemCount) {
+                        participeDao.insertParticipe(courseId, teamAdapter.getItem(position).id, teamId)
+                        coureurDao.updateCoureurNumc(teamAdapter.getItem(position).id, position)
+                    }
 
                     Toast.makeText(this, "Modification enregistrée", Toast.LENGTH_SHORT).show()
                     setResult(Activity.RESULT_OK)
@@ -146,9 +144,7 @@ class TeamEditActivity : AppCompatActivity() {
         listFreeParticipant.layoutManager = LinearLayoutManager(this)
         listFreeParticipant.adapter = adapter
 
-        teamAdapter = TeamMemberAdapter(
-            onClickListener = this::selectMember
-        )
+        teamAdapter = TeamMemberAdapter(this::selectMember, this)
         listTeamMembers.layoutManager = LinearLayoutManager(this)
         listTeamMembers.adapter = teamAdapter
 
@@ -267,7 +263,7 @@ class TeamEditActivity : AppCompatActivity() {
             LayoutContainer
     }
 
-    class TeamMemberAdapter(private val onClickListener: aTeamRunnerClickListener) : RecyclerView.Adapter<TeamMemberAdapter.ViewHolder>(){
+    class TeamMemberAdapter(private val onClickListener: aTeamRunnerClickListener, private val context: Context?) : RecyclerView.Adapter<TeamMemberAdapter.ViewHolder>(){
 
         private var members = ArrayList<Runner>()
 
@@ -284,9 +280,9 @@ class TeamEditActivity : AppCompatActivity() {
                 onClickListener(view, member)
             }
             when(position){
-                0 -> holder.imageView.setBackgroundColor(Color.parseColor("#EDBE1414"))
-                1 -> holder.imageView.setBackgroundColor(Color.parseColor("#ED1FBE14"))
-                3 -> holder.imageView.setBackgroundColor(Color.parseColor("#ED144DBE"))
+                0 -> holder.imageView.setBackgroundColor(context!!.resources.getColor(R.color.runner1))
+                1 -> holder.imageView.setBackgroundColor(context!!.resources.getColor(R.color.runner2))
+                2 -> holder.imageView.setBackgroundColor(context!!.resources.getColor(R.color.runner3))
             }
         }
 

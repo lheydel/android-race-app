@@ -95,7 +95,7 @@ class EquipeTabConsultFragment : Fragment() {
         delete_team.setOnClickListener {
             if(::selectedTeam.isInitialized){
 
-                participeDao.deleteParticipeByC_ID_E_ID(course.id,selectedTeam.id)
+                participeDao.deleteParticipeByCourseIdAndTeamId(course.id,selectedTeam.id)
                 equipeDao.deleteEquipe(selectedTeam.id.toString())
 
                 val ft = fragmentManager!!.beginTransaction()
