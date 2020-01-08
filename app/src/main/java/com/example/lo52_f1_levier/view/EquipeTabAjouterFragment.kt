@@ -89,7 +89,6 @@ class EquipeTabAjouterFragment : Fragment() {
                         coureurDao.updateCoureurNumc(teamAdapter.getItem(position).id, position)
                     }
 
-
                     edt_teamName.text.clear()
                 }
                 else{

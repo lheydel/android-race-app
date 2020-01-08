@@ -1,6 +1,7 @@
 package com.example.lo52_f1_levier.coursetimer
 
 import android.content.Context
+import android.provider.BaseColumns
 import android.view.ContextMenu
 import android.view.LayoutInflater
 import android.view.View
@@ -40,7 +41,7 @@ class TeamBoxGridAdapter(private val context: Context,
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TeamBoxGridViewHolder {
         val teamBox: View = LayoutInflater.from(parent.context)
             .inflate(R.layout.team_box, parent, false)
-        return TeamBoxGridViewHolder(teamBox, goToDetails, isTimerStarted)
+        return TeamBoxGridViewHolder(teamBox, goToDetails, isTimerStarted, this::saveTime)
     }
 
     override fun onBindViewHolder(viewHolder: TeamBoxGridViewHolder, position: Int) {
@@ -106,7 +107,7 @@ class TeamBoxGridAdapter(private val context: Context,
         val lastName = runnerCursor.getString(runnerCursor.getColumnIndex(Coureur.CoureurTable.SURNAME))
         val position = runnerCursor.getInt(runnerCursor.getColumnIndex(Coureur.CoureurTable.NUMC))
 
-        // test if full name fit in the team box
+        // if full name fit in the team box
         if (("$firstName $lastName").length <= RUNNER_NAME_MAX_LENGTH) {
             return addRunner(runners, "$firstName $lastName", position)
         }
@@ -156,13 +157,29 @@ class TeamBoxGridAdapter(private val context: Context,
      */
     private fun addTeamBoxData(teamId: Int, runners: Array<String>) {
         val teamNumber = fetchTeamNumber(teamId)
-        teams = teams.plus(TeamBoxData(teamNumber, runners))
+        teams = teams.plus(TeamBoxData(teamId, teamNumber, runners))
+    }
+
+    private fun saveTime(teamId: Int, runnerPos: Int, numTime: Int) {
+        val runnerCursor = participeDao.getCoureurByTeamIdAndNumc(teamId, runnerPos)
+
+        if (runnerCursor === null || !runnerCursor.moveToFirst()) {
+            return
+        }
+
+        val runnerId = runnerCursor.getInt(runnerCursor.getColumnIndex(BaseColumns._ID))
+
+        participeDao.setTimeByRunnerId(runnerId, numTime, getTimerValue())
     }
 
 
+    /**
+     * Data management of a single team box
+     */
     class TeamBoxGridViewHolder(private val teambox: View,
                                 private val goToDetails: (Int) -> Boolean,
-                                private val isTimerStarted: () -> Boolean) :
+                                private val isTimerStarted: () -> Boolean,
+                                private val saveTime: (teamId: Int, runnerPos: Int, numTime: Int) -> Unit) :
         RecyclerView.ViewHolder(teambox), View.OnCreateContextMenuListener {
 
         init {
@@ -206,7 +223,8 @@ class TeamBoxGridAdapter(private val context: Context,
          * Save the time and display the next step of the course for the team
          */
         private fun nextStep(team: TeamBoxData) {
-            // TODO save time
+            val runnerStep = team.step + (team.passage - 1) * team.NB_STEPS
+            saveTime(team.teamId, team.runner, runnerStep)
             team.incrementStep()
             updateData(team)
         }

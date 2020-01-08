@@ -51,7 +51,7 @@ class TeamEditActivity : AppCompatActivity() {
                 if (teamAdapter.getItemCount() == 3) {
                     equipeDao = EquipeDao(this)
                     participeDao = ParticipeDao(this)
-                    participeDao.deleteParticipeByC_ID_E_ID(courseId,teamId)
+                    participeDao.deleteParticipeByCourseIdAndTeamId(courseId,teamId)
                     equipeDao.updateEquipeByID(teamId,edt_teamName.text.toString(),edt_teamNumber.text.toString().toInt())
 
                     for (position in 0 until teamAdapter.itemCount) {
