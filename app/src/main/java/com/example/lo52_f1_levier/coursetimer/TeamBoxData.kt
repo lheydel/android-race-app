@@ -14,6 +14,9 @@ class TeamBoxData(val teamId: Int, val teamNumber: Int, private val runners: Arr
     var totalStepsDone = 0  // could be computed from the previous ones, but it would just be a pain
     var isOver = false
 
+    var lastTime: Long = 0
+    var position: Int = 0
+
     fun incrementStep() {
         if (isOver) {
             return
@@ -58,7 +61,7 @@ class TeamBoxData(val teamId: Int, val teamNumber: Int, private val runners: Arr
         }
     }
 
-    fun getDrawableRunner(): Int{
+    fun getDrawableRunner(): Int {
         return when(runner) {
             1 -> TeamBoxDrawable.RUNNER_1.id
             2 -> TeamBoxDrawable.RUNNER_2.id
@@ -66,11 +69,15 @@ class TeamBoxData(val teamId: Int, val teamNumber: Int, private val runners: Arr
         }
     }
 
-    fun getDrawablePassage(): Int{
+    fun getDrawablePassage(): Int {
         return when(passage) {
             1 -> TeamBoxDrawable.PASSAGE_1.id
             else -> TeamBoxDrawable.PASSAGE_2.id
         }
+    }
+
+    fun formattedLastTime(): String {
+        return "${lastTime / 60000}:${(lastTime / 1000) % 60}"
     }
 }
 

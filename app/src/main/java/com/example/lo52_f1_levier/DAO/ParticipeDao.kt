@@ -7,6 +7,7 @@ import android.provider.BaseColumns
 import com.example.lo52_f1_levier.model.Coureur
 import com.example.lo52_f1_levier.model.Participe
 import com.example.lo52_f1_levier.model.CourseDbHelper
+import com.example.lo52_f1_levier.model.Equipe
 
 class ParticipeDao(context : Context) {
     val dbHelper = CourseDbHelper(context)
@@ -189,36 +190,22 @@ class ParticipeDao(context : Context) {
         )
     }
 
-    fun getAllParticipe(): Cursor? {
+    fun getTeamsOfCourse(courseId: Int): Cursor? {
         val db = dbHelper.readableDatabase
 
-        val projection = arrayOf(
-            BaseColumns._ID, Participe.ParticipeTable.CR_ID, Participe.ParticipeTable.C_ID,
-            Participe.ParticipeTable.E_ID,
-            Participe.ParticipeTable.TIME1,
-            Participe.ParticipeTable.TIME2,
-            Participe.ParticipeTable.TIME3,
-            Participe.ParticipeTable.TIME4,
-            Participe.ParticipeTable.TIME5,
-            Participe.ParticipeTable.TIME6,
-            Participe.ParticipeTable.TIME7,
-            Participe.ParticipeTable.TIME8,
-            Participe.ParticipeTable.TIME9,
-            Participe.ParticipeTable.TIME10
-        )
+        val projection = arrayOf(Participe.ParticipeTable.E_ID)
 
-
-
-        val sortOrder = "${Participe.ParticipeTable.CR_ID} DESC"
+        val selection = "${Participe.ParticipeTable.C_ID} = ?"
+        val selectionArgs = arrayOf(courseId.toString())
 
         return db.query(
             Participe.ParticipeTable.NAME,   // The table to query
             projection,             // The array of columns to return (pass null to get all)
-            null,              // The columns for the WHERE clause
-            null,          // The values for the WHERE clause
+            selection,              // The columns for the WHERE clause
+            selectionArgs,          // The values for the WHERE clause
             null,                   // don't group the rows
             null,                   // don't filter by row groups
-            sortOrder               // The sort order
+            null               // The sort order
         )
     }
 
@@ -322,5 +309,36 @@ class ParticipeDao(context : Context) {
             null,                   // don't filter by row groups
             null               // The sort order
         )
+    }
+
+    fun nextTeamPosition(courseId: Int): Int {
+        val db = dbHelper.readableDatabase
+        val teamListCursor = getTeamsOfCourse(courseId)
+
+        if (teamListCursor === null || !teamListCursor.moveToFirst()) {
+            return 1
+        }
+
+        var teamIds = emptyArray<Int>()
+        while (teamListCursor.moveToNext()) {
+            val tId = teamListCursor.getInt(teamListCursor.getColumnIndex(Participe.ParticipeTable.E_ID))
+            teamIds = teamIds.plus(tId)
+        }
+
+        val projection = arrayOf("MAX(${Equipe.EquipeTable.POSITION})")
+        val selection = "${BaseColumns._ID} IN (?)"
+        val selectionArgs = arrayOf(teamIds.joinToString(", "))
+        val posCursor = db.query(
+            Equipe.EquipeTable.NAME,
+            projection, // The array of columns to return (pass null to get all)
+            selection, // The columns for the WHERE clause
+            selectionArgs,          // The values for the WHERE clause
+            null,                   // don't group the rows
+            null,                   // don't filter by row groups
+            null               // The sort order
+        )
+
+        posCursor.moveToFirst()
+        return posCursor.getInt(0)
     }
 }

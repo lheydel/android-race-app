@@ -15,6 +15,7 @@ import com.example.lo52_f1_levier.model.Coureur
 import com.example.lo52_f1_levier.model.Equipe
 import com.example.lo52_f1_levier.model.Participe
 import kotlinx.android.synthetic.main.team_box.view.*
+import kotlin.math.min
 
 /**
  * Link data to the RecyclerView listing the team boxes in the CourseTimerActivity
@@ -41,7 +42,7 @@ class TeamBoxGridAdapter(private val context: Context,
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TeamBoxGridViewHolder {
         val teamBox: View = LayoutInflater.from(parent.context)
             .inflate(R.layout.team_box, parent, false)
-        return TeamBoxGridViewHolder(teamBox, goToDetails, isTimerStarted, this::saveTime)
+        return TeamBoxGridViewHolder(teamBox, goToDetails, isTimerStarted, this::saveTime, this::calcTeamPosition)
     }
 
     override fun onBindViewHolder(viewHolder: TeamBoxGridViewHolder, position: Int) {
@@ -113,7 +114,7 @@ class TeamBoxGridAdapter(private val context: Context,
         }
 
         // truncate the full name to make it fit
-        return addRunner(runners, "${firstName[0]}. ${lastName.slice(0..12)}", position)
+        return addRunner(runners, "${firstName[0]}. ${lastName.slice(0..min(12, lastName.length - 1))}", position)
     }
 
     /**
@@ -160,16 +161,27 @@ class TeamBoxGridAdapter(private val context: Context,
         teams = teams.plus(TeamBoxData(teamId, teamNumber, runners))
     }
 
-    private fun saveTime(teamId: Int, runnerPos: Int, numTime: Int) {
+    /**
+     * Save a new time for a given runner of a given team
+     * @return the new time
+     */
+    private fun saveTime(teamId: Int, runnerPos: Int, numTime: Int): Long {
         val runnerCursor = participeDao.getCoureurByTeamIdAndNumc(teamId, runnerPos)
 
         if (runnerCursor === null || !runnerCursor.moveToFirst()) {
-            return
+            return 0
         }
 
         val runnerId = runnerCursor.getInt(runnerCursor.getColumnIndex(BaseColumns._ID))
+        val newTime = getTimerValue()
+        participeDao.setTimeByRunnerId(runnerId, numTime, newTime)
 
-        participeDao.setTimeByRunnerId(runnerId, numTime, getTimerValue())
+        return newTime
+    }
+
+    @Synchronized
+    private fun calcTeamPosition(): Int {
+        return participeDao.nextTeamPosition(courseId)
     }
 
 
@@ -179,7 +191,8 @@ class TeamBoxGridAdapter(private val context: Context,
     class TeamBoxGridViewHolder(private val teambox: View,
                                 private val goToDetails: (Int) -> Boolean,
                                 private val isTimerStarted: () -> Boolean,
-                                private val saveTime: (teamId: Int, runnerPos: Int, numTime: Int) -> Unit) :
+                                private val saveTime: (teamId: Int, runnerPos: Int, numTime: Int) -> Long,
+                                private val calcTeamPosition: () -> Int) :
         RecyclerView.ViewHolder(teambox), View.OnCreateContextMenuListener {
 
         init {
@@ -206,7 +219,8 @@ class TeamBoxGridAdapter(private val context: Context,
          */
         private fun updateData(team: TeamBoxData) {
             if (team.isOver) {
-                displayFinish()
+                team.position = calcTeamPosition()
+                displayFinish(team)
                 return
             }
 
@@ -223,8 +237,12 @@ class TeamBoxGridAdapter(private val context: Context,
          * Save the time and display the next step of the course for the team
          */
         private fun nextStep(team: TeamBoxData) {
+            if (team.isOver) {
+                return
+            }
+
             val runnerStep = team.step + (team.passage - 1) * team.NB_STEPS
-            saveTime(team.teamId, team.runner, runnerStep)
+            team.lastTime = saveTime(team.teamId, team.runner, runnerStep)
             team.incrementStep()
             updateData(team)
         }
@@ -232,11 +250,14 @@ class TeamBoxGridAdapter(private val context: Context,
         /**
          * Display the final state of the team box
          */
-        private fun displayFinish() {
+        private fun displayFinish(team: TeamBoxData) {
             teambox.runnerName.text = "Parcours Terminé"
             teambox.runningState.visibility = View.INVISIBLE
             teambox.imgJersey.visibility = View.GONE
-            teambox.imgFinish.visibility = View.VISIBLE
+
+            teambox.finishState.visibility = View.VISIBLE
+            teambox.teamTime.text = team.formattedLastTime()
+            teambox.teamPos.text = team.position.toString()
         }
 
         override fun onCreateContextMenu(menu: ContextMenu, teamBox: View, menuInfo: ContextMenu.ContextMenuInfo?) {

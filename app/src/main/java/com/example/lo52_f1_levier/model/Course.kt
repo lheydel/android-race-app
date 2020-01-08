@@ -9,12 +9,11 @@ object Course {
         const val TABLE_NAME = "Course"
         const val TITLE = "title"
         const val DATE = "date"
+        const val OVER = "over"
     }
 }
 
-
-
-object Coureur{
+object Coureur {
     object CoureurTable : BaseColumns {
         const val NAME = "Coureur"
         const val NUMC = "Numc"
@@ -22,29 +21,30 @@ object Coureur{
         const val SURNAME = "Surname"
     }
 }
-object Equipe{
+object Equipe {
     object EquipeTable : BaseColumns {
         const val NAME = "Equipe"
         const val ENAME = "Ename"
         const val ENUM = "Enum"
+        const val POSITION = "Position"
     }
 }
-object Participe{
-object ParticipeTable : BaseColumns {
-    const val NAME = "Participe"
-    const val C_ID = "C_ID"
-    const val CR_ID = "CR_ID"
-    const val E_ID = "E_ID"
-    const val TIME1 = "Time1"
-    const val TIME2 = "Time2"
-    const val TIME3 = "Time3"
-    const val TIME4 = "Time4"
-    const val TIME5 = "Time5"
-    const val TIME6 = "Time6"
-    const val TIME7 = "Time7"
-    const val TIME8 = "Time8"
-    const val TIME9 = "Time9"
-    const val TIME10 = "Time10"
-    //TODO : add times plus de times ????
-}}
+object Participe {
+    object ParticipeTable : BaseColumns {
+        const val NAME = "Participe"
+        const val C_ID = "C_ID"
+        const val CR_ID = "CR_ID"
+        const val E_ID = "E_ID"
+        const val TIME1 = "Time1"
+        const val TIME2 = "Time2"
+        const val TIME3 = "Time3"
+        const val TIME4 = "Time4"
+        const val TIME5 = "Time5"
+        const val TIME6 = "Time6"
+        const val TIME7 = "Time7"
+        const val TIME8 = "Time8"
+        const val TIME9 = "Time9"
+        const val TIME10 = "Time10"
+    }
+}
 
