@@ -289,6 +289,13 @@ class ParticipeDao(context : Context) {
         return deletedRows
     }
 
+    /**
+     * TODO
+     *
+     * @param C_ID
+     * @param E_ID
+     * @return
+     */
     fun deleteParticipeByCourseIdAndTeamId(C_ID: Int, E_ID: Int): Int {
         val db = dbHelper.writableDatabase
         val selection = "${Participe.ParticipeTable.C_ID} = ? AND ${Participe.ParticipeTable.E_ID} = ?"
@@ -297,6 +304,14 @@ class ParticipeDao(context : Context) {
         return deletedRows
     }
 
+    /**
+     * TODO
+     *
+     * @param CR_ID
+     * @param numTime
+     * @param time
+     * @return
+     */
     fun setTimeByRunnerId(CR_ID: Int, numTime : Int, time : Long): Int {
         val db = dbHelper.writableDatabase
         val values=ContentValues()
@@ -346,6 +361,13 @@ class ParticipeDao(context : Context) {
             selectionArgs)
     }
 
+    /**
+     * TODO
+     *
+     * @param teamId
+     * @param numc
+     * @return
+     */
     fun getCoureurByTeamIdAndNumc(teamId: Int, numc: Int): Cursor? {
         val db = dbHelper.readableDatabase
 
