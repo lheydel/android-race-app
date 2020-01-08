@@ -8,8 +8,26 @@ import com.example.lo52_f1_levier.model.Coureur
 import com.example.lo52_f1_levier.model.Participe
 import com.example.lo52_f1_levier.model.CourseDbHelper
 
+/**
+ * ensemble des fonction permettant de modifier le contenue de la table participe
+ *
+ * @author GMuller
+ *
+ * @constructor
+ * TODO
+ *
+ * @param context
+ */
 class ParticipeDao(context : Context) {
     val dbHelper = CourseDbHelper(context)
+    /**
+     * Permet l'insertion dans la table participe
+     *
+     * @param C_ID
+     * @param CR_ID
+     * @param E_ID
+     * @return
+     */
     fun insertParticipe(C_ID: Int, CR_ID: Int, E_ID : Int): Long? {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
@@ -20,6 +38,12 @@ class ParticipeDao(context : Context) {
         return db?.insert(Participe.ParticipeTable.NAME, null, values)
     }
 
+    /**
+     * Renvoie les enregistrements dont l'id du coureur = CR_ID
+     *
+     * @param CR_ID
+     * @return cursor
+     */
     fun getParticipeByCR_ID(CR_ID:Int): Cursor? {
         val db = dbHelper.readableDatabase
 
@@ -54,6 +78,12 @@ class ParticipeDao(context : Context) {
         )
     }
 
+    /**
+     * Renvoie un enregistrement de la table participe  via leur ID
+     *
+     * @param ID
+     * @return cursor
+     */
     fun getParticipeByID(ID:Int): Cursor? {
         val db = dbHelper.readableDatabase
 
@@ -88,6 +118,12 @@ class ParticipeDao(context : Context) {
         )
     }
 
+    /**
+     *Renvoie les enregistrements dont l'id de l'équipe  = E_ID
+     *
+     * @param E_ID
+     * @return
+     */
     fun getParticipeByE_ID(E_ID:Int): Cursor? {
         val db = dbHelper.readableDatabase
 
@@ -122,6 +158,12 @@ class ParticipeDao(context : Context) {
         )
     }
 
+    /**
+     * Renvoie les enregistrements dont l'id de la course  = C_ID
+     *
+     * @param C_ID
+     * @return cursor
+     */
     fun getParticipeByC_ID(C_ID:Int): Cursor? {
         val db = dbHelper.readableDatabase
 
@@ -156,6 +198,13 @@ class ParticipeDao(context : Context) {
         )
     }
 
+    /**
+     * Renvoie les enregistrements dont l'id de la course  = C_ID et l'id de l'équipe =E_ID
+     *
+     * @param C_ID
+     * @param E_ID
+     * @return cursor
+     */
     fun getParticipeByC_ID_E_ID(C_ID:Int,E_ID: Int): Cursor? {
         val db = dbHelper.readableDatabase
 
@@ -190,6 +239,11 @@ class ParticipeDao(context : Context) {
         )
     }
 
+    /**
+     * Revoie tout les enregistrement dans participe
+     *
+     * @return
+     */
     fun getAllParticipe(): Cursor? {
         val db = dbHelper.readableDatabase
 
@@ -223,6 +277,12 @@ class ParticipeDao(context : Context) {
         )
     }
 
+    /**
+     * Supprime les enregistrements dont l'id du coureur = CR_ID
+     *
+     * @param CR_ID
+     * @return
+     */
     fun deleteParticipeByCR_ID(CR_ID: Int): Int {
         val db = dbHelper.writableDatabase
         val selection = "${Participe.ParticipeTable.CR_ID} = ?"
@@ -231,6 +291,14 @@ class ParticipeDao(context : Context) {
         return deletedRows
     }
 
+    /**
+     * deleteParticipeByCourseIdAndTeamId est utilisé pour supprimer des enregistrement dans la base
+     * participe en focntion de l'id de la course et l'id de l'équipe
+     *
+     * @param C_ID
+     * @param E_ID
+     * @return
+     */
     fun deleteParticipeByCourseIdAndTeamId(C_ID: Int, E_ID: Int): Int {
         val db = dbHelper.writableDatabase
         val selection = "${Participe.ParticipeTable.C_ID} = ? AND ${Participe.ParticipeTable.E_ID} = ?"
@@ -239,6 +307,14 @@ class ParticipeDao(context : Context) {
         return deletedRows
     }
 
+    /**
+     * setTimeByRunnerId permet de definir le temps numTime du coureur CR_ID  a la valeur time
+     *
+     * @param CR_ID
+     * @param numTime
+     * @param time
+     * @return Int
+     */
     fun setTimeByRunnerId(CR_ID: Int, numTime : Int, time : Long): Int {
         val db = dbHelper.writableDatabase
         val values=ContentValues()
@@ -287,55 +363,15 @@ class ParticipeDao(context : Context) {
             selection,
             selectionArgs)
     }
-    fun setTimeByID(ID: Int,numTime : Int, time : Int): Int {
-        val db = dbHelper.writableDatabase
-        val values=ContentValues()
-        when(numTime){
-            1->  values.apply {
-                put(Participe.ParticipeTable.TIME1, time)
-            }
-            2->  values.apply {
-                put(Participe.ParticipeTable.TIME2, time)
-            }
-            3->  values.apply {
-                put(Participe.ParticipeTable.TIME3, time)
-            }
-            4->  values.apply {
-                put(Participe.ParticipeTable.TIME4, time)
-            }
-            5->  values.apply {
-                put(Participe.ParticipeTable.TIME5, time)
-            }
-            6->  values.apply {
-                put(Participe.ParticipeTable.TIME6, time)
-            }
-            7->  values.apply {
-                put(Participe.ParticipeTable.TIME7, time)
-            }
-            8->  values.apply {
-                put(Participe.ParticipeTable.TIME8, time)
-            }
-            9->  values.apply {
-                put(Participe.ParticipeTable.TIME9, time)
-            }
-            10->  values.apply {
-                put(Participe.ParticipeTable.TIME10, time)
-            }
-            else -> values.apply {
-                put(Participe.ParticipeTable.TIME1, time)
-            }
 
-        }
-
-        val selection = "${BaseColumns._ID} LIKE ?"
-        val selectionArgs = arrayOf(ID.toString())
-        return db.update(
-            Participe.ParticipeTable.NAME,
-            values,
-            selection,
-            selectionArgs)
-    }
-
+    /**
+     * getCoureurByTeamIdAndNumc recupere les enregistrement dans participe en fonction de leur
+     * id d'équipe et ne numéro de coureur
+     *
+     * @param teamId
+     * @param numc
+     * @return
+     */
     fun getCoureurByTeamIdAndNumc(teamId: Int, numc: Int): Cursor? {
         val db = dbHelper.readableDatabase
 
