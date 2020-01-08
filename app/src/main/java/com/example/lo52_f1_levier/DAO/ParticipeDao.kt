@@ -11,6 +11,8 @@ import com.example.lo52_f1_levier.model.CourseDbHelper
 /**
  * ensemble des fonction permettant de modifier le contenue de la table participe
  *
+ * @author GMuller
+ *
  * @constructor
  * TODO
  *

@@ -11,7 +11,7 @@ import java.lang.Exception
 
 /**
  * ensemble des fonctions permettant de modifier le contenue de la table Coureur
- *
+ *@author G muller
  * @constructor
  * TODO
  *
@@ -41,7 +41,7 @@ class CoureurDao(context: Context) {
      * Permet de recupere un coureur en fonction de son numero
      *
      * @param numc
-     * @return
+     * @return cursor
      */
     fun getCoureur(numc:Int): Cursor? {
         val db = dbHelper.readableDatabase

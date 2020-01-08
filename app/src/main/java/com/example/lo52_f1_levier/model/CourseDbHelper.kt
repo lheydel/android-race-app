@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper
 
 /**
  * Class de generation de la base
- *
+ * @author GMuller
  * @constructor
  * TODO
  *
