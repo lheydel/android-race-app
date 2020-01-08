@@ -14,7 +14,7 @@ import android.database.sqlite.SQLiteOpenHelper
  */
 class CourseDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
     /**
-     * TODO
+     * Permet de creer la base
      *
      * @param db
      */
@@ -26,7 +26,7 @@ class CourseDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     }
 
     /**
-     * TODO
+     * permet d'update la base
      *
      * @param db
      * @param oldVersion
@@ -41,7 +41,7 @@ class CourseDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     }
 
     /**
-     * TODO
+     * permet de downgade la base => retour a une version antérieur
      *
      * @param db
      * @param oldVersion

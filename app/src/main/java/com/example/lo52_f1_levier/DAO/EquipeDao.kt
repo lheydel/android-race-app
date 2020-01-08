@@ -9,7 +9,7 @@ import com.example.lo52_f1_levier.model.CourseDbHelper
 import com.example.lo52_f1_levier.model.Participe
 
 /**
- * TODO
+ * ensemble des fonction permettant de modifier le contenue de la table Equipe
  *
  * @constructor
  * TODO
@@ -22,11 +22,11 @@ class EquipeDao(context : Context) {
      */
     val dbHelper = CourseDbHelper(context)
     /**
-     * TODO
+     * Permet l'insertion dans la table equipe
      *
      * @param titre
      * @param enum
-     * @return
+     * @return long
      */
     fun insertEquipe(titre: String, enum : Int): Long? {
         val db = dbHelper.writableDatabase
@@ -39,10 +39,10 @@ class EquipeDao(context : Context) {
     }
 
     /**
-     * TODO
+     * Permet de récuperer les equipes en fonction de leur nom
      *
      * @param ename
-     * @return
+     * @return cursor
      */
     fun getEquipe(ename:String): Cursor? {
         val db = dbHelper.readableDatabase
@@ -67,7 +67,7 @@ class EquipeDao(context : Context) {
     }
 
     /**
-     * TODO
+     * Permet de récuperer les equipes en fonction de leur ID
      *
      * @param ID
      * @return
@@ -95,7 +95,7 @@ class EquipeDao(context : Context) {
     }
 
     /**
-     * TODO
+     * Permet de supprimer les equipes en fonction de leur nom
      *
      * @param ename
      * @return
@@ -108,7 +108,7 @@ class EquipeDao(context : Context) {
     }
 
     /**
-     * TODO
+     * Permet de supprimer les equipes en fonction de leur ID
      *
      * @param ID
      * @return
@@ -121,7 +121,7 @@ class EquipeDao(context : Context) {
     }
 
     /**
-     * TODO
+     * Permet de mettre a jour  les equipes en fonction de leur nom
      *
      * @param oldEname
      * @param ename
@@ -145,7 +145,7 @@ class EquipeDao(context : Context) {
     }
 
     /**
-     * TODO
+     * Permet de mettre a jour  les equipes en fonction de leur ID
      *
      * @param ID
      * @param ename
@@ -169,7 +169,7 @@ class EquipeDao(context : Context) {
     }
 
     /**
-     * TODO
+     * Permet de récuperer toutes les equipes
      *
      * @return
      */
@@ -192,7 +192,7 @@ class EquipeDao(context : Context) {
     }
 
     /**
-     * TODO
+     * Permet de récuperer les equipes participant a une course  dont l'ID est passé en argument
      *
      * @param ID
      * @return

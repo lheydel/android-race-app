@@ -8,7 +8,7 @@ import com.example.lo52_f1_levier.model.Course
 import com.example.lo52_f1_levier.model.CourseDbHelper
 
 /**
- * TODO
+ * ensemble des fonction permettant de modifier le contenue de la table Course
  *
  * @constructor
  * TODO
@@ -19,7 +19,7 @@ class CourseDao(context: Context) {
     val dbHelper = CourseDbHelper(context)
 
     /**
-     * TODO
+     * Permet d'inserer un enregistrement dans la base course
      *
      * @param titre
      * @param date
@@ -35,7 +35,7 @@ class CourseDao(context: Context) {
     }
 
     /**
-     * TODO
+     * Permet de recupere une course en fonction de son titre
      *
      * @param titre
      * @return
@@ -62,10 +62,10 @@ class CourseDao(context: Context) {
     }
 
     /**
-     * TODO
+     * Permet de recupere une course en fonction de son ID
      *
      * @param ID
-     * @return
+     * @return cursor
      */
     fun getCourseByID(ID:Int): Cursor? {
         val db = dbHelper.readableDatabase
@@ -89,9 +89,9 @@ class CourseDao(context: Context) {
     }
 
     /**
-     * TODO
+     * Permet de recupere toutes les  courses
      *
-     * @return
+     * @return cursor
      */
 
     fun getAllCourse(): Cursor? {
@@ -114,7 +114,7 @@ class CourseDao(context: Context) {
     }
 
     /**
-     * TODO
+     * Permet de supprimer unecourse  a l'aide de sont titre
      *
      * @param titre
      * @return
@@ -128,7 +128,7 @@ class CourseDao(context: Context) {
     }
 
     /**
-     * TODO
+     * updateCourse permet de mettre a  jour les course en fonction de leur titre
      *
      * @param oldTitle
      * @param title
@@ -151,7 +151,7 @@ class CourseDao(context: Context) {
     }
 
     /**
-     * TODO
+     * updateCourse permet de mettre a  jour les course en fonction de leur ID
      *
      * @param ID
      * @param title
