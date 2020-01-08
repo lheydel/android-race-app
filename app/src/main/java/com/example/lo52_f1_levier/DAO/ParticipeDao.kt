@@ -292,7 +292,8 @@ class ParticipeDao(context : Context) {
     }
 
     /**
-     * TODO
+     * deleteParticipeByCourseIdAndTeamId est utilisé pour supprimer des enregistrement dans la base
+     * participe en focntion de l'id de la course et l'id de l'équipe
      *
      * @param C_ID
      * @param E_ID
@@ -307,12 +308,12 @@ class ParticipeDao(context : Context) {
     }
 
     /**
-     * TODO
+     * setTimeByRunnerId permet de definir le temps numTime du coureur CR_ID  a la valeur time
      *
      * @param CR_ID
      * @param numTime
      * @param time
-     * @return
+     * @return Int
      */
     fun setTimeByRunnerId(CR_ID: Int, numTime : Int, time : Long): Int {
         val db = dbHelper.writableDatabase
@@ -364,7 +365,8 @@ class ParticipeDao(context : Context) {
     }
 
     /**
-     * TODO
+     * getCoureurByTeamIdAndNumc recupere les enregistrement dans participe en fonction de leur
+     * id d'équipe et ne numéro de coureur
      *
      * @param teamId
      * @param numc
