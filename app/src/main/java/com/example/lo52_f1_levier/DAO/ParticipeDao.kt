@@ -52,6 +52,7 @@ class ParticipeDao(context : Context) {
             sortOrder               // The sort order
         )
     }
+
     fun getParticipeByID(ID:Int): Cursor? {
         val db = dbHelper.readableDatabase
 

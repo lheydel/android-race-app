@@ -1,48 +1,76 @@
 package com.example.lo52_f1_levier.view
 
-import android.database.Cursor
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.BaseColumns
+import android.util.Log
 import android.view.LayoutInflater
-import com.example.lo52_f1_levier.DAO.EquipeDao
+import com.example.lo52_f1_levier.DAO.ParticipeDao
 import com.example.lo52_f1_levier.R
+import com.example.lo52_f1_levier.model.Coureur
+import com.example.lo52_f1_levier.model.Participe
+import com.example.lo52_f1_levier.model.Runner
 import kotlinx.android.synthetic.main.activity_details_course_timer.*
 
 class DetailsCourseTimerFragment : AppCompatActivity() {
 
     private var courseId: Int = -1
     private var teamId: Int = -1
-    private lateinit var equipeDao: EquipeDao
+    private lateinit var participeDao: ParticipeDao
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
-        courseId = intent.getIntExtra("courseId", 0)
-        teamId = intent.getIntExtra("teamId", 0)
-
-        equipeDao = EquipeDao(this!!)
-        // Get the different runners
-        // for each of them, create a new "timer"
-        // set the progression according to the times
-
-        val cursor = equipeDao.getEquipeByID(teamId)
-
-
-
         setContentView(R.layout.activity_details_course_timer)
 
-        equipeDao = EquipeDao(this)
+        courseId = intent.getIntExtra("courseId",0)
+        teamId = intent.getIntExtra("teamId", 0)
 
+        participeDao = ParticipeDao(this!!)
 
+        // Get the different runners
 
-        for(i in 1..4)
-        {
+        // The cursor to iterate through the DB
+        val cursor = participeDao.getParticipeByE_ID(teamId)
+
+        // The list contanining the runners
+        val runners = ArrayList<Runner>()
+        // Let's iterate
+        with(cursor!!){
+            // While we still have something in our cursor
+            while (moveToNext())
+            {
+                // We create an instance of a runner
+                val runner = Runner(getInt(getColumnIndexOrThrow(BaseColumns._ID)),
+                    getInt(getColumnIndexOrThrow(Coureur.CoureurTable.NUMC)),
+                    getString(getColumnIndexOrThrow(Coureur.CoureurTable.CNAME)),
+                    getString(getColumnIndexOrThrow(Coureur.CoureurTable.SURNAME)))
+                // We add the runner to our list
+                runners.add(runner)
+            }
+        }
+        // We close the cursor
+        cursor.close()
+
+        // for each of them, create a new "timer"
+        runners.forEach{
             var view = LayoutInflater.from(this).inflate(R.layout.fragment_progression,null,false)
+            val cRunner = participeDao.getParticipeByC_ID(it.id)
+            var t1 =""
+            with(cRunner!!){
+                while(moveToNext())
+                {
+                    t1 = getString(getColumnIndexOrThrow(Participe.ParticipeTable.TIME1)) // do the same for every time
+                }
+            }
 
+            // set the progression according to the times
+            if(t1 !== "" )
+            {
+                Log.d("Tag",t1)
+            }
 
             verticalLayout.addView(view)
-            //verticalLayout.addView(LayoutInflater.from(applicationContext).inflate(R.layout.seekbar,verticalLayout,false))
-            //view = LayoutInflater.from(applicationContext).inflate(R.layout.seekbar,verticalLayout,true)
         }
 
     }

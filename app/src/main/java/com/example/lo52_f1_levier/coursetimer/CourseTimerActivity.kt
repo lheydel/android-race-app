@@ -30,7 +30,8 @@ class CourseTimerActivity : AppCompatActivity() {
         val r2 = "Jim Anvol"
         val r3 = "Malcolm Ansé"
         var teams = emptyArray<TeamBoxData>()
-        for (i in 1..13) {
+        for (i in 1..13)
+        {
             teams = teams.plus(TeamBoxData(i, arrayOf(r1, r2, r3)))
         }
 
