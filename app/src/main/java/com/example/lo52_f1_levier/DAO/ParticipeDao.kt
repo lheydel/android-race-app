@@ -31,7 +31,7 @@ class ParticipeDao(context : Context) {
     /**
      * Renvoie les enregistrements dont l'id du coureur = CR_ID
      */
-    fun getParticipeByCR_ID(CR_ID:Int): Cursor? {
+    fun getParticipeByRunnerId(CR_ID:Int): Cursor? {
         val db = dbHelper.readableDatabase
 
         val projection = arrayOf(
@@ -310,7 +310,7 @@ class ParticipeDao(context : Context) {
     /**
      * Get a runner by its team and position in the team
      */
-    fun getCoureurByTeamIdAndNumc(teamId: Int, numc: Int): Cursor {
+    fun getCoureurByTeamIdAndNumc(teamId: Int, numc: Int): Cursor? {
         val db = dbHelper.readableDatabase
 
         val projection = arrayOf(Participe.ParticipeTable.CR_ID)
@@ -333,9 +333,11 @@ class ParticipeDao(context : Context) {
             val rId = teamCursor.getInt(teamCursor.getColumnIndex(Participe.ParticipeTable.CR_ID))
             rIds = rIds.plus(rId)
         }
+        teamCursor.close()
 
-        val runnerSelection = "${BaseColumns._ID} IN (?) AND ${Coureur.CoureurTable.NUMC} = ?"
-        val runnerSelectionArgs = arrayOf(rIds.joinToString(", "), numc.toString())
+        val queryIdsParameter = rIds.map { "?" }.joinToString(", ", "(", ")")
+        val runnerSelection = "${BaseColumns._ID} IN $queryIdsParameter AND ${Coureur.CoureurTable.NUMC} = ?"
+        val runnerSelectionArgs = rIds.map{ id -> id.toString() }.plus(numc.toString()).toTypedArray()
         return db.query(
             Coureur.CoureurTable.NAME,
             null, // The array of columns to return (pass null to get all)

@@ -86,6 +86,7 @@ class TeamBoxGridAdapter(private val context: Context,
             // add the current runner to the data of its team
             currentTeamRunners = fetchRunnerName(currentTeamRunners, courseCursor.getInt(runnerIdIndex))
         } while (courseCursor.moveToNext())
+        courseCursor.close()
 
         // add the last team to the list
         addTeamBoxData(currentTeam, currentTeamRunners)
@@ -107,6 +108,7 @@ class TeamBoxGridAdapter(private val context: Context,
         val firstName = runnerCursor.getString(runnerCursor.getColumnIndex(Coureur.CoureurTable.CNAME))
         val lastName = runnerCursor.getString(runnerCursor.getColumnIndex(Coureur.CoureurTable.SURNAME))
         val position = runnerCursor.getInt(runnerCursor.getColumnIndex(Coureur.CoureurTable.NUMC))
+        runnerCursor.close()
 
         // if full name fit in the team box
         if (("$firstName $lastName").length <= RUNNER_NAME_MAX_LENGTH) {
@@ -150,7 +152,9 @@ class TeamBoxGridAdapter(private val context: Context,
             return -1
         }
 
-        return teamCursor.getInt(teamCursor.getColumnIndex(Equipe.EquipeTable.ENUM))
+        val teamNumber = teamCursor.getInt(teamCursor.getColumnIndex(Equipe.EquipeTable.ENUM))
+        teamCursor.close()
+        return teamNumber
     }
 
     /**
@@ -177,6 +181,7 @@ class TeamBoxGridAdapter(private val context: Context,
         val newTime = getTimerValue()
         participeDao.setTimeByRunnerId(runnerId, numTime, newTime)
 
+        runnerCursor.close()
         return newTime
     }
 

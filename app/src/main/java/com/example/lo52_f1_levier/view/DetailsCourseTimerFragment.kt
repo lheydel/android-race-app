@@ -48,7 +48,7 @@ class DetailsCourseTimerFragment : AppCompatActivity() {
 
                 // We now get the runner from the runner table
                 val runCursor = runnerDao.getCoureurByID(runId)
-                while(runCursor.moveToNext())
+                while(runCursor!!.moveToNext())
                 {
                     // We create an instance of a runner
                     val runner = Runner(runId,
