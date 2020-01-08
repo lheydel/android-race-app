@@ -1,32 +1,47 @@
 package com.example.lo52_f1_levier.coursetimer
 
+import android.content.Context
+import android.provider.BaseColumns
 import android.view.ContextMenu
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.lo52_f1_levier.DAO.CoureurDao
+import com.example.lo52_f1_levier.DAO.EquipeDao
+import com.example.lo52_f1_levier.DAO.ParticipeDao
 import com.example.lo52_f1_levier.R
+import com.example.lo52_f1_levier.model.Coureur
+import com.example.lo52_f1_levier.model.Equipe
+import com.example.lo52_f1_levier.model.Participe
 import kotlinx.android.synthetic.main.team_box.view.*
 
 /**
  * Link data to the RecyclerView listing the team boxes in the CourseTimerActivity
  */
-class TeamBoxGridAdapter(private val teams: Array<TeamBoxData>,
+class TeamBoxGridAdapter(private val context: Context,
+                         private val courseId: Int,
                          private val goToDetails: (Int) -> Boolean,
                          private val getTimerValue: () -> Long,
                          private val isTimerStarted: () -> Boolean):
     RecyclerView.Adapter<TeamBoxGridAdapter.TeamBoxGridViewHolder>() {
 
-//    private val teams: Array<TeamBoxData>
+    private val RUNNER_NAME_MAX_LENGTH = 15
+
+    private val participeDao: ParticipeDao = ParticipeDao(context)
+    private val runnerDao: CoureurDao = CoureurDao(context)
+    private val teamDao: EquipeDao = EquipeDao(context)
+
+    private var teams: Array<TeamBoxData> = emptyArray()
 
     init {
-//        teams = emptyArray()
+        fetchTeamsData()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TeamBoxGridViewHolder {
         val teamBox: View = LayoutInflater.from(parent.context)
             .inflate(R.layout.team_box, parent, false)
-        return TeamBoxGridViewHolder(teamBox, goToDetails, isTimerStarted)
+        return TeamBoxGridViewHolder(teamBox, goToDetails, isTimerStarted, this::saveTime)
     }
 
     override fun onBindViewHolder(viewHolder: TeamBoxGridViewHolder, position: Int) {
@@ -35,9 +50,136 @@ class TeamBoxGridAdapter(private val teams: Array<TeamBoxData>,
 
     override fun getItemCount() = teams.size
 
+    /**
+     * Get the needed data of all the teams assigned to the course
+     */
+    private fun fetchTeamsData() {
+        // get the runners of the course ordered by team
+        val courseCursor = participeDao.getParticipeByC_ID(courseId)
+
+        // check that course exists
+        if (courseCursor === null || !courseCursor.moveToFirst()) {
+            return
+        }
+
+        // indexes of relevant columns
+        val teamIdIndex = courseCursor.getColumnIndex(Participe.ParticipeTable.E_ID)
+        val runnerIdIndex = courseCursor.getColumnIndex(Participe.ParticipeTable.CR_ID)
+
+        // info on the team being processed
+        var currentTeam: Int = courseCursor.getInt(teamIdIndex)
+        var currentTeamRunners: Array<String> = emptyArray()
+
+        // turn every teams and runners data into relevant TeamBoxData
+        do {
+            val newTeam = courseCursor.getInt(teamIdIndex)
+
+            // all runners of current team have been fetched
+            if (currentTeam != newTeam) {
+                // add team to the global list and prepare for the next one
+                addTeamBoxData(currentTeam, currentTeamRunners)
+                currentTeamRunners = emptyArray()
+                currentTeam = newTeam
+            }
+
+            // add the current runner to the data of its team
+            currentTeamRunners = fetchRunnerName(currentTeamRunners, courseCursor.getInt(runnerIdIndex))
+        } while (courseCursor.moveToNext())
+
+        // add the last team to the list
+        addTeamBoxData(currentTeam, currentTeamRunners)
+    }
+
+    /**
+     * Get the name of a given runner
+     * and add it to the given list at the right position (depending on numc)
+     * @return the new array
+     */
+    private fun fetchRunnerName(runners: Array<String>, runnerId: Int): Array<String> {
+        val runnerCursor = runnerDao.getCoureurByID(runnerId)
+
+        if (runnerCursor === null || !runnerCursor.moveToFirst()) {
+            return addRunner(runners, "????", -1)
+        }
+
+        // get the relevant data of the runner
+        val firstName = runnerCursor.getString(runnerCursor.getColumnIndex(Coureur.CoureurTable.CNAME))
+        val lastName = runnerCursor.getString(runnerCursor.getColumnIndex(Coureur.CoureurTable.SURNAME))
+        val position = runnerCursor.getInt(runnerCursor.getColumnIndex(Coureur.CoureurTable.NUMC))
+
+        // if full name fit in the team box
+        if (("$firstName $lastName").length <= RUNNER_NAME_MAX_LENGTH) {
+            return addRunner(runners, "$firstName $lastName", position)
+        }
+
+        // truncate the full name to make it fit
+        return addRunner(runners, "${firstName[0]}. ${lastName.slice(0..12)}", position)
+    }
+
+    /**
+     * Add a given runner name to a given list of runners at a given position
+     * Increase the size of the array if necessary
+     * @return the new array
+     */
+    private fun addRunner(runners: Array<String>, name: String, position: Int): Array<String> {
+        if (position < 0) {
+            return runners.plus(name)
+        }
+
+        // increase the size of the array just enough as to be able to fit the runner at the right pos
+        var tmpRunners = runners.clone()
+        if (position >= runners.size) {
+            val tmp = (0..(position - runners.size)).toList().map { "????" }.toTypedArray()
+            tmpRunners = runners.plus(tmp)
+        }
+
+        // add the runner to the list and return it
+        tmpRunners[position] = name
+        return tmpRunners
+    }
+
+    /**
+     * Get and return the number of the team
+     */
+    private fun fetchTeamNumber(teamId: Int): Int {
+        val teamCursor = teamDao.getEquipeByID(teamId)
+
+        if (teamCursor === null || !teamCursor.moveToFirst()) {
+            return -1
+        }
+
+        return teamCursor.getInt(teamCursor.getColumnIndex(Equipe.EquipeTable.ENUM))
+    }
+
+    /**
+     * Turn ugly raw data into a beautiful TeamBoxData
+     * and add it to the global list
+     */
+    private fun addTeamBoxData(teamId: Int, runners: Array<String>) {
+        val teamNumber = fetchTeamNumber(teamId)
+        teams = teams.plus(TeamBoxData(teamId, teamNumber, runners))
+    }
+
+    private fun saveTime(teamId: Int, runnerPos: Int, numTime: Int) {
+        val runnerCursor = participeDao.getCoureurByTeamIdAndNumc(teamId, runnerPos)
+
+        if (runnerCursor === null || !runnerCursor.moveToFirst()) {
+            return
+        }
+
+        val runnerId = runnerCursor.getInt(runnerCursor.getColumnIndex(BaseColumns._ID))
+
+        participeDao.setTimeByRunnerId(runnerId, numTime, getTimerValue())
+    }
+
+
+    /**
+     * Data management of a single team box
+     */
     class TeamBoxGridViewHolder(private val teambox: View,
                                 private val goToDetails: (Int) -> Boolean,
-                                private val isTimerStarted: () -> Boolean) :
+                                private val isTimerStarted: () -> Boolean,
+                                private val saveTime: (teamId: Int, runnerPos: Int, numTime: Int) -> Unit) :
         RecyclerView.ViewHolder(teambox), View.OnCreateContextMenuListener {
 
         init {
@@ -81,7 +223,8 @@ class TeamBoxGridAdapter(private val teams: Array<TeamBoxData>,
          * Save the time and display the next step of the course for the team
          */
         private fun nextStep(team: TeamBoxData) {
-            // TODO save time
+            val runnerStep = team.step + (team.passage - 1) * team.NB_STEPS
+            saveTime(team.teamId, team.runner, runnerStep)
             team.incrementStep()
             updateData(team)
         }

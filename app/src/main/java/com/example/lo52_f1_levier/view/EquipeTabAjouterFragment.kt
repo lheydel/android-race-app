@@ -1,16 +1,16 @@
 package com.example.lo52_f1_levier.view
 
 import android.app.AlertDialog
-import android.graphics.Color
+import android.content.Context
 import android.os.Bundle
 import android.provider.BaseColumns
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lo52_f1_levier.DAO.CoureurDao
@@ -23,12 +23,8 @@ import com.example.lo52_f1_levier.model.Run
 import com.example.lo52_f1_levier.model.Runner
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_equipe_tab_ajouter.*
-import kotlinx.android.synthetic.main.fragment_equipe_tab_ajouter.courseSelector
 import kotlinx.android.synthetic.main.tab_list_content.content
 import kotlinx.android.synthetic.main.team_member_list_content.*
-
-
-
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -87,9 +83,11 @@ class EquipeTabAjouterFragment : Fragment() {
                     equipeDao = EquipeDao(this.context!!)
                     participeDao = ParticipeDao(this.context!!)
                     val equipeRowId = equipeDao.insertEquipe(edt_teamName.text.toString(),edt_teamNumber.text.toString().toInt())
-                    participeDao.insertParticipe(course.id, teamAdapter.getItem(0).id, equipeRowId!!.toInt())
-                    participeDao.insertParticipe(course.id, teamAdapter.getItem(1).id, equipeRowId!!.toInt())
-                    participeDao.insertParticipe(course.id, teamAdapter.getItem(2).id, equipeRowId!!.toInt())
+
+                    for (position in 0 until teamAdapter.itemCount) {
+                        participeDao.insertParticipe(course.id, teamAdapter.getItem(position).id, equipeRowId!!.toInt())
+                        coureurDao.updateCoureurNumc(teamAdapter.getItem(position).id, position)
+                    }
 
                     edt_teamName.text.clear()
                 }
@@ -174,9 +172,7 @@ class EquipeTabAjouterFragment : Fragment() {
         listFreeParticipant.layoutManager = LinearLayoutManager(this.context)
         listFreeParticipant.adapter = adapter
 
-        teamAdapter = TeamMemberAdapter(
-            onClickListener = this::selectMember
-        )
+        teamAdapter = TeamMemberAdapter(this::selectMember, context)
         listTeamMembers.layoutManager = LinearLayoutManager(this.context)
         listTeamMembers.adapter = teamAdapter
 
@@ -308,7 +304,7 @@ class EquipeTabAjouterFragment : Fragment() {
             LayoutContainer
     }
 
-    class TeamMemberAdapter(private val onClickListener: TeamRunnerClickListener) : RecyclerView.Adapter<TeamMemberAdapter.ViewHolder>(){
+    class TeamMemberAdapter(private val onClickListener: TeamRunnerClickListener, private val context: Context?) : RecyclerView.Adapter<TeamMemberAdapter.ViewHolder>(){
 
         private var members = ArrayList<Runner>()
 
@@ -324,10 +320,11 @@ class EquipeTabAjouterFragment : Fragment() {
             holder.content.setOnClickListener { view ->
                 onClickListener(view, member)
             }
+
             when(position){
-                0 -> holder.imageView.setBackgroundColor(Color.parseColor("#EDBE1414"))
-                1 -> holder.imageView.setBackgroundColor(Color.parseColor("#ED1FBE14"))
-                3 -> holder.imageView.setBackgroundColor(Color.parseColor("#ED144DBE"))
+                0 -> holder.imageView.setBackgroundColor(context!!.resources.getColor(R.color.runner1))
+                1 -> holder.imageView.setBackgroundColor(context!!.resources.getColor(R.color.runner2))
+                2 -> holder.imageView.setBackgroundColor(context!!.resources.getColor(R.color.runner3))
             }
         }
 

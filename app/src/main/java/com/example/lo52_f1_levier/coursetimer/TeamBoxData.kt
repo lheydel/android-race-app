@@ -2,10 +2,10 @@ package com.example.lo52_f1_levier.coursetimer
 
 import com.example.lo52_f1_levier.R
 
-class TeamBoxData(val teamNumber: Int, private val runners: Array<String>) {
-    private val NB_PASSAGES = 2
-    private val NB_RUNNERS = runners.size
-    private val NB_STEPS = 5
+class TeamBoxData(val teamId: Int, val teamNumber: Int, private val runners: Array<String>) {
+    val NB_PASSAGES = 2
+    val NB_RUNNERS = runners.size
+    val NB_STEPS = 5
     val NB_TOTAL_STEPS = NB_STEPS * NB_RUNNERS * NB_PASSAGES
 
     var passage = 1
@@ -15,6 +15,10 @@ class TeamBoxData(val teamNumber: Int, private val runners: Array<String>) {
     var isOver = false
 
     fun incrementStep() {
+        if (isOver) {
+            return
+        }
+
         // increment step
         step++
         totalStepsDone++
