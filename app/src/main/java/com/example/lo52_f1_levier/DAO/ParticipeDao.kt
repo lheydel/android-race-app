@@ -8,7 +8,7 @@ import com.example.lo52_f1_levier.model.Participe
 import com.example.lo52_f1_levier.model.CourseDbHelper
 
 /**
- * TODO
+ * ensemble des fonction permettant de modifier le contenue de la base participe
  *
  * @constructor
  * TODO
@@ -18,7 +18,7 @@ import com.example.lo52_f1_levier.model.CourseDbHelper
 class ParticipeDao(context : Context) {
     val dbHelper = CourseDbHelper(context)
     /**
-     * TODO
+     * Permet l'insertion dans la table participe
      *
      * @param C_ID
      * @param CR_ID
@@ -36,10 +36,10 @@ class ParticipeDao(context : Context) {
     }
 
     /**
-     * TODO
+     * Renvoie les enregistrements dont l'id du coureur = CR_ID
      *
      * @param CR_ID
-     * @return
+     * @return cursor
      */
     fun getParticipeByCR_ID(CR_ID:Int): Cursor? {
         val db = dbHelper.readableDatabase
@@ -76,10 +76,10 @@ class ParticipeDao(context : Context) {
     }
 
     /**
-     * TODO
+     * Renvoie un enregistrement de la table participe  via leur ID
      *
      * @param ID
-     * @return
+     * @return cursor
      */
     fun getParticipeByID(ID:Int): Cursor? {
         val db = dbHelper.readableDatabase
@@ -116,7 +116,7 @@ class ParticipeDao(context : Context) {
     }
 
     /**
-     * TODO
+     *Renvoie les enregistrements dont l'id de l'équipe  = E_ID
      *
      * @param E_ID
      * @return
@@ -156,10 +156,10 @@ class ParticipeDao(context : Context) {
     }
 
     /**
-     * TODO
+     * Renvoie les enregistrements dont l'id de la course  = C_ID
      *
      * @param C_ID
-     * @return
+     * @return cursor
      */
     fun getParticipeByC_ID(C_ID:Int): Cursor? {
         val db = dbHelper.readableDatabase
@@ -196,11 +196,11 @@ class ParticipeDao(context : Context) {
     }
 
     /**
-     * TODO
+     * Renvoie les enregistrements dont l'id de la course  = C_ID et l'id de l'équipe =E_ID
      *
      * @param C_ID
      * @param E_ID
-     * @return
+     * @return cursor
      */
     fun getParticipeByC_ID_E_ID(C_ID:Int,E_ID: Int): Cursor? {
         val db = dbHelper.readableDatabase
@@ -237,7 +237,7 @@ class ParticipeDao(context : Context) {
     }
 
     /**
-     * TODO
+     * Revoie tout les enregistrement dans participe
      *
      * @return
      */
@@ -275,7 +275,7 @@ class ParticipeDao(context : Context) {
     }
 
     /**
-     * TODO
+     * Supprime les enregistrements dont l'id du coureur = CR_ID
      *
      * @param CR_ID
      * @return
@@ -289,7 +289,7 @@ class ParticipeDao(context : Context) {
     }
 
     /**
-     * TODO
+     * Supprime les enregistrements dont l'id de la course  = C_ID et l'id de l'équipe =E_ID
      *
      * @param C_ID
      * @param E_ID
@@ -304,13 +304,13 @@ class ParticipeDao(context : Context) {
     }
 
     /**
-     * TODO
+     * Modifie les enregistrements dont l'id du coureur = oldCR_ID
      *
      * @param oldCR_ID
      * @param CR_ID
      * @param C_ID
      * @param E_ID
-     * @return
+     * @return Boolean
      */
     fun updateParticipeByCR_ID(oldCR_ID: Int,CR_ID: Int,C_ID: Int, E_ID: Int): Int {
         val db = dbHelper.writableDatabase
