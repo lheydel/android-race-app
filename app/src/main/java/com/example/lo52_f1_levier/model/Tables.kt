@@ -1,9 +1,8 @@
 package com.example.lo52_f1_levier.model
 
 import android.provider.BaseColumns
-/**
-* Scripte SQL de création des tables
-* @author Gmuller
+/*
+* Scripte de création des tables
 *
 * */
 const val SQL_CREATE_COURSE =
