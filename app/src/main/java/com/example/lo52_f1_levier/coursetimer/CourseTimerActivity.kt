@@ -1,10 +1,12 @@
 package com.example.lo52_f1_levier.coursetimer
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lo52_f1_levier.R
 import com.example.lo52_f1_levier.utils.GridAutofitLayoutManager
+import com.example.lo52_f1_levier.view.DetailsCourseTimerFragment
 
 
 class CourseTimerActivity : AppCompatActivity() {
@@ -31,7 +33,10 @@ class CourseTimerActivity : AppCompatActivity() {
     }
 
     private fun redirectToDetails(teamNumber: Int): Boolean {
-        // TODO send intent to go to details (courseId and teamNumber dispo) (example in CourseFragment, line 85)
+        val intent = Intent(this, DetailsCourseTimerFragment::class.java)
+        intent.putExtra("courseId", courseId)
+        intent.putExtra("teamId",teamNumber)
+        startActivity(intent)
         return true
     }
 }
