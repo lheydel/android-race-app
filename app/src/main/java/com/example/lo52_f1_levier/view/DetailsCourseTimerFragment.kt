@@ -39,7 +39,7 @@ class DetailsCourseTimerFragment : AppCompatActivity() {
     }
 
     /**
-     * Display what has to be displayed relatively to the number of runner for a team
+     * Display what has to be displayed relatively to the number of runners for a team
      * */
     private fun init()
     {
@@ -191,7 +191,7 @@ class DetailsCourseTimerFragment : AppCompatActivity() {
             // First sprint of the second run
             if(t6 != "-1" )
             {
-                view.seekBarDeuxieme.progress = 1
+                view.seekBarDeuxieme.progress++
                 view.SprintDeuxieme1.text=getTime(t6)
             }
             else
@@ -202,7 +202,7 @@ class DetailsCourseTimerFragment : AppCompatActivity() {
             // First obstacle of the second run
             if(t7 != "-1" )
             {
-                view.seekBarDeuxieme.progress = 2
+                view.seekBarDeuxieme.progress++
                 view.ObstacleDeuxieme1.text=getTime(t7)
             }
             else
@@ -214,7 +214,7 @@ class DetailsCourseTimerFragment : AppCompatActivity() {
             // Pit stop of the second run
             if(t8 != "-1" )
             {
-                view.seekBarDeuxieme.progress = 3
+                view.seekBarDeuxieme.progress++
                 view.PitStopDeuxieme.text=getTime(t8)
             }
             else
@@ -225,7 +225,7 @@ class DetailsCourseTimerFragment : AppCompatActivity() {
             // Second sprint of the second run
             if(t9 != "-1" )
             {
-                view.seekBarDeuxieme.progress = 4
+                view.seekBarDeuxieme.progress++
                 view.SprintDeuxieme2.text=getTime(t9)
             }
             else
@@ -258,6 +258,11 @@ class DetailsCourseTimerFragment : AppCompatActivity() {
         var calculatedTime : String
         var seconds = time.toInt()/1000
         var ms = time.toInt()%1000
+        var msString = ms.toString()
+        if(msString.length<3)
+        {
+            msString= "0"+ms.toString()
+        }
         var minutes = 0
 
         if(seconds>60)
@@ -265,7 +270,7 @@ class DetailsCourseTimerFragment : AppCompatActivity() {
             minutes = seconds/60
             seconds %= 60
         }
-        calculatedTime = "${minutes}' ${seconds}\":$ms"
+        calculatedTime = "${minutes}' ${seconds}\":$msString"
         return calculatedTime
     }
 

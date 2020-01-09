@@ -53,6 +53,7 @@
             android:layout_height="51dp"
             android:layout_marginStart="20dp"
             android:ems="10"
+            android:enabled="false"
             android:inputType="textPersonName"
             android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="@+id/textView14"
