@@ -47,5 +47,10 @@ class ParticipantEditActivity : AppCompatActivity() {
 
             }
         }
+
+        btn_cancel.setOnClickListener {
+            firstName.text.clear()
+            lastName.text.clear()
+        }
     }
 }

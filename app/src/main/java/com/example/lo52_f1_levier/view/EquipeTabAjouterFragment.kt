@@ -19,6 +19,7 @@ import com.example.lo52_f1_levier.DAO.EquipeDao
 import com.example.lo52_f1_levier.DAO.ParticipeDao
 import com.example.lo52_f1_levier.R
 import com.example.lo52_f1_levier.model.Coureur
+import com.example.lo52_f1_levier.model.Course
 import com.example.lo52_f1_levier.model.Run
 import com.example.lo52_f1_levier.model.Runner
 import kotlinx.android.extensions.LayoutContainer
@@ -184,11 +185,14 @@ class EquipeTabAjouterFragment : Fragment() {
         with(courseCursor!!){
             while (moveToNext()){
                 val run = Run(
-                    getInt(getColumnIndexOrThrow(android.provider.BaseColumns._ID)),
-                    getString(getColumnIndexOrThrow(com.example.lo52_f1_levier.model.Course.Coursetable.TITLE)),
-                    getString(getColumnIndexOrThrow(com.example.lo52_f1_levier.model.Course.Coursetable.DATE))
+                    getInt(getColumnIndexOrThrow(BaseColumns._ID)),
+                    getString(getColumnIndexOrThrow(Course.Coursetable.TITLE)),
+                    getString(getColumnIndexOrThrow(Course.Coursetable.DATE)),
+                    getInt(getColumnIndexOrThrow(Course.Coursetable.OVER))
                 )
-                courses.add(run)
+                if(run.over == 0) { // Check if the course is over, if it is, doesn't add it to the list
+                    courses.add(run)
+                }
             }
         }
         if (courses.isEmpty()) {
@@ -329,10 +333,10 @@ class EquipeTabAjouterFragment : Fragment() {
             }
         }
 
-        /*fun replaceItems(runner: ArrayList<Runner>) {
+        fun replaceItems(runner: ArrayList<Runner>) {
             this.members = runner
             notifyDataSetChanged()
-        }*/
+        }
 
         fun addItem(runner: Runner) : Boolean{
             if(members.size < 3){

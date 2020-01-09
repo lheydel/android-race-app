@@ -11,7 +11,12 @@ import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import com.example.lo52_f1_levier.DAO.CoureurDao
 import com.example.lo52_f1_levier.R
+import kotlinx.android.synthetic.main.activity_paticipant_edit.*
 import kotlinx.android.synthetic.main.fragment_participant_tab_ajouter.*
+import kotlinx.android.synthetic.main.fragment_participant_tab_ajouter.btn_addParticipant
+import kotlinx.android.synthetic.main.fragment_participant_tab_ajouter.btn_cancel
+import kotlinx.android.synthetic.main.fragment_participant_tab_ajouter.firstName
+import kotlinx.android.synthetic.main.fragment_participant_tab_ajouter.lastName
 import kotlinx.android.synthetic.main.fragment_participant_tab_consult.*
 
 // TODO: Rename parameter arguments, choose names that match
@@ -28,16 +33,10 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class ParticipantTabAjouterFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-    private var listener: OnFragmentInteractionListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
         }
     }
 
@@ -65,43 +64,11 @@ class ParticipantTabAjouterFragment : Fragment() {
 
             }
         }
-    }
-
-    /*// TODO: Rename method, update argument and hook method into UI event
-    fun onButtonPressed(uri: Uri) {
-        listener?.onFragmentInteraction(uri)
-    }*/
-
-    /*override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is OnFragmentInteractionListener) {
-            listener = context
-        } else {
-            throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
+        btn_cancel.setOnClickListener {
+            firstName.text.clear()
+            lastName.text.clear()
         }
-    }*/
-
-    /*override fun onDetach() {
-        super.onDetach()
-        listener = null
-    }*/
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     *
-     *
-     * See the Android Training lesson [Communicating with Other Fragments]
-     * (http://developer.android.com/training/basics/fragments/communicating.html)
-     * for more information.
-     */
-    interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        fun onFragmentInteraction(uri: Uri)
     }
-
 
     companion object {
         /**

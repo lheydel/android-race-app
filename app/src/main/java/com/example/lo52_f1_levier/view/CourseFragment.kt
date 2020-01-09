@@ -69,7 +69,9 @@ class CourseFragment : Fragment() {
             while (moveToNext()){
                 val run = Run(getInt(getColumnIndexOrThrow(BaseColumns._ID)),
                     getString(getColumnIndexOrThrow(Course.Coursetable.TITLE)),
-                    getString(getColumnIndexOrThrow(Course.Coursetable.DATE)))
+                    getString(getColumnIndexOrThrow(Course.Coursetable.DATE)),
+                    getInt(getColumnIndexOrThrow(Course.Coursetable.OVER))
+                )
                 runs.add(run)
             }
         }

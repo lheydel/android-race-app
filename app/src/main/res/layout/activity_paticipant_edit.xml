@@ -51,16 +51,6 @@
                 app:layout_constraintStart_toStartOf="@+id/textView"
                 app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
-                android:text="@string/age"
-                android:textSize="24sp"
-                app:layout_constraintStart_toStartOf="@+id/textView2"
-                app:layout_constraintTop_toBottomOf="@+id/textView2" />
-
             <EditText
                 android:id="@+id/firstName"
                 android:layout_width="wrap_content"
@@ -89,20 +79,6 @@
                 app:layout_constraintStart_toEndOf="@+id/textView"
                 app:layout_constraintTop_toTopOf="@+id/textView2" />
 
-            <EditText
-                android:id="@+id/age"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:autofillHints=""
-                android:ems="10"
-                android:hint="@string/age"
-                android:inputType="number"
-                android:textSize="24sp"
-                app:layout_constraintBottom_toBottomOf="@+id/textView3"
-                app:layout_constraintStart_toEndOf="@+id/textView"
-                app:layout_constraintTop_toTopOf="@+id/textView3" />
-
             <Button
                 android:id="@+id/btn_addParticipant"
                 android:layout_width="wrap_content"
@@ -110,9 +86,9 @@
                 android:layout_marginStart="50dp"
                 android:text="@string/save"
                 android:textSize="24sp"
-                app:layout_constraintBottom_toTopOf="@+id/lastName"
+                app:layout_constraintBottom_toBottomOf="@+id/firstName"
                 app:layout_constraintStart_toEndOf="@+id/firstName"
-                app:layout_constraintTop_toBottomOf="@+id/firstName" />
+                app:layout_constraintTop_toTopOf="@+id/firstName" />
 
             <Button
                 android:id="@+id/btn_cancel"
@@ -120,9 +96,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/cancel"
                 android:textSize="24sp"
-                app:layout_constraintBottom_toTopOf="@+id/age"
                 app:layout_constraintStart_toStartOf="@+id/btn_addParticipant"
-                app:layout_constraintTop_toBottomOf="@+id/lastName" />
+                app:layout_constraintTop_toTopOf="@+id/lastName" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

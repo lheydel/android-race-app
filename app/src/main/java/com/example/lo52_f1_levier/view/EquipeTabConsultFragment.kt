@@ -1,10 +1,12 @@
 package com.example.lo52_f1_levier.view
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.BaseColumns
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -19,6 +21,7 @@ import com.example.lo52_f1_levier.DAO.CourseDao
 import com.example.lo52_f1_levier.DAO.EquipeDao
 import com.example.lo52_f1_levier.DAO.ParticipeDao
 import com.example.lo52_f1_levier.R
+import com.example.lo52_f1_levier.model.Course
 import com.example.lo52_f1_levier.model.Equipe
 import com.example.lo52_f1_levier.model.Run
 import com.example.lo52_f1_levier.model.Team
@@ -83,11 +86,23 @@ class EquipeTabConsultFragment : Fragment() {
 
         edit_team.setOnClickListener {
             if(::selectedTeam.isInitialized) {
+
+                var isOver = false
+
+                if(course.over == 1){
+                    isOver = true
+                    val alert = AlertDialog.Builder(this.context!!)
+                    alert.setTitle("Course terminé")
+                    alert.setMessage("Vous ne pourrez pas modifiez cette équipe, seulement visualiser sa composition")
+                    alert.show()
+                }
                 val intent = Intent(this.context, TeamEditActivity::class.java)
                 intent
                     .putExtra("teamId", selectedTeam.id)
                     .putExtra("courseId", course.id)
+                    .putExtra("isOver", isOver)
                 startActivityForResult(intent, 10001)
+
             }else
                 Toast.makeText(this.context, "Vous devez sélectionner un Participant", Toast.LENGTH_SHORT).show()
         }
@@ -115,9 +130,10 @@ class EquipeTabConsultFragment : Fragment() {
         with(courseCursor!!){
             while (moveToNext()){
                 val run = Run(
-                    getInt(getColumnIndexOrThrow(android.provider.BaseColumns._ID)),
-                    getString(getColumnIndexOrThrow(com.example.lo52_f1_levier.model.Course.Coursetable.TITLE)),
-                    getString(getColumnIndexOrThrow(com.example.lo52_f1_levier.model.Course.Coursetable.DATE))
+                    getInt(getColumnIndexOrThrow(BaseColumns._ID)),
+                    getString(getColumnIndexOrThrow(Course.Coursetable.TITLE)),
+                    getString(getColumnIndexOrThrow(Course.Coursetable.DATE)),
+                    getInt(getColumnIndexOrThrow(Course.Coursetable.OVER))
                 )
                 courses.add(run)
             }

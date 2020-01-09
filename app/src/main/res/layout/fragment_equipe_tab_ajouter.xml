@@ -97,8 +97,8 @@
                 android:gravity="center"
                 android:text="@string/available_participant"
                 android:textSize="24sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/frameLayout3"
+                app:layout_constraintStart_toStartOf="@+id/frameLayout3"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:layout_conversion_absoluteHeight="32dp"
                 tools:layout_conversion_absoluteWidth="640dp" />
@@ -210,8 +210,8 @@
                 android:layout_marginTop="20dp"
                 android:text="@string/team_members"
                 android:textSize="24sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/frameLayout2"
+                app:layout_constraintStart_toStartOf="@+id/frameLayout2"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView

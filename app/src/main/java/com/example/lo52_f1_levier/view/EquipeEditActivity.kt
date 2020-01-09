@@ -36,101 +36,128 @@ class TeamEditActivity : AppCompatActivity() {
 
     private var teamId : Int = -1
     private var courseId : Int = -1
+    private var isOver = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_team_edit)
+
+        isOver = intent.getBooleanExtra("isOver", false)
 
         coureurDao = CoureurDao(this)
         equipeDao = EquipeDao(this)
         participeDao = ParticipeDao(this)
 
         save.setOnClickListener{
-            if(!edt_teamName.text.isEmpty()) {
+            if(isOver){
+                Toast.makeText(this, "La course est terminée, aucune modification de possible", Toast.LENGTH_SHORT).show()
+            }else{
+                if(!edt_teamName.text.isEmpty()) {
 
-                if (teamAdapter.getItemCount()>=1 && teamAdapter.getItemCount() <4 ) {
-                    equipeDao = EquipeDao(this)
-                    participeDao = ParticipeDao(this)
-                    participeDao.deleteParticipeByCourseIdAndTeamId(courseId,teamId)
-                    equipeDao.updateEquipeByID(teamId,edt_teamName.text.toString(),edt_teamNumber.text.toString().toInt())
+                    if (teamAdapter.getItemCount()>=1 && teamAdapter.getItemCount() <4 ) {
+                        equipeDao = EquipeDao(this)
+                        participeDao = ParticipeDao(this)
+                        participeDao.deleteParticipeByCourseIdAndTeamId(courseId,teamId)
+                        equipeDao.updateEquipeByID(teamId,edt_teamName.text.toString(),edt_teamNumber.text.toString().toInt())
 
-                    for (position in 0 until teamAdapter.itemCount) {
-                        participeDao.insertParticipe(courseId, teamAdapter.getItem(position).id, teamId)
-                        coureurDao.updateCoureurNumc(teamAdapter.getItem(position).id, position)
+                        for (position in 0 until teamAdapter.itemCount) {
+                            participeDao.insertParticipe(courseId, teamAdapter.getItem(position).id, teamId)
+                            coureurDao.updateCoureurNumc(teamAdapter.getItem(position).id, position)
+                        }
+
+                        Toast.makeText(this, "Modification enregistrée", Toast.LENGTH_SHORT).show()
+                        setResult(Activity.RESULT_OK)
+                        finish()
                     }
-
-                    Toast.makeText(this, "Modification enregistrée", Toast.LENGTH_SHORT).show()
-                    setResult(Activity.RESULT_OK)
-                    finish()
+                    else{
+                        Toast.makeText(this, "L'équipe doit avoir au moins 1 membre et pas plus de 3", Toast.LENGTH_SHORT).show()
+                    }
                 }
-                else{
-                    Toast.makeText(this, "L'équipe doit avoir au moins 1 membre et pas plus de 3", Toast.LENGTH_SHORT).show()
-                }
+                else
+                    Toast.makeText(this, "Veuiller renseigner le nom de l'équipe", Toast.LENGTH_SHORT).show()
             }
-            else
-                Toast.makeText(this, "Veuiller renseigner le nom de l'équipe", Toast.LENGTH_SHORT).show()
+        }
+
+        cancel.setOnClickListener {
+            this.finish()
         }
 
         btn_left.setOnClickListener{
-            if(::selectedMember.isInitialized){
-                if(selectedMember.isTeamMember){
-                    selectedMember.isTeamMember = false
-                    adapter.addItem(selectedMember)
-                    teamAdapter.removeItem(selectedMember)
+            if(isOver){
+                Toast.makeText(this, "La course est terminée, aucune modification de possible", Toast.LENGTH_SHORT).show()
+            }else{
+                if(::selectedMember.isInitialized){
+                    if(selectedMember.isTeamMember){
+                        selectedMember.isTeamMember = false
+                        adapter.addItem(selectedMember)
+                        teamAdapter.removeItem(selectedMember)
 
 
-                    edt_selectedMember.text.clear()
+                        edt_selectedMember.text.clear()
+                    }
+                    else
+                        Toast.makeText(this, "Vous devez sélectionner un membre de l'équipe", Toast.LENGTH_SHORT).show()
                 }
                 else
                     Toast.makeText(this, "Vous devez sélectionner un membre de l'équipe", Toast.LENGTH_SHORT).show()
             }
-            else
-                Toast.makeText(this, "Vous devez sélectionner un membre de l'équipe", Toast.LENGTH_SHORT).show()
         }
 
         btn_right.setOnClickListener{
-            if(::selectedRunner.isInitialized){
-                if(!selectedRunner.isTeamMember){
-                    selectedRunner.isTeamMember = true
-                    if(teamAdapter.addItem(selectedRunner))
-                        adapter.removeItem(selectedRunner)
-                    else{
-                        selectedRunner.isTeamMember = false
-                        teamMaxSize()
+            if(isOver){
+                Toast.makeText(this, "La course est terminée, aucune modification de possible", Toast.LENGTH_SHORT).show()
+            }else{
+                if(::selectedRunner.isInitialized){
+                    if(!selectedRunner.isTeamMember){
+                        selectedRunner.isTeamMember = true
+                        if(teamAdapter.addItem(selectedRunner))
+                            adapter.removeItem(selectedRunner)
+                        else{
+                            selectedRunner.isTeamMember = false
+                            teamMaxSize()
+                        }
+                        edt_selectedParticipant.text.clear()
                     }
-                    edt_selectedParticipant.text.clear()
+                    else
+                        Toast.makeText(this, "Vous devez sélectionner un Participant", Toast.LENGTH_SHORT).show()
                 }
                 else
                     Toast.makeText(this, "Vous devez sélectionner un Participant", Toast.LENGTH_SHORT).show()
             }
-            else
-                Toast.makeText(this, "Vous devez sélectionner un Participant", Toast.LENGTH_SHORT).show()
         }
 
         btn_up.setOnClickListener{
-            if(::selectedMember.isInitialized){
-                if(selectedMember.isTeamMember){
-                    if(teamAdapter.getItemPos(selectedMember) > 0)
-                        teamAdapter.moveUp(selectedMember)
+            if(isOver){
+                Toast.makeText(this, "La course est terminée, aucune modification de possible", Toast.LENGTH_SHORT).show()
+            }else{
+                if(::selectedMember.isInitialized){
+                    if(selectedMember.isTeamMember){
+                        if(teamAdapter.getItemPos(selectedMember) > 0)
+                            teamAdapter.moveUp(selectedMember)
+                    }
+                    else
+                        Toast.makeText(this, "Vous devez sélectionner un membre de l'équipe", Toast.LENGTH_SHORT).show()
                 }
                 else
                     Toast.makeText(this, "Vous devez sélectionner un membre de l'équipe", Toast.LENGTH_SHORT).show()
             }
-            else
-                Toast.makeText(this, "Vous devez sélectionner un membre de l'équipe", Toast.LENGTH_SHORT).show()
         }
 
         btn_down.setOnClickListener{
-            if(::selectedMember.isInitialized){
-                if(selectedMember.isTeamMember){
-                    if(teamAdapter.getItemPos(selectedMember) < 2)
-                        teamAdapter.moveDown(selectedMember)
+            if(isOver){
+                Toast.makeText(this, "La course est terminée, aucune modification de possible", Toast.LENGTH_SHORT).show()
+            }else{
+                if(::selectedMember.isInitialized){
+                    if(selectedMember.isTeamMember){
+                        if(teamAdapter.getItemPos(selectedMember) < 2)
+                            teamAdapter.moveDown(selectedMember)
+                    }
+                    else
+                        Toast.makeText(this, "Vous devez sélectionner un membre de l'équipe", Toast.LENGTH_SHORT).show()
                 }
                 else
                     Toast.makeText(this, "Vous devez sélectionner un membre de l'équipe", Toast.LENGTH_SHORT).show()
             }
-            else
-                Toast.makeText(this, "Vous devez sélectionner un membre de l'équipe", Toast.LENGTH_SHORT).show()
         }
 
 
