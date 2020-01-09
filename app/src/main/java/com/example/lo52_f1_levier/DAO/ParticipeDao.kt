@@ -360,8 +360,65 @@ class ParticipeDao(context : Context) {
             selectionArgs)
     }
 
-    fun getLastTime(runnerId: Int): Cursor? {
+    /**
+     * Get and return the number of times and the total time saved for a given team in a given course
+     * @param courseId the id of the course runned by the team
+     * @param teamId the id of the team to get the times of
+     * @return a pair of number with (nbTimes, lastTime)
+     */
+    fun getNbAndTotalTimeOfTeam(courseId: Int, teamId: Int): Pair<Int, Long> {
+        val db = dbHelper.readableDatabase
 
+        // assemble all the time columns
+        val timeColumns = arrayOf(
+            Participe.ParticipeTable.TIME1,
+            Participe.ParticipeTable.TIME2,
+            Participe.ParticipeTable.TIME3,
+            Participe.ParticipeTable.TIME4,
+            Participe.ParticipeTable.TIME5,
+            Participe.ParticipeTable.TIME6,
+            Participe.ParticipeTable.TIME7,
+            Participe.ParticipeTable.TIME8,
+            Participe.ParticipeTable.TIME9,
+            Participe.ParticipeTable.TIME10
+        )
+
+        // select only the team times
+        val selection = "${Participe.ParticipeTable.COURSE_ID} = ? AND ${Participe.ParticipeTable.EQUIPE_ID} = ?"
+        val selectionArgs = arrayOf(courseId.toString(), teamId.toString())
+
+        // get the times
+        val timeCursor = db.query(
+            Participe.ParticipeTable.NAME,
+            timeColumns,
+            selection,
+            selectionArgs,
+            null,
+            null,
+            null
+        )
+
+        // if no time, return
+        if (timeCursor == null || !timeCursor.moveToFirst()) {
+            return Pair(-1, 0)
+        }
+
+        // check the times of all the team members
+        var totalTime: Long = 0
+        var nbTimes: Int = 0
+        do {
+            // get all the time values
+            val times = timeColumns.map { timeColumn -> timeCursor.getLong(timeCursor.getColumnIndex(timeColumn)) }
+
+            // calc last time
+            totalTime += times.reduce { total, time  -> total + time }
+
+            // calc nb times
+            nbTimes += times.count { time -> time > 0 }
+        } while (timeCursor.moveToNext())
+
+        timeCursor.close()
+        return Pair(nbTimes, totalTime)
     }
 
     /**

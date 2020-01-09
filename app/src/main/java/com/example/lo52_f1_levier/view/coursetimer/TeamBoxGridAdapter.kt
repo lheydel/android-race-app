@@ -18,6 +18,7 @@ import com.example.lo52_f1_levier.model.Coureur
 import com.example.lo52_f1_levier.model.Equipe
 import com.example.lo52_f1_levier.model.Participe
 import kotlinx.android.synthetic.main.team_box.view.*
+import java.util.Collections.max
 import kotlin.math.min
 
 
@@ -29,6 +30,7 @@ class TeamBoxGridAdapter(private val context: Context,
                          private val goToDetails: (Int) -> Boolean,
                          private val getTimerValue: () -> Long,
                          private val isTimerStarted: () -> Boolean,
+                         private val courseReady: (lastTime: Long, isOver: Boolean) -> Unit,
                          private val courseOver: () -> Unit):
     RecyclerView.Adapter<TeamBoxGridAdapter.TeamBoxGridViewHolder>() {
 
@@ -43,11 +45,11 @@ class TeamBoxGridAdapter(private val context: Context,
     private var nbTeamFinished: Int = 0
 
     init {
-        if (courseDao.isCourseOver(courseId)) {
-            courseOver
-        } else {
-            fetchTeamsData()
-        }
+        fetchTeamsData()
+
+        val lastTime = max(teams.map { team -> team.totalTime })
+        val isOver = courseDao.isCourseOver(courseId)
+        courseReady(lastTime, isOver)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TeamBoxGridViewHolder {
@@ -181,7 +183,12 @@ class TeamBoxGridAdapter(private val context: Context,
         }
         teamCursor?.close()
 
-        val teamData = TeamBoxData(teamId, teamNumber, runners, teamPos)
+        // get the number of times (first) and the last time (second)
+        val timeInfo = participeDao.getNbAndTotalTimeOfTeam(courseId, teamId)
+
+        val teamData = TeamBoxData(teamId, teamNumber, runners, teamPos, timeInfo.second)
+        teamData.setTotalStepsDone(timeInfo.first)
+
         teams = teams.plus(teamData)
     }
 
@@ -189,7 +196,7 @@ class TeamBoxGridAdapter(private val context: Context,
      * Save a new time for a given runner of a given team
      * @return the new time
      */
-    private fun saveTime(teamId: Int, runnerPos: Int, numTime: Int): Long {
+    private fun saveTime(teamId: Int, runnerPos: Int, numTime: Int, prevTotalTime: Long): Long {
         val runnerCursor = participeDao.getCoureurByTeamIdAndNumc(teamId, runnerPos)
 
         if (runnerCursor === null || !runnerCursor.moveToFirst()) {
@@ -197,11 +204,11 @@ class TeamBoxGridAdapter(private val context: Context,
         }
 
         val runnerId = runnerCursor.getInt(runnerCursor.getColumnIndex(BaseColumns._ID))
-        val newTime = getTimerValue()
+        val newTime = getTimerValue() - prevTotalTime
         participeDao.setTimeByRunnerId(runnerId, numTime, newTime)
 
         runnerCursor.close()
-        return newTime
+        return newTime + prevTotalTime
     }
 
     @Synchronized
@@ -230,7 +237,7 @@ class TeamBoxGridAdapter(private val context: Context,
                                 private val teambox: View,
                                 private val goToDetails: (Int) -> Boolean,
                                 private val isTimerStarted: () -> Boolean,
-                                private val saveTime: (teamId: Int, runnerPos: Int, numTime: Int) -> Long,
+                                private val saveTime: (teamId: Int, runnerPos: Int, numTime: Int, prevTotalTime: Long) -> Long,
                                 private val setTeamPosition: (teamId: Int) -> Int,
                                 private val teamFinished: () -> Unit):
         RecyclerView.ViewHolder(teambox), View.OnCreateContextMenuListener {
@@ -269,7 +276,7 @@ class TeamBoxGridAdapter(private val context: Context,
             teambox.imgPassage.setImageResource(team.getDrawablePassage())
             teambox.imgStep.setImageResource(team.getDrawableStep())
 
-            teambox.progressBar.progress = team.totalStepsDone
+            teambox.progressBar.progress = team.getTotalStepsDone()
         }
 
         /**
@@ -281,7 +288,7 @@ class TeamBoxGridAdapter(private val context: Context,
             }
 
             val runnerStep = team.step + (team.passage - 1) * team.NB_STEPS
-            team.lastTime = saveTime(team.teamId, team.runner-1, runnerStep)
+            team.totalTime = saveTime(team.teamId, team.runner-1, runnerStep, team.totalTime)
             team.incrementStep()
             updateData(team)
         }
@@ -295,6 +302,7 @@ class TeamBoxGridAdapter(private val context: Context,
             }
 
             teamFinished()
+            teambox.progressBar.progress = teambox.progressBar.max
 
             // disable running state
             teambox.runningState.visibility = View.INVISIBLE

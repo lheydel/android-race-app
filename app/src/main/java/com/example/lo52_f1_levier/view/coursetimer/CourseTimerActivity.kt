@@ -34,6 +34,7 @@ class CourseTimerActivity : AppCompatActivity() {
             this::redirectToDetails,
             timerFragment::getTimeInMilliseconds,
             timerFragment::isStarted,
+            this::onCourseInitialized,
             timerFragment::stop
         )
         teamBoxGrid.setHasFixedSize(true)
@@ -45,5 +46,12 @@ class CourseTimerActivity : AppCompatActivity() {
         intent.putExtra("teamId",teamNumber)
         startActivity(intent)
         return true
+    }
+
+    private fun onCourseInitialized(totalTime: Long, isOver: Boolean) {
+        timerFragment.initClock(totalTime)
+        if (isOver) {
+            timerFragment.displayTimer()
+        }
     }
 }

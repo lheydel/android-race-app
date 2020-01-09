@@ -8,9 +8,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.lo52_f1_levier.R
 import kotlinx.android.synthetic.main.fragment_timer.*
+import kotlin.math.max
 
 class Timer : Fragment() {
 
+    private var clockInitialized = false
     private var started = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -22,17 +24,29 @@ class Timer : Fragment() {
         startButton.setOnClickListener { startTimer() }
     }
 
+    fun initClock(time: Long) {
+        timer.base = SystemClock.elapsedRealtime() - max(time, 0L)
+        clockInitialized = true
+    }
+
     fun getTimeInMilliseconds(): Long {
         return SystemClock.elapsedRealtime() - timer.base
     }
 
-    private fun startTimer() {
+    fun displayTimer() {
         startButton.visibility = View.GONE
         timer.visibility = View.VISIBLE
+    }
 
-        timer.base = SystemClock.elapsedRealtime()
+    private fun startTimer() {
+        displayTimer()
+
+        if (!clockInitialized) {
+            timer.base = SystemClock.elapsedRealtime()
+            clockInitialized = true
+        }
+
         timer.start()
-
         started = true
     }
 
