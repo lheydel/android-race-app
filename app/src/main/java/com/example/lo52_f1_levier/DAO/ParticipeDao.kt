@@ -32,15 +32,16 @@ class ParticipeDao(context : Context) {
     fun insertParticipe(C_ID: Int, CR_ID: Int, E_ID : Int): Long? {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
-            put(Participe.ParticipeTable.CR_ID, CR_ID )
-            put(Participe.ParticipeTable.C_ID, C_ID)
-            put(Participe.ParticipeTable.E_ID, E_ID)
+            put(Participe.ParticipeTable.COUREURID, CR_ID )
+            put(Participe.ParticipeTable.COURSE_ID, C_ID)
+            put(Participe.ParticipeTable.EQUIPE_ID, E_ID)
         }
         return db?.insert(Participe.ParticipeTable.NAME, null, values)
     }
 
 
     /**
+     * Renvoie les enregistrements dont l'id du coureur = COUREURID
      * Renvoie les enregistrements dont l'id du coureur = CR_ID
      *
      * @param CR_ID
@@ -50,8 +51,8 @@ class ParticipeDao(context : Context) {
         val db = dbHelper.readableDatabase
 
         val projection = arrayOf(
-            BaseColumns._ID, Participe.ParticipeTable.CR_ID, Participe.ParticipeTable.C_ID,
-            Participe.ParticipeTable.E_ID,
+            BaseColumns._ID, Participe.ParticipeTable.COUREURID, Participe.ParticipeTable.COURSE_ID,
+            Participe.ParticipeTable.EQUIPE_ID,
             Participe.ParticipeTable.TIME1,
             Participe.ParticipeTable.TIME2,
             Participe.ParticipeTable.TIME3,
@@ -64,10 +65,10 @@ class ParticipeDao(context : Context) {
             Participe.ParticipeTable.TIME10
             )
 
-        val selection = "${Participe.ParticipeTable.CR_ID} = ?"
+        val selection = "${Participe.ParticipeTable.COUREURID} = ?"
         val selectionArgs = arrayOf(CR_ID.toString())
 
-        val sortOrder = "${Participe.ParticipeTable.E_ID} DESC"
+        val sortOrder = "${Participe.ParticipeTable.EQUIPE_ID} DESC"
 
         return db.query(
             Participe.ParticipeTable.NAME,   // The table to query
@@ -91,8 +92,8 @@ class ParticipeDao(context : Context) {
         val db = dbHelper.readableDatabase
 
         val projection = arrayOf(
-            BaseColumns._ID, Participe.ParticipeTable.CR_ID, Participe.ParticipeTable.C_ID,
-            Participe.ParticipeTable.E_ID,
+            BaseColumns._ID, Participe.ParticipeTable.COUREURID, Participe.ParticipeTable.COURSE_ID,
+            Participe.ParticipeTable.EQUIPE_ID,
             Participe.ParticipeTable.TIME1,
             Participe.ParticipeTable.TIME2,
             Participe.ParticipeTable.TIME3,
@@ -108,7 +109,7 @@ class ParticipeDao(context : Context) {
         val selection = "${BaseColumns._ID} = ?"
         val selectionArgs = arrayOf(ID.toString())
 
-        val sortOrder = "${Participe.ParticipeTable.E_ID} DESC"
+        val sortOrder = "${Participe.ParticipeTable.EQUIPE_ID} DESC"
 
         return db.query(
             Participe.ParticipeTable.NAME,   // The table to query
@@ -132,8 +133,8 @@ class ParticipeDao(context : Context) {
         val db = dbHelper.readableDatabase
 
         val projection = arrayOf(
-            BaseColumns._ID, Participe.ParticipeTable.CR_ID, Participe.ParticipeTable.C_ID,
-            Participe.ParticipeTable.E_ID,
+            BaseColumns._ID, Participe.ParticipeTable.COUREURID, Participe.ParticipeTable.COURSE_ID,
+            Participe.ParticipeTable.EQUIPE_ID,
             Participe.ParticipeTable.TIME1,
             Participe.ParticipeTable.TIME2,
             Participe.ParticipeTable.TIME3,
@@ -146,10 +147,10 @@ class ParticipeDao(context : Context) {
             Participe.ParticipeTable.TIME10
         )
 
-        val selection = "${Participe.ParticipeTable.E_ID} = ?"
+        val selection = "${Participe.ParticipeTable.EQUIPE_ID} = ?"
         val selectionArgs = arrayOf(E_ID.toString())
 
-        val sortOrder = "${Participe.ParticipeTable.CR_ID} DESC"
+        val sortOrder = "${Participe.ParticipeTable.COUREURID} DESC"
 
         return db.query(
             Participe.ParticipeTable.NAME,   // The table to query
@@ -172,8 +173,8 @@ class ParticipeDao(context : Context) {
         val db = dbHelper.readableDatabase
 
         val projection = arrayOf(
-            BaseColumns._ID, Participe.ParticipeTable.CR_ID, Participe.ParticipeTable.C_ID,
-            Participe.ParticipeTable.E_ID,
+            BaseColumns._ID, Participe.ParticipeTable.COUREURID, Participe.ParticipeTable.COURSE_ID,
+            Participe.ParticipeTable.EQUIPE_ID,
             Participe.ParticipeTable.TIME1,
             Participe.ParticipeTable.TIME2,
             Participe.ParticipeTable.TIME3,
@@ -186,10 +187,10 @@ class ParticipeDao(context : Context) {
             Participe.ParticipeTable.TIME10
         )
 
-        val selection = "${Participe.ParticipeTable.C_ID} = ?"
+        val selection = "${Participe.ParticipeTable.COURSE_ID} = ?"
         val selectionArgs = arrayOf(C_ID.toString())
 
-        val sortOrder = Participe.ParticipeTable.E_ID  // important for TeamBoxGridAdapter
+        val sortOrder = Participe.ParticipeTable.EQUIPE_ID  // important for TeamBoxGridAdapter
 
         return db.query(
             Participe.ParticipeTable.NAME,   // The table to query
@@ -214,8 +215,8 @@ class ParticipeDao(context : Context) {
         val db = dbHelper.readableDatabase
 
         val projection = arrayOf(
-            BaseColumns._ID, Participe.ParticipeTable.CR_ID, Participe.ParticipeTable.C_ID,
-            Participe.ParticipeTable.E_ID,
+            BaseColumns._ID, Participe.ParticipeTable.COUREURID, Participe.ParticipeTable.COURSE_ID,
+            Participe.ParticipeTable.EQUIPE_ID,
             Participe.ParticipeTable.TIME1,
             Participe.ParticipeTable.TIME2,
             Participe.ParticipeTable.TIME3,
@@ -228,10 +229,10 @@ class ParticipeDao(context : Context) {
             Participe.ParticipeTable.TIME10
         )
 
-        val selection = "${Participe.ParticipeTable.C_ID} = ? AND ${Participe.ParticipeTable.E_ID} = ?"
+        val selection = "${Participe.ParticipeTable.COURSE_ID} = ? AND ${Participe.ParticipeTable.EQUIPE_ID} = ?"
         val selectionArgs = arrayOf(C_ID.toString(), E_ID.toString())
 
-        val sortOrder = "${Participe.ParticipeTable.CR_ID} DESC"
+        val sortOrder = "${Participe.ParticipeTable.COUREURID} DESC"
 
         return db.query(
             Participe.ParticipeTable.NAME,   // The table to query
@@ -253,9 +254,9 @@ class ParticipeDao(context : Context) {
     fun getTeamsOfCourse(courseId: Int): Cursor? {
         val db = dbHelper.readableDatabase
 
-        val projection = arrayOf(Participe.ParticipeTable.E_ID)
+        val projection = arrayOf(Participe.ParticipeTable.EQUIPE_ID)
 
-        val selection = "${Participe.ParticipeTable.C_ID} = ?"
+        val selection = "${Participe.ParticipeTable.COURSE_ID} = ?"
         val selectionArgs = arrayOf(courseId.toString())
 
         return db.query(
@@ -278,7 +279,7 @@ class ParticipeDao(context : Context) {
      */
     fun deleteParticipeByCR_ID(CR_ID: Int): Int {
         val db = dbHelper.writableDatabase
-        val selection = "${Participe.ParticipeTable.CR_ID} = ?"
+        val selection = "${Participe.ParticipeTable.COUREURID} = ?"
         val selectionArgs = arrayOf(CR_ID.toString())
         val deletedRows = db.delete(Participe.ParticipeTable.NAME, selection, selectionArgs)
         return deletedRows
@@ -295,7 +296,7 @@ class ParticipeDao(context : Context) {
      */
     fun deleteParticipeByCourseIdAndTeamId(C_ID: Int, E_ID: Int): Int {
         val db = dbHelper.writableDatabase
-        val selection = "${Participe.ParticipeTable.C_ID} = ? AND ${Participe.ParticipeTable.E_ID} = ?"
+        val selection = "${Participe.ParticipeTable.COURSE_ID} = ? AND ${Participe.ParticipeTable.EQUIPE_ID} = ?"
         val selectionArgs = arrayOf(C_ID.toString(),E_ID.toString())
         val deletedRows = db.delete(Participe.ParticipeTable.NAME, selection, selectionArgs)
         return deletedRows
@@ -350,7 +351,7 @@ class ParticipeDao(context : Context) {
 
         }
 
-        val selection = "${Participe.ParticipeTable.CR_ID} = ?"
+        val selection = "${Participe.ParticipeTable.COUREURID} = ?"
         val selectionArgs = arrayOf(CR_ID.toString())
         return db.update(
             Participe.ParticipeTable.NAME,
@@ -370,9 +371,9 @@ class ParticipeDao(context : Context) {
     fun getCoureurByTeamIdAndNumc(teamId: Int, numc: Int): Cursor? {
         val db = dbHelper.readableDatabase
 
-        val projection = arrayOf(Participe.ParticipeTable.CR_ID)
+        val projection = arrayOf(Participe.ParticipeTable.COUREURID)
 
-        val selection = "${Participe.ParticipeTable.E_ID} = ?"
+        val selection = "${Participe.ParticipeTable.EQUIPE_ID} = ?"
         val selectionArgs = arrayOf(teamId.toString())
 
         val teamCursor = db.query(
@@ -387,7 +388,7 @@ class ParticipeDao(context : Context) {
 
         var rIds = emptyArray<Int>()
         while (teamCursor.moveToNext()) {
-            val rId = teamCursor.getInt(teamCursor.getColumnIndex(Participe.ParticipeTable.CR_ID))
+            val rId = teamCursor.getInt(teamCursor.getColumnIndex(Participe.ParticipeTable.COUREURID))
             rIds = rIds.plus(rId)
         }
         teamCursor.close()
@@ -422,7 +423,7 @@ class ParticipeDao(context : Context) {
 
         var teamIds = emptyArray<Int>()
         while (teamListCursor.moveToNext()) {
-            val tId = teamListCursor.getInt(teamListCursor.getColumnIndex(Participe.ParticipeTable.E_ID))
+            val tId = teamListCursor.getInt(teamListCursor.getColumnIndex(Participe.ParticipeTable.EQUIPE_ID))
             teamIds = teamIds.plus(tId)
         }
 

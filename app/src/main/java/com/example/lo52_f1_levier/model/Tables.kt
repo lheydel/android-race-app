@@ -38,9 +38,9 @@ const val SQL_DELETE_COUREUR = "DROP TABLE IF EXISTS ${Coureur.CoureurTable.NAME
 const val SQL_CREATE_PARTICIPE =
     "CREATE TABLE ${Participe.ParticipeTable.NAME} (" +
         "${BaseColumns._ID} INTEGER PRIMARY KEY," +
-        "${Participe.ParticipeTable.C_ID} INTEGER," +
-        "${Participe.ParticipeTable.CR_ID} INTEGER,"+
-        "${Participe.ParticipeTable.E_ID} INTEGER,"+
+        "${Participe.ParticipeTable.COURSE_ID} INTEGER," +
+        "${Participe.ParticipeTable.COUREURID} INTEGER,"+
+        "${Participe.ParticipeTable.EQUIPE_ID} INTEGER,"+
         "${Participe.ParticipeTable.TIME1} NUMBER DEFAULT -1,"+
         "${Participe.ParticipeTable.TIME2} NUMBER DEFAULT -1,"+
         "${Participe.ParticipeTable.TIME3} NUMBER DEFAULT -1,"+

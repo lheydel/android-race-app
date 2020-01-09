@@ -32,9 +32,9 @@ object Equipe {
 object Participe {
     object ParticipeTable : BaseColumns {
         const val NAME = "Participe"
-        const val C_ID = "C_ID"     // Course
-        const val CR_ID = "CR_ID"   // Coureur
-        const val E_ID = "E_ID"
+        const val COURSE_ID = "COURSE_ID"     // Course
+        const val COUREURID = "COUREURID"   // Coureur
+        const val EQUIPE_ID = "EQUIPE_ID"
         const val TIME1 = "Time1"
         const val TIME2 = "Time2"
         const val TIME3 = "Time3"
