@@ -66,7 +66,12 @@ class EquipeDao(context : Context) {
     fun getEquipeByID(ID:Int): Cursor? {
         val db = dbHelper.readableDatabase
 
-        val projection = arrayOf(BaseColumns._ID, Equipe.EquipeTable.ENAME, Equipe.EquipeTable.ENUM)
+        val projection = arrayOf(
+            BaseColumns._ID,
+            Equipe.EquipeTable.ENAME,
+            Equipe.EquipeTable.ENUM,
+            Equipe.EquipeTable.POSITION
+        )
 
         val selection = "${BaseColumns._ID} = ?"
         val selectionArgs = arrayOf(ID.toString())
