@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lo52_f1_levier.DAO.CourseDao
 import com.example.lo52_f1_levier.R
-import com.example.lo52_f1_levier.coursetimer.CourseTimerActivity
+import com.example.lo52_f1_levier.view.coursetimer.CourseTimerActivity
 import com.example.lo52_f1_levier.model.Course
 import com.example.lo52_f1_levier.model.Run
 import kotlinx.android.extensions.LayoutContainer
