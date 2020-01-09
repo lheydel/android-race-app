@@ -1,17 +1,20 @@
 package com.example.lo52_f1_levier.view
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.BaseColumns
-import android.util.Log
 import android.view.LayoutInflater
-import com.example.lo52_f1_levier.DAO.ParticipeDao
+import android.view.View
+import android.view.View.OnTouchListener
+import androidx.appcompat.app.AppCompatActivity
 import com.example.lo52_f1_levier.DAO.CoureurDao
+import com.example.lo52_f1_levier.DAO.ParticipeDao
 import com.example.lo52_f1_levier.R
 import com.example.lo52_f1_levier.model.Coureur
 import com.example.lo52_f1_levier.model.Participe
 import com.example.lo52_f1_levier.model.Runner
 import kotlinx.android.synthetic.main.activity_details_course_timer.*
+import kotlinx.android.synthetic.main.fragment_progression.view.*
+
 
 class DetailsCourseTimerFragment : AppCompatActivity() {
 
@@ -55,6 +58,7 @@ class DetailsCourseTimerFragment : AppCompatActivity() {
         // We close the cursor
         cursor.close()
 
+        runnersId.sort()
         // Now we once again iterate
         // We now get the runner from the runner table
         runnersId.forEach{
@@ -78,155 +82,184 @@ class DetailsCourseTimerFragment : AppCompatActivity() {
         // for each of them, create a new "timer"
         runners.forEach{
             var view = LayoutInflater.from(this).inflate(R.layout.fragment_progression,null,false)
-            val cRunner = participeDao.getParticipeByC_ID(it.id)
-            var t1 =""
+
+            view.seekBarPremier.setOnTouchListener { v, event -> true }
+            view.seekBarDeuxieme.setOnTouchListener { v, event -> true }
+
+
+            verticalLayout.addView(view)
+            val cRunner = participeDao.getParticipeByRunnerId(it.id)
+            var t1 ="" // Sprint 1
+            var t2 ="" // Obstacle 1
+            var t3 ="" // PitStop
+            var t4 ="" // Sprint 2
+            var t5 ="" // Obstacle 2
+            var t6 ="" // Sprint 1 2ème passage
+            var t7 ="" // Obstacle 1 2ème passage
+            var t8 ="" // PitStop 2ème passage
+            var t9 ="" // Sprint 2 2ème passage
+            var t10 ="" // Obstacle 2 2ème passage
+
+            view.runnersInfos.text = "${it.cname} ${it.surname}"
             with(cRunner!!){
                 while(moveToNext())
                 {
-                    t1 = getString(getColumnIndex(Participe.ParticipeTable.TIME1)) // do the same for every time
+                    t1 = getString(getColumnIndex(Participe.ParticipeTable.TIME1))
+                    t2 = getString(getColumnIndex(Participe.ParticipeTable.TIME2))
+                    t3 = getString(getColumnIndex(Participe.ParticipeTable.TIME3))
+                    t4 = getString(getColumnIndex(Participe.ParticipeTable.TIME4))
+                    t5 = getString(getColumnIndex(Participe.ParticipeTable.TIME5))
+                    t6 = getString(getColumnIndex(Participe.ParticipeTable.TIME6))
+                    t7 = getString(getColumnIndex(Participe.ParticipeTable.TIME7))
+                    t8 = getString(getColumnIndex(Participe.ParticipeTable.TIME8))
+                    t9 = getString(getColumnIndex(Participe.ParticipeTable.TIME9))
+                    t10 = getString(getColumnIndex(Participe.ParticipeTable.TIME10))
+
                 }
             }
 
             // set the progression according to the times
-            if(t1 !== null )
+
+            // First sprint of the first run
+            if(t1 != "-1" )
             {
-                Log.d("Tag",t1)
+                view.seekBarPremier.progress = 1
+                view.SprintPremier1.text=getTime(t1)
+            }
+            else
+            {
+                view.SprintPremier1.text = "Sprint"
             }
 
-            verticalLayout.addView(view)
+            // First Obstacle of the first run
+            if(t2 != "-1" )
+            {
+                view.seekBarPremier.progress = 2
+                view.ObstaclePremier1.text=getTime(t2)
+            }
+            else
+            {
+                view.ObstaclePremier1.text = "Obstacle"
+            }
+
+            // Pit stop of the first run
+            if(t3 != "-1" )
+            {
+                view.seekBarPremier.progress = 3
+                view.PitStopPremier.text=getTime(t3)
+            }
+            else
+            {
+                view.PitStopPremier.text = "PitStop"
+            }
+
+            // Second sprint of the first run
+            if(t4 != "-1" )
+            {
+                view.seekBarPremier.progress = 4
+                view.SprintPremier2.text=getTime(t4)
+            }
+            else
+            {
+                view.SprintPremier2.text = "Sprint"
+            }
+
+            // Second obstacle of the first run
+            if(t5 != "-1" )
+            {
+                view.seekBarPremier.progress = 6
+                view.ObstaclePremier2.text=getTime(t5)
+                val totalTime = (t1.toInt()+t2.toInt()+t3.toInt()+t4.toInt()+t5.toInt()).toString()
+                view.FinishPremier.text = "1st run : ${getTime(totalTime)}"
+            }
+            else
+            {
+                view.ObstaclePremier2.text = "Obstacle"
+            }
+
+            // On passe sur la deuxième seekbar
+
+            // First sprint of the second run
+            if(t6 != "-1" )
+            {
+                view.seekBarDeuxieme.progress = 1
+                view.SprintDeuxieme1.text=getTime(t6)
+            }
+            else
+            {
+                view.SprintDeuxieme1.text = "Sprint"
+            }
+
+            // First obstacle of the second run
+            if(t7 != "-1" )
+            {
+                view.seekBarDeuxieme.progress = 2
+                view.ObstacleDeuxieme1.text=getTime(t7)
+            }
+            else
+            {
+                view.ObstacleDeuxieme1.text = "Obstacle"
+            }
+
+
+            // Pit stop of the second run
+            if(t8 != "-1" )
+            {
+                view.seekBarDeuxieme.progress = 3
+                view.PitStopDeuxieme.text=getTime(t8)
+            }
+            else
+            {
+                view.PitStopDeuxieme.text = "PitStop"
+            }
+
+            // Second sprint of the second run
+            if(t9 != "-1" )
+            {
+                view.seekBarDeuxieme.progress = 4
+                view.SprintDeuxieme2.text=getTime(t9)
+            }
+            else
+            {
+                view.SprintDeuxieme2.text = "Sprint"
+            }
+
+            // Second obstacle of the second run
+            if(t10 != "-1" )
+            {
+                view.seekBarDeuxieme.progress = 6
+                view.ObstacleDeuxieme2.text=getTime(t10)
+                val totalTime = (t1.toInt()+t2.toInt()+t3.toInt()+t4.toInt()+t5.toInt()+t6.toInt()+t7.toInt()+t8.toInt()+t9.toInt()+t10.toInt()).toString()
+                view.FinishDeuxieme.text = "Total : ${getTime(totalTime)}"
+            }
+            else
+            {
+                view.ObstacleDeuxieme2.text = "Obstacle"
+            }
+
         }
 
     }
 
 
+    /**
+     * takes the raw time from the database and converts it to a cool string
+     * */
+    private fun getTime(time : String) : String
+    {
+        var calculatedTime : String
+        var seconds = time.toInt()/1000
+        var ms = time.toInt()%1000
+        var minutes = 0
+
+        if(seconds>60)
+        {
+            minutes = seconds/60
+            seconds %= 60
+        }
+        calculatedTime = "${minutes}' ${seconds}\":$ms"
+        return calculatedTime
+    }
 
 
 }
-
-/*
-*
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import kotlinx.android.synthetic.main.activity_main.*
-import android.view.LayoutInflater
-import android.view.View
-import com.example.lo52_f1_levier.R
-import kotlinx.android.synthetic.main.fragment_progression.view.*
-
-
-import kotlinx.android.synthetic.main.seekbar.view.*
-
-
-class MainActivity : AppCompatActivity()
-{
-
-
-    override fun onCreate(savedInstanceState: Bundle?)
-    {
-        super.onCreate(savedInstanceState)
-
-        setContentView(R.layout.activity_main)
-
-        for(i in 1..4)
-        {
-            var view = LayoutInflater.from(this).inflate(R.layout.seekbar,null,false)
-            val b = view.button
-            b.setOnClickListener {
-                buttonClicked(view)
-            }
-
-            verticalLayout.addView(view)
-            //verticalLayout.addView(LayoutInflater.from(applicationContext).inflate(R.layout.seekbar,verticalLayout,false))
-            //view = LayoutInflater.from(applicationContext).inflate(R.layout.seekbar,verticalLayout,true)
-        }
-    }
-
-    private fun buttonClicked(v : View)
-    {
-        val rdm = (1..5).shuffled().first()
-        v.seekBar.progress = rdm
-        when (rdm)
-        {
-            1 ->
-            {
-                v.Sprint.text="${(0..2).shuffled().first()}' ${(10..59).shuffled().first()}\""
-                v.Sprint.isVisible=true
-
-                v.Obstacle.visibility=View.INVISIBLE
-
-                v.PitStop.visibility=View.INVISIBLE
-
-                v.Sprint2.visibility=View.INVISIBLE
-
-                v.Obstacle2.visibility=View.INVISIBLE
-            }
-            2 ->
-            {
-                v.Sprint.text="${(0..2).shuffled().first()}' ${(10..59).shuffled().first()}\""
-                v.Sprint.isVisible=true
-
-                v.Obstacle.text="${(0..2).shuffled().first()}' ${(10..59).shuffled().first()}\""
-                v.Obstacle.isVisible=true
-
-                v.PitStop.visibility=View.INVISIBLE
-
-                v.Sprint2.visibility=View.INVISIBLE
-
-                v.Obstacle2.visibility=View.INVISIBLE
-            }
-            3 ->
-            {
-                v.Sprint.text="${(0..2).shuffled().first()}' ${(10..59).shuffled().first()}\""
-                v.Sprint.isVisible=true
-
-                v.Obstacle.text="${(0..2).shuffled().first()}' ${(10..59).shuffled().first()}\""
-                v.Obstacle.isVisible=true
-
-                v.PitStop.text="${(0..2).shuffled().first()}' ${(10..59).shuffled().first()}\""
-                v.PitStop.isVisible=true
-
-                v.Sprint2.visibility=View.INVISIBLE
-
-                v.Obstacle2.visibility=View.INVISIBLE
-            }
-            4 ->
-            {
-                v.Sprint.text="${(0..2).shuffled().first()}' ${(10..59).shuffled().first()}\""
-                v.Sprint.isVisible=true
-
-                v.Obstacle.text="${(0..2).shuffled().first()}' ${(10..59).shuffled().first()}\""
-                v.Obstacle.isVisible=true
-
-                v.PitStop.text="${(0..2).shuffled().first()}' ${(10..59).shuffled().first()}\""
-                v.PitStop.isVisible=true
-
-                v.Sprint2.text="${(0..2).shuffled().first()}' ${(10..59).shuffled().first()}\""
-                v.Sprint2.isVisible=true
-
-                v.Obstacle2.visibility=View.INVISIBLE
-            }
-            5 ->
-            {
-                v.Sprint.text="${(0..2).shuffled().first()}' ${(10..59).shuffled().first()}\""
-                v.Sprint.isVisible=true
-
-                v.Obstacle.text="${(0..2).shuffled().first()}' ${(10..59).shuffled().first()}\""
-                v.Obstacle.isVisible=true
-
-                v.PitStop.text="${(0..2).shuffled().first()}' ${(10..59).shuffled().first()}\""
-                v.PitStop.isVisible=true
-
-                v.Sprint2.text="${(0..2).shuffled().first()}' ${(10..59).shuffled().first()}\""
-                v.Sprint2.isVisible=true
-
-                v.Obstacle2.text="${(0..2).shuffled().first()}' ${(10..59).shuffled().first()}\""
-                v.Obstacle2.isVisible=true
-            }
-            else -> { // Note the block
-                print("x is neither 1 nor 2")
-            }
-        }
-    }
-
-
-}*/

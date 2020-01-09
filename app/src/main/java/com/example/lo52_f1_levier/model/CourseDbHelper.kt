@@ -56,7 +56,7 @@ class CourseDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
      */
     companion object {
         // If you change the database schema, you must increment the database version.
-        const val DATABASE_VERSION = 12
+        const val DATABASE_VERSION = 14
         const val DATABASE_NAME = "Course.db"
     }
 }
