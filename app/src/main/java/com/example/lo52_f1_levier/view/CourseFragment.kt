@@ -7,10 +7,12 @@ import android.provider.BaseColumns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lo52_f1_levier.DAO.CourseDao
+import com.example.lo52_f1_levier.DAO.ParticipeDao
 import com.example.lo52_f1_levier.R
 import com.example.lo52_f1_levier.view.coursetimer.CourseTimerActivity
 import com.example.lo52_f1_levier.model.Course
@@ -19,7 +21,7 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_course.*
 import kotlinx.android.synthetic.main.tab_list_content.*
 
-class CourseFragment : Fragment() {
+class CourseFragment : Fragment(){
     private lateinit var courseDao: CourseDao
     private lateinit var adapter: CourseAdapter
 
@@ -41,10 +43,11 @@ class CourseFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         courseDao = CourseDao(this.context!!)
+
         val runs = ArrayList<Run>()
         val cursor = courseDao.getAllCourse()
 
-        // Get the list of course that we want to display
+        // Get the list of runs that we want to display
         with(cursor!!){
             while (moveToNext()){
                 val run = Run(getInt(getColumnIndexOrThrow(BaseColumns._ID)),
@@ -55,6 +58,7 @@ class CourseFragment : Fragment() {
                 runs.add(run)
             }
         }
+
         adapter = CourseAdapter(this::redirectToCourseTimer)
         adapter.replaceItems(runs)
         listCourse.layoutManager = LinearLayoutManager(this.context)
@@ -102,9 +106,10 @@ class CourseFragment : Fragment() {
 
     class CourseAdapter(private val goToCourseTimer: (Int) -> Unit) : RecyclerView.Adapter<CourseAdapter.ViewHolder>(){
         private var courses = ArrayList<Run>()
-
+        private lateinit var participeDao : ParticipeDao
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            participeDao = ParticipeDao(parent.context)
             val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.tab_list_content, parent, false)
             return ViewHolder(view)
@@ -113,7 +118,13 @@ class CourseFragment : Fragment() {
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val course = courses[position]
             holder.content.text = course.name + " : " + course.date
-            holder.content.setOnClickListener { goToCourseTimer(course.id) }
+            holder.content.setOnClickListener {parent->
+                if(isTeamRun(course.id)) {goToCourseTimer(course.id)}
+                else
+                {
+                    Toast.makeText(parent.context, "Aucune équipe assignée à cette course", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
 
 
@@ -125,6 +136,18 @@ class CourseFragment : Fragment() {
 
         override fun getItemCount(): Int {
             return courses.size
+        }
+
+        private fun isTeamRun(runId:Int):Boolean
+        {
+            val cursorTeam = participeDao.getParticipeByC_ID(runId)
+            if(cursorTeam!==null)
+            {
+                val thereIs =  cursorTeam.moveToNext()
+                cursorTeam.close()
+                return thereIs
+            }
+            return false
         }
 
         inner class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView),
