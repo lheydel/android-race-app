@@ -14,6 +14,7 @@ import android.database.sqlite.SQLiteOpenHelper
  * @param context
  */
 class CourseDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
+
     /**
      * onCreate is used to create the tables of the data base
      *
@@ -57,7 +58,7 @@ class CourseDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
      */
     companion object {
         // If you change the database schema, you must increment the database version.
-        const val DATABASE_VERSION = 15
+        const val DATABASE_VERSION = 13
         const val DATABASE_NAME = "Course.db"
     }
 }

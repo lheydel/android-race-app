@@ -1,6 +1,5 @@
-package com.example.lo52_f1_levier.coursetimer
+package com.example.lo52_f1_levier.view.coursetimer
 
-import android.content.Context
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.LayoutInflater

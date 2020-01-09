@@ -1,4 +1,4 @@
-package com.example.lo52_f1_levier.coursetimer
+package com.example.lo52_f1_levier.view.coursetimer
 
 import android.content.Context
 import android.provider.BaseColumns
@@ -10,6 +10,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lo52_f1_levier.DAO.CoureurDao
+import com.example.lo52_f1_levier.DAO.CourseDao
 import com.example.lo52_f1_levier.DAO.EquipeDao
 import com.example.lo52_f1_levier.DAO.ParticipeDao
 import com.example.lo52_f1_levier.R
@@ -36,12 +37,17 @@ class TeamBoxGridAdapter(private val context: Context,
     private val participeDao: ParticipeDao = ParticipeDao(context)
     private val runnerDao: CoureurDao = CoureurDao(context)
     private val teamDao: EquipeDao = EquipeDao(context)
+    private val courseDao: CourseDao = CourseDao(context)
 
     private var teams: Array<TeamBoxData> = emptyArray()
     private var nbTeamFinished: Int = 0
 
     init {
-        fetchTeamsData()
+        if (courseDao.isCourseOver(courseId)) {
+            courseOver
+        } else {
+            fetchTeamsData()
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TeamBoxGridViewHolder {
@@ -207,13 +213,13 @@ class TeamBoxGridAdapter(private val context: Context,
     }
 
     /**
-     * Callback when a team finish the course
+     * Callback when a team finishes the course
      */
     private fun addTeamFinished() {
         nbTeamFinished++
         if (nbTeamFinished == teams.size) {
             courseOver
-            // TODO OVER in db
+            courseDao.setCourseOver(courseId)
         }
     }
 

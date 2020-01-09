@@ -27,7 +27,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".coursetimer.CourseTimerActivity"
+            android:name="com.example.lo52_f1_levier.view.coursetimer.CourseTimerActivity"
             android:screenOrientation="landscape">
         </activity>
         <activity android:name=".view.DetailsCourseTimerFragment"/>

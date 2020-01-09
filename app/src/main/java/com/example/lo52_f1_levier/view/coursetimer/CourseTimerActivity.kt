@@ -1,4 +1,4 @@
-package com.example.lo52_f1_levier.coursetimer
+package com.example.lo52_f1_levier.view.coursetimer
 
 import android.content.Intent
 import android.os.Bundle

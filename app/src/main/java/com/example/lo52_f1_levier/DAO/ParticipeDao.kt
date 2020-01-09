@@ -318,7 +318,7 @@ class ParticipeDao(context : Context) {
         when(numTime){
             1->  values.apply {
             put(Participe.ParticipeTable.TIME1, time)
-        }
+            }
             2->  values.apply {
                 put(Participe.ParticipeTable.TIME2, time)
             }
@@ -348,8 +348,7 @@ class ParticipeDao(context : Context) {
             }
             else -> values.apply {
             put(Participe.ParticipeTable.TIME1, time)
-        }
-
+            }
         }
 
         val selection = "${Participe.ParticipeTable.COUREURID} = ?"
@@ -361,6 +360,9 @@ class ParticipeDao(context : Context) {
             selectionArgs)
     }
 
+    fun getLastTime(runnerId: Int): Cursor? {
+
+    }
 
     /**
      * Get a runner by its team and position in the team
