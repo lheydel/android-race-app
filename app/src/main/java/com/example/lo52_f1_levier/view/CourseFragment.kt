@@ -19,9 +19,10 @@ import com.example.lo52_f1_levier.model.Course
 import com.example.lo52_f1_levier.model.Run
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_course.*
+import kotlinx.android.synthetic.main.spinner_item.*
 import kotlinx.android.synthetic.main.tab_list_content.*
 
-class CourseFragment : Fragment(){
+class CourseFragment : Fragment() {
     private lateinit var courseDao: CourseDao
     private lateinit var adapter: CourseAdapter
 
@@ -111,14 +112,14 @@ class CourseFragment : Fragment(){
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             participeDao = ParticipeDao(parent.context)
             val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.tab_list_content, parent, false)
+                .inflate(R.layout.spinner_item, parent, false)
             return ViewHolder(view)
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val course = courses[position]
-            holder.content.text = course.name + " : " + course.date
-            holder.content.setOnClickListener {parent->
+            holder.text1.text = course.name + " : " + course.date
+            holder.text1.setOnClickListener {parent->
                 if(isTeamRun(course.id)) {goToCourseTimer(course.id)}
                 else
                 {
