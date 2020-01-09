@@ -2,8 +2,6 @@ package com.example.lo52_f1_levier.view
 
 import android.app.DatePickerDialog
 import android.os.Bundle
-import android.view.View.OnFocusChangeListener
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.lo52_f1_levier.DAO.CourseDao
 import com.example.lo52_f1_levier.R
@@ -33,25 +31,17 @@ class CreateCourseActivity : AppCompatActivity() {
             val myFormat = "dd.MM.yyyy" // mention the format you need
             val sdf = SimpleDateFormat(myFormat, Locale.FRANCE)
             courseDate.setText(sdf.format(cal.time))
-
         }
-
-
 
         courseDate.setOnClickListener {
             editDateClicked(dateSetListener)
         }
-
 
         courseDate.setOnFocusChangeListener{ view, hasFocus ->
             if (hasFocus) {
                 editDateClicked(dateSetListener)
             }
         }
-
-
-
-
 
         createCourse.setOnClickListener {
             if(courseName.text.isNotEmpty() && courseDate.text.isNotEmpty()){

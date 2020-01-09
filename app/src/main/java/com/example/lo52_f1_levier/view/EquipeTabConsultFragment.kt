@@ -3,11 +3,9 @@ package com.example.lo52_f1_levier.view
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.BaseColumns
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -33,10 +31,6 @@ import kotlinx.android.synthetic.main.fragment_equipe_tab_consult.listTeam
 import kotlinx.android.synthetic.main.tab_list_content.*
 import kotlinx.android.synthetic.main.fragment_equipe.*
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 typealias TeamClickListener = (View, Team) -> Unit
 
 /**
@@ -61,8 +55,6 @@ class EquipeTabConsultFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
         }
     }
 
@@ -76,18 +68,20 @@ class EquipeTabConsultFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Initialize the dao
         equipeDao = EquipeDao(this.context!!)
         courseDao = CourseDao(this.context!!)
         participeDao = ParticipeDao(this.context!!)
 
         add_team.setOnClickListener {
-            this.parentFragment?.tab_layout?.getTabAt(0)?.select()
+            this.parentFragment?.tab_layout?.getTabAt(0)?.select() // return to tab 0
         }
 
         edit_team.setOnClickListener {
             if(::selectedTeam.isInitialized) {
 
-                var isOver = false
+                var isOver = false // if the course is over
 
                 if(course.over == 1){
                     isOver = true
@@ -110,9 +104,11 @@ class EquipeTabConsultFragment : Fragment() {
         delete_team.setOnClickListener {
             if(::selectedTeam.isInitialized){
 
+                // Delete the participant and then the team
                 participeDao.deleteParticipeByCourseIdAndTeamId(course.id,selectedTeam.id)
                 equipeDao.deleteEquipe(selectedTeam.id.toString())
 
+                // Actualise the fragment
                 val ft = fragmentManager!!.beginTransaction()
                 if (Build.VERSION.SDK_INT >= 26) {
                     ft.setReorderingAllowed(false)
@@ -127,6 +123,7 @@ class EquipeTabConsultFragment : Fragment() {
         val courseCursor = courseDao.getAllCourse()
         val courses = ArrayList<Run>()
 
+        // Get the list of course
         with(courseCursor!!){
             while (moveToNext()){
                 val run = Run(
@@ -155,9 +152,11 @@ class EquipeTabConsultFragment : Fragment() {
 
             }
 
+            // When a course is selected
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 course = courseSelector.selectedItem as Run
 
+                // Get the teams for the course
                 val teamInCourseCursor = equipeDao.getTeamForACourse(course.id)
                 with(teamInCourseCursor!!){
                     teams.clear()
@@ -168,29 +167,26 @@ class EquipeTabConsultFragment : Fragment() {
                             getInt(getColumnIndexOrThrow(Equipe.EquipeTable.ENUM))
                         )
                         teams.add(team)
-
-
                     }
-                    Log.d("TESTSTSTSTSTST", teams.toString())
                 }
                 editTextNbTeam.setText(teams.size.toString())
                 setTeam(teams)
-                Log.d("TESTSTSTSTSTST", teamAdapter.itemCount.toString())
             }
-
         }
-
     }
 
+    // Set the list of team to display
     private fun setTeam(team : ArrayList<Team>){
         teamAdapter.replaceItems(team)
     }
 
+    // define the action when an item of list of team is selected
     private fun selectTeam(view: View,team: Team) {
         selectedTeam = team
         editTextSelectedTeam.setText("Equipe " + selectedTeam.number + " : " + selectedTeam.name)
     }
 
+    // When the ressult of an edti is received
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 10001 && resultCode == Activity.RESULT_OK) {
@@ -203,6 +199,7 @@ class EquipeTabConsultFragment : Fragment() {
         }
     }
 
+    // Adapter for the recyclerView displaying the teams
     class TeamAdapter(private val onClickListener: TeamClickListener) : RecyclerView.Adapter<TeamAdapter.ViewHolder>(){
         private var equipes = ArrayList<Team>()
 
@@ -244,40 +241,16 @@ class EquipeTabConsultFragment : Fragment() {
             LayoutContainer
     }
 
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     *
-     *
-     * See the Android Training lesson [Communicating with Other Fragments]
-     * (http://developer.android.com/training/basics/fragments/communicating.html)
-     * for more information.
-     */
-    interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        fun onFragmentInteraction(uri: Uri)
-    }
-
     companion object {
         /**
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
          * @return A new instance of fragment EquipeTabConsultFragment.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             EquipeTabConsultFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
             }
     }
 }

@@ -18,9 +18,16 @@ class ParticipantEditActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_paticipant_edit)
-        val coureurDao = CoureurDao(this)
-        var coureurNumc = -1
+
+        // Get the value from the intent
         runnerId = intent.getIntExtra("runnerId", -1)
+
+        // Initialize the dao
+        val coureurDao = CoureurDao(this)
+
+        var coureurNumc = -1
+
+        // Get the runner data
         if(runnerId != -1){
             var res : Cursor? = coureurDao.getCoureurByID(runnerId)
             res?.moveToFirst()
@@ -34,7 +41,7 @@ class ParticipantEditActivity : AppCompatActivity() {
             if(firstName.text.toString() != "" && lastName.text.toString() != ""){
                 val coureurDao = CoureurDao(this)
                 coureurDao.updateCoureurByID(runnerId,coureurNumc,
-                    firstName.text.toString(), lastName.text.toString())
+                    firstName.text.toString(), lastName.text.toString()) // Update the runner data
                 Toast.makeText(this, "Modification enregistrée", Toast.LENGTH_SHORT).show()
                 setResult(Activity.RESULT_OK)
                 finish()
@@ -44,7 +51,6 @@ class ParticipantEditActivity : AppCompatActivity() {
                 builder.setTitle("Attention")
                 builder.setMessage("Veuillez bien remplir toutes les informations nécessaires.")
                 builder.show()
-
             }
         }
 

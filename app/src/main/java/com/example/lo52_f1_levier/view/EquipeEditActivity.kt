@@ -36,14 +36,18 @@ class TeamEditActivity : AppCompatActivity() {
 
     private var teamId : Int = -1
     private var courseId : Int = -1
-    private var isOver = false
+    private var isOver = false // True if the course is over
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_team_edit)
 
+        // Get the value sent from the intent
+        teamId = intent.getIntExtra("teamId", -1)
+        courseId = intent.getIntExtra("courseId", -1)
         isOver = intent.getBooleanExtra("isOver", false)
 
+        // Instanciate the dao
         coureurDao = CoureurDao(this)
         equipeDao = EquipeDao(this)
         participeDao = ParticipeDao(this)
@@ -54,10 +58,11 @@ class TeamEditActivity : AppCompatActivity() {
             }else{
                 if(!edt_teamName.text.isEmpty()) {
 
+                    // Modifie the team composition if the number of member is between 1 and 3
                     if (teamAdapter.getItemCount()>=1 && teamAdapter.getItemCount() <4 ) {
                         equipeDao = EquipeDao(this)
                         participeDao = ParticipeDao(this)
-                        participeDao.deleteParticipeByCourseIdAndTeamId(courseId,teamId)
+                        participeDao.deleteParticipeByCourseIdAndTeamId(courseId,teamId) // delete the old participant
                         equipeDao.updateEquipeByID(teamId,edt_teamName.text.toString(),edt_teamNumber.text.toString().toInt())
 
                         for (position in 0 until teamAdapter.itemCount) {
@@ -82,6 +87,7 @@ class TeamEditActivity : AppCompatActivity() {
             this.finish()
         }
 
+        // Move a team member to list of available runner
         btn_left.setOnClickListener{
             if(isOver){
                 Toast.makeText(this, "La course est terminée, aucune modification de possible", Toast.LENGTH_SHORT).show()
@@ -103,6 +109,7 @@ class TeamEditActivity : AppCompatActivity() {
             }
         }
 
+        // Move an available runner to the list of team member
         btn_right.setOnClickListener{
             if(isOver){
                 Toast.makeText(this, "La course est terminée, aucune modification de possible", Toast.LENGTH_SHORT).show()
@@ -126,6 +133,7 @@ class TeamEditActivity : AppCompatActivity() {
             }
         }
 
+        // Move a team member up
         btn_up.setOnClickListener{
             if(isOver){
                 Toast.makeText(this, "La course est terminée, aucune modification de possible", Toast.LENGTH_SHORT).show()
@@ -143,6 +151,7 @@ class TeamEditActivity : AppCompatActivity() {
             }
         }
 
+        // Move a team member down
         btn_down.setOnClickListener{
             if(isOver){
                 Toast.makeText(this, "La course est terminée, aucune modification de possible", Toast.LENGTH_SHORT).show()
@@ -160,9 +169,7 @@ class TeamEditActivity : AppCompatActivity() {
             }
         }
 
-
-
-        val coureurs = ArrayList<Runner>()
+        val coureurs = ArrayList<Runner>() // Will contain the list of available runners
 
         adapter = RunnerAdapter(
             onClickListener = this::selectItem
@@ -175,16 +182,17 @@ class TeamEditActivity : AppCompatActivity() {
         listTeamMembers.layoutManager = LinearLayoutManager(this)
         listTeamMembers.adapter = teamAdapter
 
-        teamId = intent.getIntExtra("teamId", -1)
-        courseId = intent.getIntExtra("courseId", -1)
         if(teamId != -1 && courseId != -1){
+
+            // Get the ids of the team members
             var res = participeDao.getParticipeByC_ID_E_ID(courseId,teamId)
-            var listIdTeamMember = ArrayList<Int>()
+            var listIdTeamMember = ArrayList<Int>() // list of the team members id
             with(res!!){
                 while (moveToNext()){
                     listIdTeamMember.add(getInt(getColumnIndexOrThrow(Participe.ParticipeTable.COUREURID)))
                 }
             }
+            // Get the data of the team
             res = equipeDao.getEquipeByID(teamId)
             with(res!!){
                 var team : Team
@@ -198,6 +206,8 @@ class TeamEditActivity : AppCompatActivity() {
                     edt_teamNumber.setText(team.number.toString())
                 }
             }
+
+            // Get the team members
             var teamRunners = ArrayList<Runner>()
             listIdTeamMember.forEach{
                 res = coureurDao.getCoureurByID(it)
@@ -213,6 +223,8 @@ class TeamEditActivity : AppCompatActivity() {
                     }
                 }
             }
+
+            // Add the team members in the recyclerView
             teamAdapter.replaceItems(teamRunners)
             res = coureurDao.getCoureurFree(courseId)
             with(res!!){
@@ -233,11 +245,13 @@ class TeamEditActivity : AppCompatActivity() {
         }
     }
 
+    // define the action when an item of list of availaible runners is selected
     private fun selectItem(view: View,runner: Runner) {
         selectedRunner = runner
         edt_selectedParticipant.setText(selectedRunner.cname + " " + selectedRunner.surname)
     }
 
+    // define the action when an item of list of team members is selected
     private fun selectMember(view: View,runner: Runner){
         selectedMember = runner
         edt_selectedMember.setText(selectedMember.cname + " " + selectedMember.surname)
@@ -247,6 +261,7 @@ class TeamEditActivity : AppCompatActivity() {
         Toast.makeText(this, "Taille maximum de l'équipe atteinte", Toast.LENGTH_SHORT).show()
     }
 
+    // Adapter for the recyclerView displaying the availaible runners
     class RunnerAdapter(private val onClickListener: aAvailableRunnerClickListener) : RecyclerView.Adapter<RunnerAdapter.ViewHolder>(){
         private var runners = ArrayList<Runner>()
         private var selectedPos = RecyclerView.NO_POSITION
@@ -290,6 +305,7 @@ class TeamEditActivity : AppCompatActivity() {
             LayoutContainer
     }
 
+    // Adapter for the recyclerView displaying the team members
     class TeamMemberAdapter(private val onClickListener: aTeamRunnerClickListener, private val context: Context?) : RecyclerView.Adapter<TeamMemberAdapter.ViewHolder>(){
 
         private var members = ArrayList<Runner>()
@@ -306,6 +322,8 @@ class TeamEditActivity : AppCompatActivity() {
             holder.content.setOnClickListener { view ->
                 onClickListener(view, member)
             }
+
+            // Define the color of the member according to their position
             when(position){
                 0 -> holder.imageView.setBackgroundColor(context!!.resources.getColor(R.color.runner1))
                 1 -> holder.imageView.setBackgroundColor(context!!.resources.getColor(R.color.runner2))

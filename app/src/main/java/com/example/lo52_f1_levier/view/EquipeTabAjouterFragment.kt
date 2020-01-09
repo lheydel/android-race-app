@@ -27,26 +27,11 @@ import kotlinx.android.synthetic.main.fragment_equipe_tab_ajouter.*
 import kotlinx.android.synthetic.main.tab_list_content.content
 import kotlinx.android.synthetic.main.team_member_list_content.*
 
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 typealias AvailableRunnerClickListener = (View, Runner) -> Unit
 typealias TeamRunnerClickListener = (View, Runner) -> Unit
 
-/**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [EquipeTabAjouterFragment.OnFragmentInteractionListener] interface
- * to handle interaction events.
- * Use the [EquipeTabAjouterFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+
 class EquipeTabAjouterFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
     private lateinit var coureurDao : CoureurDao
     private lateinit var equipeDao : EquipeDao
@@ -57,12 +42,11 @@ class EquipeTabAjouterFragment : Fragment() {
     private lateinit var adapter: RunnerAdapter
     private lateinit var teamAdapter: TeamMemberAdapter
     private lateinit var course: Run
+    private var nbTeam = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
         }
     }
 
@@ -80,6 +64,7 @@ class EquipeTabAjouterFragment : Fragment() {
         save.setOnClickListener{
             if(!edt_teamName.text.isEmpty()) {
 
+                // Add the team composition if the number of member is between 1 and 3
                 if (teamAdapter.getItemCount() >= 1 && teamAdapter.getItemCount()<4) {
                     equipeDao = EquipeDao(this.context!!)
                     participeDao = ParticipeDao(this.context!!)
@@ -91,7 +76,11 @@ class EquipeTabAjouterFragment : Fragment() {
                     }
 
                     edt_teamName.text.clear()
-                    teamAdapter.remonveItem()
+                    teamAdapter.remonveItem() // clear the recyclerView after the add
+
+                    // Edit the number for the next team
+                    nbTeam ++
+                    edt_teamNumber.setText(nbTeam.toString())
                 }
                 else{
                     Toast.makeText(this.context, "L'équipe doit avoir au moins 1 membre et au maximum 3", Toast.LENGTH_SHORT).show()
@@ -101,6 +90,7 @@ class EquipeTabAjouterFragment : Fragment() {
                 Toast.makeText(this.context, "Veuiller renseigner le nom de l'équipe", Toast.LENGTH_SHORT).show()
         }
 
+        // Move a team member to list of available runner
         btn_left.setOnClickListener{
             if(::selectedMember.isInitialized){
                 if(selectedMember.isTeamMember){
@@ -118,6 +108,7 @@ class EquipeTabAjouterFragment : Fragment() {
                 Toast.makeText(this.context, "Vous devez sélectionner un membre de l'équipe", Toast.LENGTH_SHORT).show()
         }
 
+        // Move an available runner to the list of team member
         btn_right.setOnClickListener{
             if(::selectedRunner.isInitialized){
                 if(!selectedRunner.isTeamMember){
@@ -137,6 +128,7 @@ class EquipeTabAjouterFragment : Fragment() {
                 Toast.makeText(this.context, "Vous devez sélectionner un Participant", Toast.LENGTH_SHORT).show()
         }
 
+        // Move a team member up
         btn_up.setOnClickListener{
             if(::selectedMember.isInitialized){
                 if(selectedMember.isTeamMember){
@@ -150,6 +142,7 @@ class EquipeTabAjouterFragment : Fragment() {
                 Toast.makeText(this.context, "Vous devez sélectionner un membre de l'équipe", Toast.LENGTH_SHORT).show()
         }
 
+        // Move a team member down
         btn_down.setOnClickListener{
             if(::selectedMember.isInitialized){
                 if(selectedMember.isTeamMember){
@@ -182,6 +175,7 @@ class EquipeTabAjouterFragment : Fragment() {
         val courseCursor = courseDao.getAllCourse()
         val courses = ArrayList<Run>()
 
+        // Get the list of course
         with(courseCursor!!){
             while (moveToNext()){
                 val run = Run(
@@ -211,13 +205,14 @@ class EquipeTabAjouterFragment : Fragment() {
             override fun onNothingSelected(parent: AdapterView<*>?) {
 
             }
-
+            // If a course is selected
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 course = courseSelector.selectedItem as Run
 
 
                 val freeRunnerCursor = coureurDao.getCoureurFree(course.id)
 
+                // Get the list of availaible runner for the course
                 with(freeRunnerCursor!!){
                     coureurs.clear()
                     while (moveToNext()){
@@ -229,16 +224,17 @@ class EquipeTabAjouterFragment : Fragment() {
                         coureurs.add(freeRunner)
                     }
                 }
+
+                // Display the number of the next team to be created
                 val teamsCursor = equipeDao.getTeamForACourse(course.id)
-                var nb = 0
                 with(teamsCursor!!){
                     while (moveToNext()){
-                        nb ++
+                        nbTeam ++
                     }
                 }
 
-                nb ++
-                edt_teamNumber.setText(nb.toString())
+                nbTeam ++
+                edt_teamNumber.setText(nbTeam.toString())
 
                 setFreeRunner(coureurs)
 
@@ -248,10 +244,12 @@ class EquipeTabAjouterFragment : Fragment() {
 
     }
 
+    // define the action when an item of list of availaible runners is selected
     private fun setFreeRunner(runners : ArrayList<Runner>){
         adapter.replaceItems(runners)
     }
 
+    // define the action when an item of list of team members is selected
     private fun selectItem(view: View,runner: Runner) {
         selectedRunner = runner
         edt_selectedParticipant.setText(selectedRunner.cname + " " + selectedRunner.surname)
@@ -266,6 +264,7 @@ class EquipeTabAjouterFragment : Fragment() {
         Toast.makeText(this.context, "Taille maximum de l'équipe atteinte", Toast.LENGTH_SHORT).show()
     }
 
+    // Adapter for the recyclerView displaying the availaible runners
     class RunnerAdapter(private val onClickListener: AvailableRunnerClickListener) : RecyclerView.Adapter<RunnerAdapter.ViewHolder>(){
         private var runners = ArrayList<Runner>()
         private var selectedPos = RecyclerView.NO_POSITION
@@ -309,6 +308,7 @@ class EquipeTabAjouterFragment : Fragment() {
             LayoutContainer
     }
 
+    // Adapter for the recyclerView displaying the team members
     class TeamMemberAdapter(private val onClickListener: TeamRunnerClickListener, private val context: Context?) : RecyclerView.Adapter<TeamMemberAdapter.ViewHolder>(){
 
         private var members = ArrayList<Runner>()
@@ -326,6 +326,7 @@ class EquipeTabAjouterFragment : Fragment() {
                 onClickListener(view, member)
             }
 
+            // Define the color of the member according to their position
             when(position){
                 0 -> holder.imageView.setBackgroundColor(context!!.resources.getColor(R.color.runner1))
                 1 -> holder.imageView.setBackgroundColor(context!!.resources.getColor(R.color.runner2))
@@ -398,19 +399,13 @@ class EquipeTabAjouterFragment : Fragment() {
         /**
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
+
          * @return A new instance of fragment EquipeTabAjouterFragment.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             EquipeTabAjouterFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
             }
     }
 }

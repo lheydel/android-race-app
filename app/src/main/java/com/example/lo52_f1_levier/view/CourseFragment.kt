@@ -2,7 +2,6 @@ package com.example.lo52_f1_levier.view
 
 import android.app.Activity
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.provider.BaseColumns
 import android.view.LayoutInflater
@@ -20,33 +19,13 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_course.*
 import kotlinx.android.synthetic.main.tab_list_content.*
 
-
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [CourseFragment.OnFragmentInteractionListener] interface
- * to handle interaction events.
- * Use the [CourseFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class CourseFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
     private lateinit var courseDao: CourseDao
     private lateinit var adapter: CourseAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
         }
     }
 
@@ -65,6 +44,7 @@ class CourseFragment : Fragment() {
         val runs = ArrayList<Run>()
         val cursor = courseDao.getAllCourse()
 
+        // Get the list of course that we want to display
         with(cursor!!){
             while (moveToNext()){
                 val run = Run(getInt(getColumnIndexOrThrow(BaseColumns._ID)),
@@ -137,7 +117,7 @@ class CourseFragment : Fragment() {
         }
 
 
-
+        // Load the data to display in the recylerView
         fun replaceItems(course: ArrayList<Run>) {
             this.courses = course
             notifyDataSetChanged()
@@ -151,41 +131,16 @@ class CourseFragment : Fragment() {
             LayoutContainer
     }
 
-
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     *
-     *
-     * See the Android Training lesson [Communicating with Other Fragments]
-     * (http://developer.android.com/training/basics/fragments/communicating.html)
-     * for more information.
-     */
-    interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        fun onFragmentInteraction(uri: Uri)
-    }
-
     companion object {
         /**
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
          * @return A new instance of fragment CourseFragment.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             CourseFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
             }
     }
 }

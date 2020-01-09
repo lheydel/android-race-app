@@ -7,23 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.lo52_f1_levier.R
-import com.example.lo52_f1_levier.item.MenuContent
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.fragment_participant.*
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [participantFragment.OnFragmentInteractionListener] interface
- * to handle interaction events.
- * Use the [participantFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ParticipantFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,10 +25,10 @@ class ParticipantFragment : Fragment() {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_participant, container, false)
     }
-    // Pour agir sur les éléments du layout
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        // sale mais fonctionne
+        // Force the display of the first Tab
         var fragment : Fragment
         fragment = ParticipantTabAjouterFragment().apply {}
         childFragmentManager
@@ -50,11 +36,11 @@ class ParticipantFragment : Fragment() {
             .replace(R.id.toReplaceWithFragment, fragment)
             .commit()
 
-        // listener sur le TabLayout
+        // listener on the TabLayout
         tab_layout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
 
-                // Ajouter
+                // Tab Add
                 if(tab!!.position == 0){
                     fragment = ParticipantTabAjouterFragment().apply {}
                     childFragmentManager
@@ -62,7 +48,7 @@ class ParticipantFragment : Fragment() {
                         .replace(R.id.toReplaceWithFragment, fragment)
                         .commit()
                 }
-                // Consult...
+                // Tab Consult...
                 if(tab!!.position == 1){
                     fragment = ParticipantTabConsultFragment().apply {}
                     childFragmentManager
@@ -81,66 +67,6 @@ class ParticipantFragment : Fragment() {
         })
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    /*fun onButtonPressed(uri: Uri) {
-        listener?.onFragmentInteraction(uri)
-    }*/
-
-    /*override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is OnFragmentInteractionListener) {
-            listener = context
-        } else {
-            throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
-        }
-    }*/
-
-    /*override fun onDetach() {
-        super.onDetach()
-        listener = null
-    }*/
-
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     *
-     *
-     * See the Android Training lesson [Communicating with Other Fragments]
-     * (http://developer.android.com/training/basics/fragments/communicating.html)
-     * for more information.
-     */
-    interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        fun onFragmentInteraction(uri: Uri)
-    }
-
     companion object {
-        /**
-         * The fragment argument representing the item ID that this fragment
-         * represents.
-         */
     }
-
-    /*companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment participantFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            participantFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }*/
 }
