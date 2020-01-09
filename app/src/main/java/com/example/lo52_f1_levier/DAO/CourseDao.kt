@@ -43,7 +43,7 @@ class CourseDao(context: Context) {
     fun getCourse(titre:String): Cursor? {
         val db = dbHelper.readableDatabase
 
-        val projection = arrayOf(BaseColumns._ID, Course.Coursetable.TITLE, Course.Coursetable.DATE)
+        val projection = arrayOf(BaseColumns._ID, Course.Coursetable.TITLE, Course.Coursetable.DATE, Course.Coursetable.OVER)
 
         val selection = "${Course.Coursetable.TITLE} = ?"
         val selectionArgs = arrayOf(titre)
@@ -70,7 +70,7 @@ class CourseDao(context: Context) {
     fun getCourseByID(ID:Int): Cursor? {
         val db = dbHelper.readableDatabase
 
-        val projection = arrayOf(BaseColumns._ID, Course.Coursetable.TITLE, Course.Coursetable.DATE)
+        val projection = arrayOf(BaseColumns._ID, Course.Coursetable.TITLE, Course.Coursetable.DATE, Course.Coursetable.OVER)
 
         val selection = "${BaseColumns._ID} = ?"
         val selectionArgs = arrayOf(ID.toString())
@@ -96,7 +96,7 @@ class CourseDao(context: Context) {
     fun getAllCourse(): Cursor? {
         val db = dbHelper.readableDatabase
 
-        val projection = arrayOf(BaseColumns._ID, Course.Coursetable.TITLE, Course.Coursetable.DATE)
+        val projection = arrayOf(BaseColumns._ID, Course.Coursetable.TITLE, Course.Coursetable.DATE, Course.Coursetable.OVER)
 
 
         val sortOrder = "${Course.Coursetable.DATE} DESC"
