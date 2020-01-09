@@ -79,7 +79,7 @@ class EquipeTabAjouterFragment : Fragment() {
         save.setOnClickListener{
             if(!edt_teamName.text.isEmpty()) {
 
-                if (teamAdapter.getItemCount() == 3 /*&& teamAdapter.getItemCount() >=1*/) {
+                if (teamAdapter.getItemCount() >= 1 && teamAdapter.getItemCount()<4) {
                     equipeDao = EquipeDao(this.context!!)
                     participeDao = ParticipeDao(this.context!!)
                     val equipeRowId = equipeDao.insertEquipe(edt_teamName.text.toString(),edt_teamNumber.text.toString().toInt())
@@ -93,7 +93,7 @@ class EquipeTabAjouterFragment : Fragment() {
                     teamAdapter.remonveItem()
                 }
                 else{
-                    Toast.makeText(this.context, "L'équipe doit avoir 3 memebres", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this.context, "L'équipe doit avoir au moins 1 membre et au maximum 3", Toast.LENGTH_SHORT).show()
                 }
             }
             else

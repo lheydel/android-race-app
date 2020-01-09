@@ -34,6 +34,15 @@ class DetailsCourseTimerFragment : AppCompatActivity() {
         participeDao = ParticipeDao(this)
         runnerDao = CoureurDao(this)
 
+       init()
+
+    }
+
+    /**
+     * Display what has to be displayed relatively to the number of runner for a team
+     * */
+    private fun init()
+    {
         // Get the different runners
 
         // The cursor to iterate through the DB
@@ -240,7 +249,6 @@ class DetailsCourseTimerFragment : AppCompatActivity() {
         }
 
     }
-
 
     /**
      * takes the raw time from the database and converts it to a cool string
