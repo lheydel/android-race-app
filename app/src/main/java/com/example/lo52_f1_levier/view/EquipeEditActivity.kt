@@ -155,7 +155,7 @@ class TeamEditActivity : AppCompatActivity() {
             var listIdTeamMember = ArrayList<Int>()
             with(res!!){
                 while (moveToNext()){
-                    listIdTeamMember.add(getInt(getColumnIndexOrThrow(Participe.ParticipeTable.CR_ID)))
+                    listIdTeamMember.add(getInt(getColumnIndexOrThrow(Participe.ParticipeTable.COUREURID)))
                 }
             }
             res = equipeDao.getEquipeByID(teamId)

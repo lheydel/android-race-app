@@ -7,9 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.lo52_f1_levier.R
-import com.example.lo52_f1_levier.item.MenuContent
 import com.google.android.material.tabs.TabLayout
-import kotlinx.android.synthetic.main.activity_tab_detail.*
 import kotlinx.android.synthetic.main.fragment_participant.*
 
 // TODO: Rename parameter arguments, choose names that match
@@ -26,22 +24,10 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class EquipeFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-    private var listener: OnFragmentInteractionListener? = null
-    private var item: MenuContent.MainTab? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            if (it.containsKey(TabDetailFragment.ARG_ITEM_ID)) {
-                // Load the dummy content specified by the fragment
-                // arguments. In a real-world scenario, use a Loader
-                // to load content from a content provider.
-                item = MenuContent.ITEM_MAP[it.getString(TabDetailFragment.ARG_ITEM_ID)]
-                activity?.toolbar_layout?.title = item?.content
-            }
         }
     }
 
@@ -131,11 +117,6 @@ class EquipeFragment : Fragment() {
     }
 
     companion object {
-        /**
-         * The fragment argument representing the item ID that this fragment
-         * represents.
-         */
-        const val ARG_ITEM_ID = "item_id"
     }
 
     /*companion object {

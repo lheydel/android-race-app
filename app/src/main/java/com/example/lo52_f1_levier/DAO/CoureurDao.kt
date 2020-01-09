@@ -177,8 +177,8 @@ class CoureurDao(context: Context) {
         val db = dbHelper.readableDatabase
 
         var query = "SELECT * FROM "+Coureur.CoureurTable.NAME+  " WHERE "+BaseColumns._ID+
-                " NOT IN ( SELECT "+Participe.ParticipeTable.CR_ID+" FROM "+Participe.ParticipeTable.NAME+
-                " WHERE "+Participe.ParticipeTable.C_ID+ " = "+ ID.toString() + ");"
+                " NOT IN ( SELECT "+Participe.ParticipeTable.COUREURID+" FROM "+Participe.ParticipeTable.NAME+
+                " WHERE "+Participe.ParticipeTable.COURSE_ID+ " = "+ ID.toString() + ");"
 
         return db.rawQuery(query, null)
 

@@ -26,7 +26,6 @@ object MenuContent {
         addItem(MainTab("1", "Participants"))
         addItem(MainTab("2", "Equipes"))
         addItem(MainTab("3", "Courses"))
-        addItem(MainTab("4", "Historiques"))
     }
 
     private fun addItem(item: MainTab) {

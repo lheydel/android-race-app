@@ -90,6 +90,7 @@ class EquipeTabAjouterFragment : Fragment() {
                     }
 
                     edt_teamName.text.clear()
+                    teamAdapter.remonveItem()
                 }
                 else{
                     Toast.makeText(this.context, "L'équipe doit avoir 3 memebres", Toast.LENGTH_SHORT).show()
@@ -341,6 +342,11 @@ class EquipeTabAjouterFragment : Fragment() {
             }
             else
                 return false
+        }
+
+        fun remonveItem(){
+            this.members.clear()
+            notifyDataSetChanged()
         }
 
         fun moveUp(runner: Runner){

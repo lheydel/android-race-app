@@ -129,8 +129,8 @@ class EquipeDao(context : Context) {
         val db = dbHelper.readableDatabase
 
         var query = "SELECT * FROM "+Equipe.EquipeTable.NAME+ " WHERE "+BaseColumns._ID +
-                " IN ( SELECT "+ Participe.ParticipeTable.E_ID+" FROM "+Participe.ParticipeTable.NAME+
-                " WHERE "+Participe.ParticipeTable.C_ID+  " = "+ ID.toString() + ");"
+                " IN ( SELECT "+ Participe.ParticipeTable.EQUIPE_ID+" FROM "+Participe.ParticipeTable.NAME+
+                " WHERE "+Participe.ParticipeTable.COURSE_ID+  " = "+ ID.toString() + ");"
 
         return db.rawQuery(query, null)
 
