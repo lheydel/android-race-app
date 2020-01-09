@@ -9,7 +9,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
+        android:theme="@style/AppTheme.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".view.TeamEditActivity"></activity>
         <activity android:name=".view.CreateCourseActivity" />
@@ -27,7 +27,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".coursetimer.CourseTimerActivity"
+            android:name="com.example.lo52_f1_levier.view.coursetimer.CourseTimerActivity"
             android:screenOrientation="landscape">
         </activity>
         <activity android:name=".view.DetailsCourseTimerFragment"/>

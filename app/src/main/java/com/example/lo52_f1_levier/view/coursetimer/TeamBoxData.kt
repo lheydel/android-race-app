@@ -1,12 +1,13 @@
-package com.example.lo52_f1_levier.coursetimer
+package com.example.lo52_f1_levier.view.coursetimer
 
 import com.example.lo52_f1_levier.R
+import kotlin.math.max
 
 class TeamBoxData(val teamId: Int,
                   val teamNumber: Int,
                   private val runners: Array<String>,
                   var position: Int,
-                  var lastTime: Long = 0) {
+                  var totalTime: Long) {
 
     val NB_PASSAGES = 2
     val NB_RUNNERS = runners.size
@@ -16,11 +17,28 @@ class TeamBoxData(val teamId: Int,
     var passage = 1
     var runner = 1
     var step = 1
-    var totalStepsDone = 0  // could be computed from the previous ones, but it would just be a pain
+    private var totalStepsDone = 0  // could be computed from the previous ones, but it would just be a pain
     var isOver: Boolean
 
     init {
         isOver = position > 0
+        totalTime = max(totalTime, 0L)
+    }
+
+    fun setTotalStepsDone(nbSteps: Int) {
+        val nbNewSteps = nbSteps - totalStepsDone
+        if (nbNewSteps <= 0) {
+            return
+        }
+
+        // not very efficient
+        for (i in 0..nbNewSteps) {
+            incrementStep()
+        }
+    }
+
+    fun getTotalStepsDone(): Int {
+        return totalStepsDone
     }
 
     fun incrementStep() {
@@ -99,10 +117,10 @@ class TeamBoxData(val teamId: Int,
     }
 
     fun formattedLastTime(): String {
-        var minutes = "${lastTime / 60000}"
+        var minutes = "${totalTime / 60000}"
         if (minutes.length < 2) minutes = "0$minutes"
 
-        var seconds = "${(lastTime / 1000) % 60}"
+        var seconds = "${(totalTime / 1000) % 60}"
         if (seconds.length < 2) seconds = "0$seconds"
 
         return "$minutes:$seconds"

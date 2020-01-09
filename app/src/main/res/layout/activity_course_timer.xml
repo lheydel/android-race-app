@@ -5,11 +5,11 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".coursetimer.CourseTimerActivity">
+    tools:context=".view.coursetimer.CourseTimerActivity">
 
     <fragment
         android:id="@+id/timerFgmt"
-        android:name="com.example.lo52_f1_levier.coursetimer.Timer"
+        android:name="com.example.lo52_f1_levier.view.coursetimer.Timer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -20,6 +20,7 @@
         android:id="@+id/teamBoxes"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="16dp"
         android:paddingLeft="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

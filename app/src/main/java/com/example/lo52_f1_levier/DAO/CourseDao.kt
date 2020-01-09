@@ -120,7 +120,7 @@ class CourseDao(context: Context) {
      */
     fun deleteCourse(titre: String): Int {
         val db = dbHelper.writableDatabase
-        val selection = "${Course.Coursetable.TITLE} LIKE ?"
+        val selection = "${Course.Coursetable.TITLE} = ?"
         val selectionArgs = arrayOf(titre)
         val deletedRows = db.delete(Course.Coursetable.TABLE_NAME, selection, selectionArgs)
         return deletedRows
@@ -140,7 +140,7 @@ class CourseDao(context: Context) {
             put(Course.Coursetable.TITLE, title)
             put(Course.Coursetable.DATE,date)
         }
-        val selection = "${Course.Coursetable.TITLE} LIKE ?"
+        val selection = "${Course.Coursetable.TITLE} = ?"
         val selectionArgs = arrayOf(oldTitle)
         return db.update(
             Course.Coursetable.TABLE_NAME,
@@ -163,12 +163,58 @@ class CourseDao(context: Context) {
             put(Course.Coursetable.TITLE, title)
             put(Course.Coursetable.DATE,date)
         }
-        val selection = "${BaseColumns._ID} LIKE ?"
+        val selection = "${BaseColumns._ID} = ?"
         val selectionArgs = arrayOf(ID.toString())
         return db.update(
             Course.Coursetable.TABLE_NAME,
             values,
             selection,
             selectionArgs)
+    }
+
+    /**
+     * Set a course to be over
+     */
+    fun setCourseOver(ID: Int) {
+        val db = dbHelper.writableDatabase
+
+        val values = ContentValues().apply { put(Course.Coursetable.OVER, 1) }
+
+        val selection = "${BaseColumns._ID} = ?"
+        val selectionArgs = arrayOf(ID.toString())
+
+        db.update(
+            Course.Coursetable.TABLE_NAME,
+            values,
+            selection,
+            selectionArgs)
+    }
+
+    /**
+     * Check if a course is over
+     */
+    fun isCourseOver(ID: Int): Boolean {
+        val db = dbHelper.readableDatabase
+
+        val projection = arrayOf(Course.Coursetable.OVER)
+
+        val selection = "${BaseColumns._ID} = ?"
+        val selectionArgs = arrayOf(ID.toString())
+
+        val cursor = db.query(
+            Course.Coursetable.TABLE_NAME,   // The table to query
+            projection,             // The array of columns to return (pass null to get all)
+            selection,              // The columns for the WHERE clause
+            selectionArgs,          // The values for the WHERE clause
+            null,                   // don't group the rows
+            null,                   // don't filter by row groups
+            null               // The sort order
+        )
+
+        if (cursor == null || !cursor.moveToFirst()) {
+            return false
+        }
+
+        return cursor.getInt(cursor.getColumnIndex(Course.Coursetable.OVER)) == 1
     }
 }
