@@ -64,7 +64,7 @@ class EquipeDao(context : Context) {
     }
 
     /**
-     * Allow to get to get a team by it's ID
+     * Allow to get  a team by it's ID
      *
      * @param ID
      * @return cursor

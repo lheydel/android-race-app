@@ -10,7 +10,7 @@ import com.example.lo52_f1_levier.model.Participe
 import java.lang.Exception
 
 /**
- * TODO
+ * Management of the 'Coureur' table
  *
  * @constructor
  * TODO
@@ -38,7 +38,7 @@ class CoureurDao(context: Context) {
     }
 
     /**
-     * TODO
+     * Allow to get  a coureur by it's Number
      *
      * @param titre
      * @return
@@ -66,9 +66,9 @@ class CoureurDao(context: Context) {
     }
 
     /**
-     * TODO
+     * Allow to get  a coureur  by it's ID
      *
-     * @param ID
+     * @param ID : coureur id
      * @return
      */
     fun getCoureurByID(ID:Int): Cursor? {
@@ -94,7 +94,7 @@ class CoureurDao(context: Context) {
     }
 
     /**
-     * TODO
+     * Allow to get  a coureur by it's Number
      *
      * @param numc
      * @return
@@ -122,7 +122,7 @@ class CoureurDao(context: Context) {
     }
 
     /**
-     * TODO
+     * Allow to get  all coureur
      *
      * @return
      */
@@ -146,10 +146,10 @@ class CoureurDao(context: Context) {
     }
 
     /**
-     * TODO
+     * Allow to delete  a coureur by it's Number
      *
      * @param numc
-     * @return
+     * @return rows deleted
      */
     fun deleteCoureur(numc: Int): Int {
         val db = dbHelper.writableDatabase
@@ -160,7 +160,7 @@ class CoureurDao(context: Context) {
     }
 
     /**
-     * TODO
+     * Allow to update a coureur by it's Number
      *
      * @param oldNumc
      * @param numc
@@ -185,7 +185,7 @@ class CoureurDao(context: Context) {
     }
 
     /**
-     * TODO
+     * Allow to update  a coureur by it's ID
      *
      * @param ID
      * @param numc
@@ -210,7 +210,7 @@ class CoureurDao(context: Context) {
     }
 
     /**
-     * TODO
+     * Allow to update  a coureur by it's Number
      *
      * @param ID
      * @param numc
@@ -231,9 +231,9 @@ class CoureurDao(context: Context) {
     }
 
     /**
-     * TODO
-     *
-     * @return
+     * Allow to getlast number used
+     * *
+     * @return last coureur number used
      */
     fun getLastId() : Int {
         val db = dbHelper.writableDatabase
@@ -249,9 +249,9 @@ class CoureurDao(context: Context) {
     }
 
     /**
-     * TODO
+     * Allow to get all coureur not linked to a course
      *
-     * @param ID
+     * @param ID : course ID
      * @return
      */
     fun getCoureurFree(ID : Int): Cursor? {

@@ -37,7 +37,7 @@ class CourseDao(context: Context) {
     /**
      * Get course with it's title
      *
-     * @param titre : title of the course 
+     * @param titre : title of the course
      * @return cursor
      */
     fun getCourse(titre:String): Cursor? {
@@ -62,10 +62,10 @@ class CourseDao(context: Context) {
     }
 
     /**
-     * TODO
+     * Get course with it's ID
      *
-     * @param ID
-     * @return
+     * @param ID : ID  of the course
+     * @return cursor
      */
     fun getCourseByID(ID:Int): Cursor? {
         val db = dbHelper.readableDatabase
@@ -89,9 +89,9 @@ class CourseDao(context: Context) {
     }
 
     /**
-     * TODO
+     * Get all courses  of the table
      *
-     * @return
+     * @return cursor
      */
     fun getAllCourse(): Cursor? {
         val db = dbHelper.readableDatabase
@@ -113,10 +113,10 @@ class CourseDao(context: Context) {
     }
 
     /**
-     * TODO
+     * delete  course with it's title
      *
-     * @param titre
-     * @return
+     * @param titre : titel of the course
+     * @return number of row deleted
      */
     fun deleteCourse(titre: String): Int {
         val db = dbHelper.writableDatabase
@@ -127,7 +127,7 @@ class CourseDao(context: Context) {
     }
 
     /**
-     * TODO
+     * Modify  course by it's title
      *
      * @param oldTitle
      * @param title
@@ -150,7 +150,7 @@ class CourseDao(context: Context) {
     }
 
     /**
-     * TODO
+     * Modify  course by it's ID
      *
      * @param ID
      * @param title
