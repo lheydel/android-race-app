@@ -27,7 +27,8 @@ class TeamBoxGridAdapter(private val context: Context,
                          private val courseId: Int,
                          private val goToDetails: (Int) -> Boolean,
                          private val getTimerValue: () -> Long,
-                         private val isTimerStarted: () -> Boolean):
+                         private val isTimerStarted: () -> Boolean,
+                         private val courseOver: () -> Unit):
     RecyclerView.Adapter<TeamBoxGridAdapter.TeamBoxGridViewHolder>() {
 
     private val RUNNER_NAME_MAX_LENGTH = 15
@@ -37,6 +38,7 @@ class TeamBoxGridAdapter(private val context: Context,
     private val teamDao: EquipeDao = EquipeDao(context)
 
     private var teams: Array<TeamBoxData> = emptyArray()
+    private var nbTeamFinished: Int = 0
 
     init {
         fetchTeamsData()
@@ -45,7 +47,15 @@ class TeamBoxGridAdapter(private val context: Context,
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TeamBoxGridViewHolder {
         val teamBox: View = LayoutInflater.from(parent.context)
             .inflate(R.layout.team_box, parent, false)
-        return TeamBoxGridViewHolder(context, teamBox, goToDetails, isTimerStarted, this::saveTime, this::setTeamPosition)
+        return TeamBoxGridViewHolder(
+            context,
+            teamBox,
+            goToDetails,
+            isTimerStarted,
+            this::saveTime,
+            this::setTeamPosition,
+            this::addTeamFinished
+        )
     }
 
     override fun onBindViewHolder(viewHolder: TeamBoxGridViewHolder, position: Int) {
@@ -146,27 +156,27 @@ class TeamBoxGridAdapter(private val context: Context,
     }
 
     /**
-     * Get and return the number of the team
-     */
-    private fun fetchTeamNumber(teamId: Int): Int {
-        val teamCursor = teamDao.getEquipeByID(teamId)
-
-        if (teamCursor === null || !teamCursor.moveToFirst()) {
-            return -1
-        }
-
-        val teamNumber = teamCursor.getInt(teamCursor.getColumnIndex(Equipe.EquipeTable.ENUM))
-        teamCursor.close()
-        return teamNumber
-    }
-
-    /**
      * Turn ugly raw data into a beautiful TeamBoxData
      * and add it to the global list
      */
     private fun addTeamBoxData(teamId: Int, runners: Array<String>) {
-        val teamNumber = fetchTeamNumber(teamId)
-        teams = teams.plus(TeamBoxData(teamId, teamNumber, runners))
+        // get the team data in db
+        val teamCursor = teamDao.getEquipeByID(teamId)
+
+        // fetch the relevant data
+        val teamNumber : Int
+        val teamPos : Int
+        if (teamCursor === null || !teamCursor.moveToFirst()) {
+            teamNumber = -1
+            teamPos = 0
+        } else {
+            teamNumber = teamCursor.getInt(teamCursor.getColumnIndex(Equipe.EquipeTable.ENUM))
+            teamPos = teamCursor.getInt(teamCursor.getColumnIndex(Equipe.EquipeTable.POSITION))
+        }
+        teamCursor?.close()
+
+        val teamData = TeamBoxData(teamId, teamNumber, runners, teamPos)
+        teams = teams.plus(teamData)
     }
 
     /**
@@ -196,6 +206,16 @@ class TeamBoxGridAdapter(private val context: Context,
         return nextPos
     }
 
+    /**
+     * Callback when a team finish the course
+     */
+    private fun addTeamFinished() {
+        nbTeamFinished++
+        if (nbTeamFinished == teams.size) {
+            courseOver
+            // TODO OVER in db
+        }
+    }
 
     /**
      * Data management of a single team box
@@ -205,7 +225,8 @@ class TeamBoxGridAdapter(private val context: Context,
                                 private val goToDetails: (Int) -> Boolean,
                                 private val isTimerStarted: () -> Boolean,
                                 private val saveTime: (teamId: Int, runnerPos: Int, numTime: Int) -> Long,
-                                private val setTeamPosition: (teamId: Int) -> Int) :
+                                private val setTeamPosition: (teamId: Int) -> Int,
+                                private val teamFinished: () -> Unit):
         RecyclerView.ViewHolder(teambox), View.OnCreateContextMenuListener {
 
         init {
@@ -232,7 +253,6 @@ class TeamBoxGridAdapter(private val context: Context,
          */
         private fun updateData(team: TeamBoxData) {
             if (team.isOver) {
-                team.position = setTeamPosition(team.teamId)
                 displayFinish(team)
                 return
             }
@@ -264,6 +284,12 @@ class TeamBoxGridAdapter(private val context: Context,
          * Display the final state of the team box
          */
         private fun displayFinish(team: TeamBoxData) {
+            if (team.position == 0) {
+                team.position = setTeamPosition(team.teamId)
+            }
+
+            teamFinished()
+
             // disable running state
             teambox.runningState.visibility = View.INVISIBLE
             teambox.imgJersey.visibility = View.GONE
