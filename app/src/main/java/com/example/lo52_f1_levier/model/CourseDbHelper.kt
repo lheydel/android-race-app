@@ -5,7 +5,8 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
 /**
- * TODO
+ *
+ * Management of the database structure
  *
  * @constructor
  * TODO
@@ -14,9 +15,9 @@ import android.database.sqlite.SQLiteOpenHelper
  */
 class CourseDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
     /**
-     * TODO
+     * onCreate is used to create the tables of the data base
      *
-     * @param db
+     * @param db : SQLiteDatabase
      */
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(SQL_CREATE_COURSE)
@@ -26,11 +27,11 @@ class CourseDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     }
 
     /**
-     * TODO
+     * Allow to update the data base structure
      *
-     * @param db
-     * @param oldVersion
-     * @param newVersion
+     * @param db SQLiteDatabase
+     * @param oldVersion int
+     * @param newVersion int
      */
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         db.execSQL(SQL_DELETE_COURSE)
@@ -41,7 +42,7 @@ class CourseDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     }
 
     /**
-     * TODO
+     * Allow to go back to a old version of the database structure
      *
      * @param db
      * @param oldVersion

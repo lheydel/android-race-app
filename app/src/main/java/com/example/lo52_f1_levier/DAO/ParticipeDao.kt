@@ -23,6 +23,7 @@ class ParticipeDao(context : Context) {
 
     /**
      * Permet l'insertion dans la table participe
+     * Allow to insert data in the table
      *
      * @param C_ID
      * @param CR_ID

@@ -9,7 +9,7 @@ import com.example.lo52_f1_levier.model.CourseDbHelper
 import com.example.lo52_f1_levier.model.Participe
 
 /**
- * TODO
+ * Management of the 'Equipe' table
  *
  * @constructor
  * TODO
@@ -18,7 +18,13 @@ import com.example.lo52_f1_levier.model.Participe
  */
 class EquipeDao(context : Context) {
     val dbHelper = CourseDbHelper(context)
-
+    /**
+     * Allow to insert data in the table
+     *
+     * @param titre
+     * @param enum
+     * @return cursor
+     */
     fun insertEquipe(titre: String, enum : Int): Long? {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
@@ -30,10 +36,10 @@ class EquipeDao(context : Context) {
     }
 
     /**
-     * TODO
+     * Allow to get to get a team by it's name
      *
-     * @param ename
-     * @return
+     * @param ename : team name
+     * @return cursor
      */
     fun getEquipe(ename:String): Cursor? {
         val db = dbHelper.readableDatabase
@@ -58,10 +64,10 @@ class EquipeDao(context : Context) {
     }
 
     /**
-     * TODO
+     * Allow to get to get a team by it's ID
      *
      * @param ID
-     * @return
+     * @return cursor
      */
     fun getEquipeByID(ID:Int): Cursor? {
         val db = dbHelper.readableDatabase
@@ -86,10 +92,10 @@ class EquipeDao(context : Context) {
     }
 
     /**
-     * TODO
+     * Allow to delete a team by it's name
      *
-     * @param ename
-     * @return
+     * @param ename : team name
+     * @return Int : count how many delete
      */
     fun deleteEquipe(ename: String): Int {
         val db = dbHelper.writableDatabase
@@ -99,10 +105,10 @@ class EquipeDao(context : Context) {
     }
 
     /**
-     * TODO
+     * Allow to delete a team by it's ID
      *
      * @param ID
-     * @return
+     * @return Int : count how many delete
      */
     fun deleteEquipeByID(ID: Int): Int {
         val db = dbHelper.writableDatabase
@@ -112,12 +118,12 @@ class EquipeDao(context : Context) {
     }
 
     /**
-     * TODO
+     * Allow to modify a team by giving it's name
      *
-     * @param oldEname
-     * @param ename
-     * @param enum
-     * @return
+     * @param oldEname : old team name
+     * @param ename : new team name
+     * @param enum : numero d'équipe
+     * @return Int : count how many change
      */
     fun updateEquipe(oldEname: String,ename: String, enum : Int): Int {
         val db = dbHelper.writableDatabase
@@ -136,12 +142,12 @@ class EquipeDao(context : Context) {
     }
 
     /**
-     * TODO
+     * Allow to modify a team by giving it's ID
      *
-     * @param ID
-     * @param ename
-     * @param enum
-     * @return
+     * @param ID : team ID
+     * @param ename : new team name
+     * @param enum : team number
+     * @return Int : count how many change
      */
     fun updateEquipeByID(ID: Int,ename: String, enum : Int): Int {
         val db = dbHelper.writableDatabase
@@ -160,9 +166,9 @@ class EquipeDao(context : Context) {
     }
 
     /**
-     * TODO
+     * Return all the team
      *
-     * @return
+     * @return cursor of all the team
      */
     fun getAllEquipe(): Cursor? {
         val db = dbHelper.readableDatabase
@@ -183,9 +189,9 @@ class EquipeDao(context : Context) {
     }
 
     /**
-     * TODO
+     * Return teams attempting a course
      *
-     * @param ID
+     * @param ID : ID of a course
      * @return
      */
     fun getTeamForACourse(ID : Int): Cursor? {
@@ -200,10 +206,10 @@ class EquipeDao(context : Context) {
     }
 
     /**
-     * TODO
+     * Modify the position of a team
      *
-     * @param ID
-     * @param pos
+     * @param ID : ID of the team
+     * @param pos : nem position
      */
     fun updatePosition(ID: Int, pos: Int) {
         val db = dbHelper.writableDatabase

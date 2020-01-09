@@ -20,7 +20,7 @@ import java.lang.Exception
 class CoureurDao(context: Context) {
     val dbHelper = CourseDbHelper(context)
     /**
-     * TODO
+     * Allow to insert data in the table
      *
      * @param cname
      * @param surname

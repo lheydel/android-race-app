@@ -8,7 +8,7 @@ import com.example.lo52_f1_levier.model.Course
 import com.example.lo52_f1_levier.model.CourseDbHelper
 
 /**
- * TODO
+ * Management of course table
  *
  * @constructor
  * TODO
@@ -19,7 +19,7 @@ class CourseDao(context: Context) {
     val dbHelper = CourseDbHelper(context)
 
     /**
-     * TODO
+     * Allow to insert data in the table
      *
      * @param titre
      * @param date
@@ -35,10 +35,10 @@ class CourseDao(context: Context) {
     }
 
     /**
-     * TODO
+     * Get course with it's title
      *
-     * @param titre
-     * @return
+     * @param titre : title of the course 
+     * @return cursor
      */
     fun getCourse(titre:String): Cursor? {
         val db = dbHelper.readableDatabase
