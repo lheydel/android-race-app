@@ -2,7 +2,12 @@ package com.example.lo52_f1_levier.coursetimer
 
 import com.example.lo52_f1_levier.R
 
-class TeamBoxData(val teamId: Int, val teamNumber: Int, private val runners: Array<String>) {
+class TeamBoxData(val teamId: Int,
+                  val teamNumber: Int,
+                  private val runners: Array<String>,
+                  var position: Int,
+                  var lastTime: Long = 0) {
+
     val NB_PASSAGES = 2
     val NB_RUNNERS = runners.size
     val NB_STEPS = 5
@@ -12,10 +17,11 @@ class TeamBoxData(val teamId: Int, val teamNumber: Int, private val runners: Arr
     var runner = 1
     var step = 1
     var totalStepsDone = 0  // could be computed from the previous ones, but it would just be a pain
-    var isOver = false
+    var isOver: Boolean
 
-    var lastTime: Long = 0
-    var position: Int = 0
+    init {
+        isOver = position > 0
+    }
 
     fun incrementStep() {
         if (isOver) {
@@ -76,6 +82,22 @@ class TeamBoxData(val teamId: Int, val teamNumber: Int, private val runners: Arr
         }
     }
 
+    fun getDrawablePosition(): Int {
+        return when (position) {
+            1 -> TeamBoxDrawable.LAUREL_FIRST.id
+            2 -> TeamBoxDrawable.LAUREL_SECOND.id
+            3 -> TeamBoxDrawable.LAUREL_THIRD.id
+            else -> TeamBoxDrawable.LAUREL_DEFAULT.id
+        }
+    }
+
+    fun getOffsetPosition(): Int {
+        return when (position) {
+            1, 2, 3 -> R.dimen.team_pos_offset_podium
+            else -> R.dimen.team_pos_offset_default
+        }
+    }
+
     fun formattedLastTime(): String {
         var minutes = "${lastTime / 60000}"
         if (minutes.length < 2) minutes = "0$minutes"
@@ -101,5 +123,8 @@ enum class TeamBoxDrawable(val id: Int) {
     PASSAGE_1(R.drawable.passage1),
     PASSAGE_2(R.drawable.passage2),
 
-    FINISH(R.drawable.end_flag);
+    LAUREL_DEFAULT(R.drawable.laurel),
+    LAUREL_FIRST(R.drawable.laurel1),
+    LAUREL_SECOND(R.drawable.laurel2),
+    LAUREL_THIRD(R.drawable.laurel3);
 }

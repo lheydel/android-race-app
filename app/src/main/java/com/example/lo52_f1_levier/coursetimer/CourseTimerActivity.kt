@@ -28,7 +28,14 @@ class CourseTimerActivity : AppCompatActivity() {
         val columnWidth = resources.getDimension(R.dimen.teambox_width) + resources.getDimension(R.dimen.teambox_margin_side)
         teamBoxGrid = findViewById(R.id.teamBoxes)
         teamBoxGrid.layoutManager = GridAutofitLayoutManager(this, columnWidth.toInt())
-        teamBoxGrid.adapter = TeamBoxGridAdapter(this, courseId, this::redirectToDetails, timerFragment::getTimeInMilliseconds, timerFragment::isStarted)
+        teamBoxGrid.adapter = TeamBoxGridAdapter(
+            this,
+            courseId,
+            this::redirectToDetails,
+            timerFragment::getTimeInMilliseconds,
+            timerFragment::isStarted,
+            timerFragment::stop
+        )
         teamBoxGrid.setHasFixedSize(true)
     }
 

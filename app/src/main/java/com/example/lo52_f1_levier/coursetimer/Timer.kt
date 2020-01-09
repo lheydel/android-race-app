@@ -40,4 +40,8 @@ class Timer : Fragment() {
     fun isStarted(): Boolean {
         return started
     }
+
+    fun stop() {
+        timer.stop()
+    }
 }

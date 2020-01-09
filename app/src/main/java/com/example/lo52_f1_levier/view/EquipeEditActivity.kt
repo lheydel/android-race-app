@@ -48,7 +48,7 @@ class TeamEditActivity : AppCompatActivity() {
         save.setOnClickListener{
             if(!edt_teamName.text.isEmpty()) {
 
-                if (teamAdapter.getItemCount() == 3) {
+                if (teamAdapter.getItemCount()>=1 && teamAdapter.getItemCount() <4 ) {
                     equipeDao = EquipeDao(this)
                     participeDao = ParticipeDao(this)
                     participeDao.deleteParticipeByCourseIdAndTeamId(courseId,teamId)
@@ -64,7 +64,7 @@ class TeamEditActivity : AppCompatActivity() {
                     finish()
                 }
                 else{
-                    Toast.makeText(this, "L'équipe doit avoir 3 memebres", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "L'équipe doit avoir au moins 1 membre et pas plus de 3", Toast.LENGTH_SHORT).show()
                 }
             }
             else
