@@ -36,8 +36,12 @@ class DetailsCourseTimerFragment : AppCompatActivity() {
         // The cursor to iterate through the DB
         val cursor = participeDao.getParticipeByE_ID(teamId)
 
+        // The list of the runners' ID
+        val runnersId = ArrayList<Int>()
+
         // The list contanining the runners
         val runners = ArrayList<Runner>()
+
         // Let's iterate through the team's runners
         with(cursor!!){
             // While we still have something in our cursor
@@ -45,24 +49,31 @@ class DetailsCourseTimerFragment : AppCompatActivity() {
             {
                 // We get the Id of the runner
                 val runId = getInt(getColumnIndexOrThrow(BaseColumns._ID))
-
-                // We now get the runner from the runner table
-                val runCursor = runnerDao.getCoureurByID(runId)
-                while(runCursor!!.moveToNext())
-                {
-                    // We create an instance of a runner
-                    val runner = Runner(runId,
-                        getInt(1),
-                        getString(2),
-                        getString(3))
-                    // We add the runner to our list
-                    runners.add(runner)
-                }
-                runCursor?.close()
+                runnersId.add(runId)
             }
         }
         // We close the cursor
         cursor.close()
+
+        // Now we once again iterate
+        // We now get the runner from the runner table
+        runnersId.forEach{
+            val runCursor = runnerDao.getCoureurByID(it)
+            with(runCursor!!){
+                while(runCursor!!.moveToNext())
+                {
+                    // We create an instance of a runner
+                    val runner = Runner(it,
+                        getInt(getColumnIndex(Coureur.CoureurTable.NUMC)),
+                        getString(getColumnIndex(Coureur.CoureurTable.CNAME)),
+                        getString(getColumnIndex(Coureur.CoureurTable.SURNAME)))
+                    // We add the runner to our list
+                    runners.add(runner)
+                }
+            }
+            runCursor?.close()
+        }
+
 
         // for each of them, create a new "timer"
         runners.forEach{
