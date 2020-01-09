@@ -64,8 +64,8 @@ class TeamBoxGridAdapter(private val context: Context,
         }
 
         // indexes of relevant columns
-        val teamIdIndex = courseCursor.getColumnIndex(Participe.ParticipeTable.E_ID)
-        val runnerIdIndex = courseCursor.getColumnIndex(Participe.ParticipeTable.CR_ID)
+        val teamIdIndex = courseCursor.getColumnIndex(Participe.ParticipeTable.EQUIPE_ID)
+        val runnerIdIndex = courseCursor.getColumnIndex(Participe.ParticipeTable.COUREURID)
 
         // info on the team being processed
         var currentTeam: Int = courseCursor.getInt(teamIdIndex)

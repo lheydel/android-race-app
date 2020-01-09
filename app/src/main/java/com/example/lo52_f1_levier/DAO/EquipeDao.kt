@@ -197,9 +197,9 @@ class EquipeDao(context : Context) {
     fun getTeamForACourse(ID : Int): Cursor? {
         val db = dbHelper.readableDatabase
 
-        val query = "SELECT * FROM "+Equipe.EquipeTable.NAME+ " WHERE "+BaseColumns._ID +
-                " IN ( SELECT "+ Participe.ParticipeTable.E_ID+" FROM "+Participe.ParticipeTable.NAME+
-                " WHERE "+Participe.ParticipeTable.C_ID+  " = "+ ID.toString() + ");"
+        var query = "SELECT * FROM "+Equipe.EquipeTable.NAME+ " WHERE "+BaseColumns._ID +
+                " IN ( SELECT "+ Participe.ParticipeTable.EQUIPE_ID+" FROM "+Participe.ParticipeTable.NAME+
+                " WHERE "+Participe.ParticipeTable.COURSE_ID+  " = "+ ID.toString() + ");"
 
         return db.rawQuery(query, null)
 
