@@ -227,13 +227,13 @@ class EquipeTabAjouterFragment : Fragment() {
 
                 // Display the number of the next team to be created
                 val teamsCursor = equipeDao.getTeamForACourse(course.id)
+                nbTeam = 1
                 with(teamsCursor!!){
                     while (moveToNext()){
                         nbTeam ++
                     }
                 }
 
-                nbTeam ++
                 edt_teamNumber.setText(nbTeam.toString())
 
                 setFreeRunner(coureurs)
