@@ -1,5 +1,6 @@
 package com.example.lo52_f1_levier.view
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +21,7 @@ class CreateCourseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_course)
         courseDao = CourseDao(this)
+        setResult(Activity.RESULT_OK)
 
         cal = Calendar.getInstance()
         courseDate.setText(SimpleDateFormat("dd.MM.yyyy").format(System.currentTimeMillis()))

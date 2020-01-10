@@ -144,7 +144,7 @@ class EquipeTabConsultFragment : Fragment() {
         listTeam.adapter = teamAdapter
 
         val spinnerAdapter = ArrayAdapter<Run>(this.context!!,
-            android.R.layout.simple_spinner_item, courses)
+            R.layout.spinner_item, courses)
         courseSelector.adapter = spinnerAdapter
 
         courseSelector?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
