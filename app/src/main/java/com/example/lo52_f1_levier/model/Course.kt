@@ -33,7 +33,7 @@ object Participe {
     object ParticipeTable : BaseColumns {
         const val NAME = "Participe"
         const val COURSE_ID = "COURSE_ID"     // Course
-        const val COUREURID = "COUREURID"   // Coureur
+        const val COUREUR_ID = "COUREURID"   // Coureur
         const val EQUIPE_ID = "EQUIPE_ID"
         const val TIME1 = "Time1"
         const val TIME2 = "Time2"

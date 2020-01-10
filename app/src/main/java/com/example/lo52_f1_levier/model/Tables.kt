@@ -39,7 +39,7 @@ const val SQL_CREATE_PARTICIPE =
     "CREATE TABLE ${Participe.ParticipeTable.NAME} (" +
         "${BaseColumns._ID} INTEGER PRIMARY KEY," +
         "${Participe.ParticipeTable.COURSE_ID} INTEGER," +
-        "${Participe.ParticipeTable.COUREURID} INTEGER,"+
+        "${Participe.ParticipeTable.COUREUR_ID} INTEGER,"+
         "${Participe.ParticipeTable.EQUIPE_ID} INTEGER,"+
         "${Participe.ParticipeTable.TIME1} NUMBER DEFAULT -1,"+
         "${Participe.ParticipeTable.TIME2} NUMBER DEFAULT -1,"+
