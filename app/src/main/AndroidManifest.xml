@@ -10,10 +10,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
-        tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".view.TeamEditActivity"></activity>
-        <activity android:name=".view.CreateCourseActivity" />
-        <activity android:name=".view.ParticipantEditActivity" />
+        tools:ignore="GoogleAppIndexingWarning"
+        android:screenOrientation="landscape">
+        <activity android:name=".view.TeamEditActivity"
+            android:screenOrientation="landscape">
+        </activity>
+        <activity android:name=".view.CreateCourseActivity"
+            android:screenOrientation="landscape">
+        </activity>
+        <activity android:name=".view.ParticipantEditActivity"
+            android:screenOrientation="landscape">
+        </activity>
         <activity
             android:name=".view.MenuActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
@@ -30,7 +37,9 @@
             android:name="com.example.lo52_f1_levier.view.coursetimer.CourseTimerActivity"
             android:screenOrientation="landscape">
         </activity>
-        <activity android:name=".view.DetailsCourseTimerFragment"/>
+        <activity android:name=".view.DetailsCourseTimerFragment"
+            android:screenOrientation="landscape">
+        </activity>
     </application>
 
 </manifest>
