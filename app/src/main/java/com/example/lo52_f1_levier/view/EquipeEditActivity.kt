@@ -189,7 +189,7 @@ class TeamEditActivity : AppCompatActivity() {
             var listIdTeamMember = ArrayList<Int>() // list of the team members id
             with(res!!){
                 while (moveToNext()){
-                    listIdTeamMember.add(getInt(getColumnIndexOrThrow(Participe.ParticipeTable.COUREURID)))
+                    listIdTeamMember.add(getInt(getColumnIndexOrThrow(Participe.ParticipeTable.COUREUR_ID)))
                 }
             }
             // Get the data of the team

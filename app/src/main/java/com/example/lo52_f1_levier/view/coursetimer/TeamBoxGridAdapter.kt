@@ -86,7 +86,7 @@ class TeamBoxGridAdapter(private val context: Context,
 
         // indexes of relevant columns
         val teamIdIndex = courseCursor.getColumnIndex(Participe.ParticipeTable.EQUIPE_ID)
-        val runnerIdIndex = courseCursor.getColumnIndex(Participe.ParticipeTable.COUREURID)
+        val runnerIdIndex = courseCursor.getColumnIndex(Participe.ParticipeTable.COUREUR_ID)
 
         // info on the team being processed
         var currentTeam: Int = courseCursor.getInt(teamIdIndex)
@@ -215,7 +215,6 @@ class TeamBoxGridAdapter(private val context: Context,
     private fun setTeamPosition(teamId: Int): Int {
         val nextPos = participeDao.nextTeamPosition(courseId)
         teamDao.updatePosition(teamId, nextPos)
-//        teamDao.updatePosition(teamId, 0)
         return nextPos
     }
 
@@ -225,7 +224,7 @@ class TeamBoxGridAdapter(private val context: Context,
     private fun addTeamFinished() {
         nbTeamFinished++
         if (nbTeamFinished == teams.size) {
-            courseOver
+            courseOver()
             courseDao.setCourseOver(courseId)
         }
     }
@@ -251,7 +250,7 @@ class TeamBoxGridAdapter(private val context: Context,
          */
         fun setData(team: TeamBoxData) {
             teambox.teamNumber.text = team.teamNumber.toString()
-            teambox.progressBar.max = team.NB_TOTAL_STEPS - 1
+            teambox.progressBar.max = team.NB_TOTAL_STEPS
             updateData(team)
 
             teambox.setOnClickListener {
