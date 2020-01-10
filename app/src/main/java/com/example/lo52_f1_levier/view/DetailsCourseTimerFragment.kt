@@ -92,12 +92,14 @@ class DetailsCourseTimerFragment : AppCompatActivity() {
         runners.forEach{
             var view = LayoutInflater.from(this).inflate(R.layout.fragment_progression,null,false)
 
+
+            // L'utilisateur ne pourra pas faire progresser la seek bar
             view.seekBarPremier.setOnTouchListener { v, event -> true }
             view.seekBarDeuxieme.setOnTouchListener { v, event -> true }
 
 
             verticalLayout.addView(view)
-            val cRunner = participeDao.getParticipeByRunnerId(it.id)
+            val cRunner = participeDao.getParticipeByRunnerIdRunId(it.id,courseId)
             var t1 ="" // Sprint 1
             var t2 ="" // Obstacle 1
             var t3 ="" // PitStop

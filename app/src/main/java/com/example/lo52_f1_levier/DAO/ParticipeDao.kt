@@ -48,7 +48,7 @@ class ParticipeDao(context : Context) {
      * @param CR_ID
      * @return
      */
-    fun getParticipeByRunnerId(CR_ID:Int): Cursor? {
+    fun getParticipeByRunnerIdRunId(CR_ID:Int,teamId: Int): Cursor? {
         val db = dbHelper.readableDatabase
 
         val projection = arrayOf(
@@ -66,10 +66,10 @@ class ParticipeDao(context : Context) {
             Participe.ParticipeTable.TIME10
             )
 
-        val selection = "${Participe.ParticipeTable.COUREURID} = ?"
-        val selectionArgs = arrayOf(CR_ID.toString())
+        val selection = "${Participe.ParticipeTable.COUREURID} = ? AND ${Participe.ParticipeTable.COURSE_ID} = ?"
+        val selectionArgs = arrayOf(CR_ID.toString(),teamId.toString())
 
-        val sortOrder = "${Participe.ParticipeTable.EQUIPE_ID} DESC"
+        val sortOrder = "${Participe.ParticipeTable.EQUIPE_ID} ASC"
 
         return db.query(
             Participe.ParticipeTable.NAME,   // The table to query
