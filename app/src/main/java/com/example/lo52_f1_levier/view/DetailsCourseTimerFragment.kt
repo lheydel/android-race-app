@@ -46,7 +46,7 @@ class DetailsCourseTimerFragment : AppCompatActivity() {
         // Get the different runners
 
         // The cursor to iterate through the DB
-        val cursor = participeDao.getParticipeByE_ID(teamId)
+        val cursor = participeDao.getParticipeByC_ID_E_ID(courseId,teamId)
 
         // The list of the runners' ID
         val runnersId = ArrayList<Int>()
