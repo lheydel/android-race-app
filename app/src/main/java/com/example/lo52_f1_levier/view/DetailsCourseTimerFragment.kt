@@ -3,8 +3,6 @@ package com.example.lo52_f1_levier.view
 import android.os.Bundle
 import android.provider.BaseColumns
 import android.view.LayoutInflater
-import android.view.View
-import android.view.View.OnTouchListener
 import androidx.appcompat.app.AppCompatActivity
 import com.example.lo52_f1_levier.DAO.CoureurDao
 import com.example.lo52_f1_levier.DAO.ParticipeDao
